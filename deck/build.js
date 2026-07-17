@@ -111,7 +111,7 @@ T.section(p, { kicker: "Part three", title: "The reveal" });
 // 15. The brag (stat)
 T.stat(p, {
   value: "1",
-  label: "Claude Code session built this entire workshop - these slides, all four apps, and the repo you'll get the link to.",
+  label: "Claude Code session built this whole workshop - these slides and all four apps. No template. No help. Just conversation.",
 });
 
 // 16. How you start Monday
@@ -126,14 +126,14 @@ T.content(p, {
   ],
 });
 
-// 17. Thank you + repo QR
+// 17. Closer
 T.content(p, {
-  title: "Everything's here - take it home",
+  title: "Your turn",
   points: [
-    { text: "Slides, all four apps, and the how-to cheat-sheets.", color: "INK" },
-    { text: "[ Repo QR - top right ]", color: "MAROON" },
+    { text: "Open Claude Code. Describe the thing you wish existed.", color: "ACCENTBLUE" },
+    { text: "You just watched me do it - no code, no template.", color: "INK" },
     { text: "" },
-    { text: "Now go build something you wished existed.", color: "GREEN" },
+    { text: "Go build something you wished existed.", color: "GREEN" },
   ],
 });
 
