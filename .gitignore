@@ -3,3 +3,11 @@ node_modules/
 *.log
 deck/.qa/
 **/.qa/
+
+# Never commit real financial data
+
+*Wayne*
+
+apps/**/real-*
+
+*.xlsx
