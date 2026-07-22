@@ -302,6 +302,15 @@
       "note": null
     },
     {
+      "id": "groceries-202601-6",
+      "date": "2026-01-02",
+      "line": "groceries",
+      "amount": 65.06,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
       "id": "groceries-202601-7",
       "date": "2026-01-03",
       "line": "groceries",
@@ -416,6 +425,15 @@
       "amount": 205.0,
       "item": null,
       "store": "amazon / Chinese",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-5",
+      "date": "2026-03-01",
+      "line": "groceries",
+      "amount": 42.2,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
       "note": null
     },
     {

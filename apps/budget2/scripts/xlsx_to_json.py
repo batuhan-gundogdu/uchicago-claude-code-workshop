@@ -6,7 +6,6 @@ the app's budget.json data contract.
 """
 
 import calendar
-import re
 from datetime import date, datetime
 
 import openpyxl
@@ -185,14 +184,12 @@ def _parse_monthly_budget(ws):
     return lines, monthly_actuals
 
 
-def _grocery_like_entries(ws, line_id, formula_ws, include_store):
+def _grocery_like_entries(ws, line_id, include_store):
     """Parse a Groceries/Enjoy-shaped sheet: a 'Month' header row, a TOTAL row,
-    then a leftmost day-serial column with one numeric cell per month column.
-
-    formula_ws is the same sheet loaded without data_only, used only to read
-    the starting row of each month's SUM(...) range so we reproduce the
-    sheet's own TOTAL (some columns' ranges start below the very first data
-    rows - see the skip note below). We never write a formula into the output.
+    then a leftmost day-serial column with numeric cells under each month
+    column. Every numeric cell under a month column becomes one entry - we
+    capture all transactions rather than trying to match the spreadsheet's
+    own (sometimes incomplete) cached TOTAL.
     """
     # Find the header row (contains "Month" in column A) and the row above
     # it that may carry store names (for Groceries only).
@@ -204,26 +201,13 @@ def _grocery_like_entries(ws, line_id, formula_ws, include_store):
     if header_row is None:
         raise ValueError("Could not find 'Month' header row")
 
-    total_row = header_row + 1
-    first_data_row = header_row + 2
+    first_data_row = header_row + 2  # skip the TOTAL row right below the header
 
     month_cols = []  # (col_index_1based, (year, month))
     for c in range(2, ws.max_column + 1):
         name = ws.cell(row=header_row, column=c).value
         if name in MONTH_MAP:
             month_cols.append((c, MONTH_MAP[name]))
-
-    # Some month columns' TOTAL formula range starts a couple of rows below
-    # first_data_row because a small number of stray rows near the top of
-    # the sheet were left out of the original SUM() range (visible when the
-    # workbook is opened without data_only=True). We read that starting row
-    # per column so our entries reproduce the sheet's own TOTAL exactly,
-    # rather than hardcoding a skip.
-    start_row = {}
-    for c, _ in month_cols:
-        formula = formula_ws.cell(row=total_row, column=c).value
-        m = re.search(r"SUM\([A-Z]+(\d+):", str(formula)) if formula else None
-        start_row[c] = int(m.group(1)) if m else first_data_row
 
     entries = []
     for c, (year, month) in month_cols:
@@ -234,7 +218,7 @@ def _grocery_like_entries(ws, line_id, formula_ws, include_store):
             names = [n for n in (name1, name2) if n]
             store = " / ".join(names) if names else None
 
-        for r in range(start_row[c], ws.max_row + 1):
+        for r in range(first_data_row, ws.max_row + 1):
             day_serial = _to_num(ws.cell(row=r, column=1).value)
             amount = _to_num(ws.cell(row=r, column=c).value)
             if day_serial is None or amount is None:
@@ -279,15 +263,17 @@ def _parse_home_expenses(ws):
     return entries
 
 
-# Bookkeeping skip rule: the workbook's monthly auto-transfer into the
-# Vacation / Rainy Day funds (the recurring ~470-545 contributions that are
-# already captured via monthlyActuals["vacation_savings"/"rainy_day_savings"])
-# also shows up as rows in the Bookkeeping ledger, often sharing a date with
-# a genuine one-off (a car/student loan payment into the house fund). We skip
-# a Vacation/Rainy Day cell only when it falls in that narrow recurring band;
-# House (Arlington) column cells are always kept, since every Arlington
-# movement here is a genuine one-off (sale, loan, principal payment, or a
-# car/student payment funneled into the house account).
+# Bookkeeping skip rule (positive-only): the workbook's monthly auto-transfer
+# into the Vacation / Rainy Day funds (the recurring ~470-545 contributions
+# that are already captured via monthlyActuals["vacation_savings"/
+# "rainy_day_savings"]) also shows up as rows in the Bookkeeping ledger,
+# often sharing a date with a genuine one-off (a car/student loan payment
+# into the house fund). We skip a Vacation/Rainy Day cell only when it is a
+# positive amount in that narrow recurring band - a negative amount in the
+# same range is a genuine one-off (e.g. a real withdrawal) and is never
+# skipped. House (Arlington) column cells are always kept, since every
+# Arlington movement here is a genuine one-off (sale, loan, principal
+# payment, or a car/student payment funneled into the house account).
 RECURRING_SAVINGS_MIN = 450
 RECURRING_SAVINGS_MAX = 550
 
@@ -305,8 +291,8 @@ def _parse_bookkeeping(ws):
             amount = _to_num(ws.cell(row=r, column=col).value)
             if amount is None:
                 continue
-            if fund != "house" and RECURRING_SAVINGS_MIN <= abs(amount) <= RECURRING_SAVINGS_MAX:
-                continue  # skip: duplicates the auto-fed monthly savings contribution
+            if fund != "house" and RECURRING_SAVINGS_MIN <= amount <= RECURRING_SAVINGS_MAX:
+                continue  # skip: duplicates the auto-fed monthly savings contribution (positive-only)
             counter += 1
             ledger.append({
                 "id": f"fund-{counter}",
@@ -320,16 +306,11 @@ def _parse_bookkeeping(ws):
 
 def build_budget(xlsx_path):
     wb = openpyxl.load_workbook(xlsx_path, data_only=True)
-    wb_formulas = openpyxl.load_workbook(xlsx_path, data_only=False)
 
     line_data, monthly_actuals = _parse_monthly_budget(wb["Monthly Budget"])
 
-    groceries_entries = _grocery_like_entries(
-        wb["Groceries"], "groceries", wb_formulas["Groceries"], include_store=True
-    )
-    enjoy_entries = _grocery_like_entries(
-        wb["Enjoy"], "enjoy", wb_formulas["Enjoy"], include_store=False
-    )
+    groceries_entries = _grocery_like_entries(wb["Groceries"], "groceries", include_store=True)
+    enjoy_entries = _grocery_like_entries(wb["Enjoy"], "enjoy", include_store=False)
     home_entries = _parse_home_expenses(wb["Home Expenses"])
     entries = groceries_entries + enjoy_entries + home_entries
 
