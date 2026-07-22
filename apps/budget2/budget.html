@@ -460,6 +460,80 @@
   }
   .funds-empty { color: var(--ink-faint); font-size: 13.5px; padding: 8px 2px; }
 
+  /* ---- Analysis page ---- */
+  .an-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 4px;
+  }
+  .an-head .titles { min-width: 0; }
+  .an-head h2 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+  .an-head p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+  .an-controls { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+  .seg-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .seg-wrap > span {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .seg {
+    display: inline-flex; padding: 4px; gap: 4px;
+    background: var(--canvas-tint); border-radius: 999px; border: 1px solid var(--line);
+  }
+  .seg button {
+    font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-soft);
+    border: none; background: transparent; padding: 8px 15px; border-radius: 999px; cursor: pointer;
+    transition: color .16s, background .16s, box-shadow .16s;
+  }
+  .seg button:hover { color: var(--ink); }
+  .seg button[aria-pressed="true"] {
+    color: #fff; background: linear-gradient(140deg, var(--blush), var(--grape));
+    box-shadow: 0 8px 18px -10px var(--blush);
+  }
+  .seg button:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+  .an-card { margin-bottom: 18px; }
+  .an-card:last-child { margin-bottom: 0; }
+  .an-card .sec-title:first-of-type { margin-top: 0; }
+  .chart-box { width: 100%; margin-top: 6px; }
+  .chart-box svg.chart { width: 100%; height: auto; display: block; }
+  .an-grid { display: grid; gap: 20px; grid-template-columns: 1.35fr 1fr; align-items: start; }
+  @media (max-width: 720px) { .an-grid { grid-template-columns: 1fr; } }
+
+  .rank-list { display: flex; flex-direction: column; gap: 13px; margin-top: 8px; }
+  .rank-row { display: grid; grid-template-columns: 1fr auto; gap: 5px 12px; align-items: center; }
+  .rank-row .rk-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .rank-row .rk-val {
+    font-size: 13.5px; font-weight: 700; color: var(--grape-deep); font-variant-numeric: tabular-nums;
+  }
+  .rank-row .rk-track {
+    grid-column: 1 / -1; height: 8px; border-radius: 999px; background: var(--canvas-tint); overflow: hidden;
+  }
+  .rank-row .rk-fill { height: 100%; border-radius: 999px; }
+
+  .big-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .big-row {
+    display: flex; align-items: center; gap: 13px;
+    padding: 11px 15px; border-radius: var(--radius-md); background: var(--canvas-tint);
+  }
+  .big-row .bg-rank {
+    width: 26px; height: 26px; flex: none; border-radius: 8px; display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; color: var(--grape-deep); background: var(--grape-soft);
+  }
+  .big-row .bg-date {
+    font-size: 12.5px; font-weight: 600; color: var(--ink-soft); width: 92px; flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .big-row .bg-amount {
+    font-size: 15px; font-weight: 700; color: var(--grape-deep); width: 92px; flex: none;
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .big-row .bg-detail { flex: 1; min-width: 0; }
+  .big-row .bg-main {
+    font-size: 13.5px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .big-row .bg-main .muted { color: var(--ink-faint); }
+  .big-row .bg-sub { font-size: 12px; color: var(--ink-faint); }
+  .an-empty { color: var(--ink-soft); font-size: 14px; padding: 20px 2px; }
+
   @media (max-width: 640px) {
     .cat-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
@@ -1618,10 +1692,400 @@
     if (isNaN(amount)) { fundsSetHint("Enter an amount, e.g. 250 (or -50 for a withdrawal)."); return; }
     addLedgerRow({ date: date, fund: fund, amount: amount, note: note });
   }
+  /* =========================================================================
+   * Analysis page - hand-drawn inline SVG charts + stat lists.
+   *
+   * Three reusable chart builders (svgLine / svgDonut / svgBars) each return a
+   * self-contained SVG string sized by a viewBox, so they scale to whatever
+   * container width they land in. No external chart library, no network.
+   * ========================================================================= */
+
+  // Ordered pastel palette for categories / slices. Solid hex (not CSS vars)
+  // so the SVG renders identically wherever it is placed.
+  const CHART_COLORS = [
+    "#7c6bd6", // grape
+    "#7fb8ec", // sky
+    "#7bd0b0", // mint
+    "#f4b183", // peach
+    "#ef9bbf", // blush
+    "#f2d17a", // butter
+    "#5a4bb0", // grape-deep
+    "#9b95ae", // ink-faint
+  ];
+  const C_GRID = "#ece7f4";
+  const C_INK = "#3a3550";
+  const C_INK_SOFT = "#6f6987";
+  const C_INK_FAINT = "#9b95ae";
+
+  // Round a raw maximum up to a friendly axis top (1 / 2 / 2.5 / 5 x 10^n).
+  function niceMax(v) {
+    if (!(v > 0)) return 1;
+    const pow = Math.pow(10, Math.floor(Math.log10(v)));
+    const n = v / pow;
+    let nice;
+    if (n <= 1) nice = 1;
+    else if (n <= 2) nice = 2;
+    else if (n <= 2.5) nice = 2.5;
+    else if (n <= 5) nice = 5;
+    else nice = 10;
+    return nice * pow;
+  }
+
+  // Compact money for axis ticks / donut center: "$4.5k", "$320".
+  function moneyShort(v) {
+    const n = Number(v) || 0;
+    const abs = Math.abs(n);
+    if (abs >= 1000) return "$" + (Math.round((n / 1000) * 10) / 10) + "k";
+    return "$" + Math.round(n);
+  }
+
+  // "2025-11" -> "Nov '25"
+  function shortMonth(key) {
+    if (!key || key.length < 7) return esc(key || "");
+    const [y, m] = key.split("-");
+    const d = new Date(Number(y), Number(m) - 1, 1);
+    return d.toLocaleDateString("en-US", { month: "short" }) + " '" + y.slice(2);
+  }
+
+  // svgLine(series, opts) - line chart. series = [{label, value}].
+  // Axes, gridlines, money y-scale, labeled x ticks, soft area fill + points.
+  function svgLine(series, opts) {
+    opts = opts || {};
+    const W = 720, H = 260;
+    const padL = 60, padR = 18, padT = 18, padB = 42;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const n = series.length;
+    const color = opts.color || CHART_COLORS[0];
+    let max = 0;
+    series.forEach((s) => { max = Math.max(max, Number(s.value) || 0); });
+    max = niceMax(max);
+    const x = (i) => (n <= 1 ? padL + iw / 2 : padL + (iw * i) / (n - 1));
+    const y = (v) => padT + ih - ih * (v / max);
+
+    const ticks = 4;
+    let grid = "";
+    for (let t = 0; t <= ticks; t++) {
+      const gv = (max * t) / ticks;
+      const gy = y(gv);
+      grid += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy +
+        '" stroke="' + C_GRID + '" stroke-width="1"/>';
+      grid += '<text x="' + (padL - 10) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="11" fill="' +
+        C_INK_FAINT + '">' + moneyShort(gv) + '</text>';
+    }
+    let xlab = "";
+    series.forEach((s, i) => {
+      xlab += '<text x="' + x(i) + '" y="' + (H - padB + 20) + '" text-anchor="middle" font-size="11" fill="' +
+        C_INK_SOFT + '">' + esc(s.label) + '</text>';
+    });
+    const linePts = series.map((s, i) => x(i) + "," + y(Number(s.value) || 0)).join(" ");
+    const areaPts = padL + "," + (padT + ih) + " " + linePts + " " + x(n - 1) + "," + (padT + ih);
+    let dots = "";
+    series.forEach((s, i) => {
+      dots += '<circle cx="' + x(i) + '" cy="' + y(Number(s.value) || 0) +
+        '" r="4" fill="#fff" stroke="' + color + '" stroke-width="2.5"/>';
+    });
+    return '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" preserveAspectRatio="xMidYMid meet">' +
+      grid +
+      '<polygon points="' + areaPts + '" fill="' + color + '" opacity="0.08"/>' +
+      '<polyline points="' + linePts + '" fill="none" stroke="' + color +
+        '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+      dots + xlab +
+    '</svg>';
+  }
+
+  // svgDonut(slices, opts) - donut with center total and an SVG legend
+  // (colour swatch + label + money + percentage) on the right.
+  // slices = [{label, value, color?}].
+  function svgDonut(slices, opts) {
+    opts = opts || {};
+    const W = 560, H = 300;
+    const cx = 150, cy = 150, r = 96, thick = 34;
+    const circ = 2 * Math.PI * r;
+    const total = slices.reduce((s, x) => s + (Number(x.value) || 0), 0);
+
+    let segs = "";
+    if (total <= 0) {
+      segs = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + C_GRID +
+        '" stroke-width="' + thick + '"/>';
+    } else {
+      let acc = 0;
+      slices.forEach((sl, i) => {
+        const val = Number(sl.value) || 0;
+        if (val <= 0) return;
+        const len = (val / total) * circ;
+        const color = sl.color || CHART_COLORS[i % CHART_COLORS.length];
+        segs += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + color +
+          '" stroke-width="' + thick + '" stroke-dasharray="' + len + " " + (circ - len) +
+          '" stroke-dashoffset="' + (-acc) + '" transform="rotate(-90 ' + cx + " " + cy + ')"/>';
+        acc += len;
+      });
+    }
+    const center =
+      '<text x="' + cx + '" y="' + (cy - 4) + '" text-anchor="middle" font-size="12.5" fill="' +
+        C_INK_FAINT + '">Total</text>' +
+      '<text x="' + cx + '" y="' + (cy + 20) + '" text-anchor="middle" font-size="21" font-weight="700" fill="' +
+        C_INK + '">' + esc(moneyShort(total)) + '</text>';
+
+    let leg = "";
+    const lx = 300;
+    let ly = 42;
+    if (!slices.length) {
+      leg = '<text x="' + lx + '" y="' + ly + '" font-size="12.5" fill="' + C_INK_FAINT +
+        '">No spending in range.</text>';
+    }
+    slices.forEach((sl, i) => {
+      const val = Number(sl.value) || 0;
+      const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+      const color = sl.color || CHART_COLORS[i % CHART_COLORS.length];
+      leg += '<rect x="' + lx + '" y="' + (ly - 11) + '" width="13" height="13" rx="3" fill="' + color + '"/>';
+      leg += '<text x="' + (lx + 20) + '" y="' + ly + '" font-size="12.5" fill="' + C_INK + '">' +
+        esc(sl.label) + '</text>';
+      leg += '<text x="' + (W - 14) + '" y="' + ly + '" text-anchor="end" font-size="12.5" font-weight="600" fill="' +
+        C_INK_SOFT + '">' + esc(money(val)) + '  ' + pct + '%</text>';
+      ly += 29;
+    });
+    return '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" preserveAspectRatio="xMidYMid meet">' +
+      segs + center + leg +
+    '</svg>';
+  }
+
+  // svgBars(pairs, opts) - grouped/paired bars. pairs = [{label, a, b}].
+  // Two bars per label (default Planned vs Actual) with a small top legend.
+  function svgBars(pairs, opts) {
+    opts = opts || {};
+    const W = 760, H = 300;
+    const padL = 58, padR = 16, padT = 30, padB = 66;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const n = pairs.length;
+    const colA = opts.colorA || CHART_COLORS[1]; // sky - planned
+    const colB = opts.colorB || CHART_COLORS[0]; // grape - actual
+    const labA = opts.labelA || "Planned";
+    const labB = opts.labelB || "Actual";
+    let max = 0;
+    pairs.forEach((p) => { max = Math.max(max, Number(p.a) || 0, Number(p.b) || 0); });
+    max = niceMax(max);
+    const y = (v) => padT + ih - ih * (v / max);
+    const groupW = n > 0 ? iw / n : iw;
+    const barW = Math.max(6, Math.min(20, groupW * 0.32));
+    const gap = 4;
+
+    const ticks = 4;
+    let grid = "";
+    for (let t = 0; t <= ticks; t++) {
+      const gv = (max * t) / ticks;
+      const gy = y(gv);
+      grid += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy +
+        '" stroke="' + C_GRID + '" stroke-width="1"/>';
+      grid += '<text x="' + (padL - 10) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="11" fill="' +
+        C_INK_FAINT + '">' + moneyShort(gv) + '</text>';
+    }
+    let bars = "";
+    pairs.forEach((p, i) => {
+      const gx = padL + groupW * i + groupW / 2;
+      const a = Number(p.a) || 0, b = Number(p.b) || 0;
+      const ax = gx - barW - gap / 2, bx = gx + gap / 2;
+      bars += '<rect x="' + ax + '" y="' + y(a) + '" width="' + barW + '" height="' + (padT + ih - y(a)) +
+        '" rx="3" fill="' + colA + '"/>';
+      bars += '<rect x="' + bx + '" y="' + y(b) + '" width="' + barW + '" height="' + (padT + ih - y(b)) +
+        '" rx="3" fill="' + colB + '"/>';
+      const ly = padT + ih + 15;
+      bars += '<text x="' + gx + '" y="' + ly + '" text-anchor="end" font-size="10.5" fill="' + C_INK_SOFT +
+        '" transform="rotate(-35 ' + gx + " " + ly + ')">' + esc(p.label) + '</text>';
+    });
+    const leg =
+      '<rect x="' + padL + '" y="8" width="12" height="12" rx="3" fill="' + colA + '"/>' +
+      '<text x="' + (padL + 18) + '" y="18" font-size="12" fill="' + C_INK + '">' + esc(labA) + '</text>' +
+      '<rect x="' + (padL + 92) + '" y="8" width="12" height="12" rx="3" fill="' + colB + '"/>' +
+      '<text x="' + (padL + 110) + '" y="18" font-size="12" fill="' + C_INK + '">' + esc(labB) + '</text>';
+    return '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" preserveAspectRatio="xMidYMid meet">' +
+      grid + bars + leg +
+    '</svg>';
+  }
+
+  /* ---- Analysis data helpers (all derived from settings, nothing hardcoded) ---- */
+
+  // Scope for the category donut / biggest lists: "month" or "all".
+  let analysisScope = "month";
+
+  function analysisExpenseLines() {
+    return (App.state.settings.lines || []).filter((l) => l.type !== "income");
+  }
+
+  // Total expense for one month = sum of every expense line's actual.
+  function monthTotalExpense(m) {
+    return analysisExpenseLines().reduce((s, l) => s + actualForLine(l.id, m), 0);
+  }
+
+  // Category -> summed actual across the given months, sorted high to low.
+  function categoryTotals(months) {
+    const map = Object.create(null);
+    const order = [];
+    analysisExpenseLines().forEach((l) => {
+      let sum = 0;
+      months.forEach((m) => { sum += actualForLine(l.id, m); });
+      if (sum > 0) {
+        const cat = l.category || "Other";
+        if (!(cat in map)) { map[cat] = 0; order.push(cat); }
+        map[cat] += sum;
+      }
+    });
+    return order.map((c) => ({ label: c, value: map[c] })).sort((a, b) => b.value - a.value);
+  }
+
+  // Individual entries within scope, largest first, capped at `limit`.
+  function biggestEntries(months, limit) {
+    const inScope = Object.create(null);
+    months.forEach((m) => { inScope[m] = true; });
+    return (App.state.entries || [])
+      .filter((e) => inScope[monthKey(e.date)])
+      .slice()
+      .sort((a, b) => (Number(b.amount) || 0) - (Number(a.amount) || 0))
+      .slice(0, limit || 8);
+  }
+
+  function entryDetailText(e) {
+    if (e.line === "groceries") return e.store || "";
+    if (e.line === "enjoy") return e.note || "";
+    return e.item || "";
+  }
+
+  function bigExpenseRowHtml(e, rank) {
+    const main = entryDetailText(e);
+    const mainHtml = main ? esc(main) : '<span class="muted">' + esc(lineName(e.line)) + "</span>";
+    const line = lineById(e.line);
+    const cat = line && line.category ? line.category : "";
+    const sub = esc(lineName(e.line)) + (cat ? "  " + esc(cat) : "");
+    return '<div class="big-row">' +
+      '<span class="bg-rank">' + rank + "</span>" +
+      '<span class="bg-date">' + esc(e.date) + "</span>" +
+      '<span class="bg-amount">' + esc(money(e.amount)) + "</span>" +
+      '<span class="bg-detail">' +
+        '<div class="bg-main">' + mainHtml + "</div>" +
+        '<div class="bg-sub">' + sub + "</div>" +
+      "</span>" +
+    "</div>";
+  }
+
+  function rankRowHtml(item, max, i) {
+    const color = CHART_COLORS[i % CHART_COLORS.length];
+    const pct = max > 0 ? Math.round((item.value / max) * 100) : 0;
+    return '<div class="rank-row">' +
+      '<span class="rk-name">' + esc(item.label) + "</span>" +
+      '<span class="rk-val">' + esc(money(item.value)) + "</span>" +
+      '<span class="rk-track"><span class="rk-fill" style="width:' + pct + "%;background:" + color + '"></span></span>' +
+    "</div>";
+  }
+
   function renderAnalysis() {
-    return placeholder("analysis", "Spot the trends",
-      "Charts and breakdowns that turn a year of entries into a story you can actually read.",
-      '<path d="M4 20V4"/><path d="M4 20h16"/><rect x="7" y="12" width="3" height="5" rx="1"/><rect x="12" y="8" width="3" height="9" rx="1"/><rect x="17" y="5" width="3" height="12" rx="1"/>');
+    const months = availableMonths();
+    if (!months.length) {
+      return '<div class="card"><div class="an-head"><div class="titles">' +
+        "<h2>Analysis</h2><p>Trends and breakdowns across your budget.</p></div></div>" +
+        '<div class="an-empty">No data to analyse yet. Add some entries or monthly amounts first.</div></div>';
+    }
+
+    // Selected month drives the bars and (in month scope) the donut / lists.
+    let sel = App.month;
+    if (!sel || months.indexOf(sel) === -1) sel = months[months.length - 1];
+    if (App.month !== sel) { App.month = sel; updateMonthIndicator(); }
+
+    const scopeMonths = analysisScope === "all" ? months : [sel];
+    const scopeName = analysisScope === "all" ? "all time" : monthLabel(sel);
+
+    // 1. Month-by-month total spending trend (always all months).
+    const trend = months.map((m) => ({ label: shortMonth(m), value: monthTotalExpense(m) }));
+
+    // 2. Spending by category donut for the current scope.
+    const cats = categoryTotals(scopeMonths);
+    const catSlices = cats.map((c, i) => ({ label: c.label, value: c.value, color: CHART_COLORS[i % CHART_COLORS.length] }));
+
+    // 3. Planned vs actual per expense line for the selected month.
+    const barPairs = analysisExpenseLines().map((l) => ({
+      label: l.name, a: plannedForLine(l.id), b: actualForLine(l.id, sel),
+    }));
+
+    // 4. Biggest single expenses - a hall of fame across all history (individual
+    //    entries only, so this stays all-time rather than following the scope
+    //    toggle, which can land on a month with monthly totals but no entries).
+    const bigE = biggestEntries(months, 8);
+    // 5. Biggest categories follow the donut scope.
+    const topCats = cats.slice(0, 6);
+    const catMax = topCats.length ? topCats[0].value : 0;
+
+    // Controls: scope segmented toggle + month picker.
+    const monthOpts = months.map((k) =>
+      '<option value="' + esc(k) + '"' + (k === sel ? " selected" : "") + ">" + esc(monthLabel(k)) + "</option>"
+    ).join("");
+    const controls =
+      '<div class="an-controls">' +
+        '<div class="seg-wrap"><span>Scope</span>' +
+          '<div class="seg" id="an-scope" role="group" aria-label="Analysis scope">' +
+            '<button type="button" data-scope="month" aria-pressed="' + (analysisScope === "month") + '">This month</button>' +
+            '<button type="button" data-scope="all" aria-pressed="' + (analysisScope === "all") + '">All time</button>' +
+          "</div>" +
+        "</div>" +
+        '<div class="month-picker"><label for="an-month">Month</label>' +
+          '<select id="an-month">' + monthOpts + "</select></div>" +
+      "</div>";
+
+    const headCard =
+      '<div class="card an-card"><div class="an-head">' +
+        '<div class="titles"><h2>Analysis</h2>' +
+          "<p>Fancy graphs and stats - hand-drawn, no libraries. Showing <b>" + esc(scopeName) + "</b>.</p></div>" +
+        controls +
+      "</div></div>";
+
+    const trendCard =
+      '<div class="card an-card">' +
+        '<h3 class="sec-title">Monthly spending trend</h3>' +
+        '<div class="chart-box">' + svgLine(trend, {}) + "</div>" +
+      "</div>";
+
+    const catList = topCats.length
+      ? '<div class="rank-list">' + topCats.map((c, i) => rankRowHtml(c, catMax, i)).join("") + "</div>"
+      : '<div class="an-empty">No spending in this range.</div>';
+    const donutCard =
+      '<div class="card an-card"><div class="an-grid">' +
+        "<div>" +
+          '<h3 class="sec-title">Spending by category</h3>' +
+          '<div class="chart-box">' + svgDonut(catSlices, {}) + "</div>" +
+        "</div>" +
+        "<div>" +
+          '<h3 class="sec-title">Biggest categories</h3>' + catList +
+        "</div>" +
+      "</div></div>";
+
+    const barsCard =
+      '<div class="card an-card">' +
+        '<h3 class="sec-title">Planned vs actual - ' + esc(monthLabel(sel)) + "</h3>" +
+        '<div class="chart-box">' + svgBars(barPairs, {}) + "</div>" +
+      "</div>";
+
+    const bigList = bigE.length
+      ? '<div class="big-list">' + bigE.map((e, i) => bigExpenseRowHtml(e, i + 1)).join("") + "</div>"
+      : '<div class="an-empty">No individual entries in this range.</div>';
+    const bigCard =
+      '<div class="card an-card">' +
+        '<h3 class="sec-title">Biggest single expenses - all time</h3>' + bigList +
+      "</div>";
+
+    return headCard + trendCard + donutCard + barsCard + bigCard;
+  }
+
+  /* ---- Analysis page event handling (delegated on #view) ---- */
+  function onAnalysisClick(e) {
+    const btn = e.target.closest("[data-scope]");
+    if (btn) {
+      analysisScope = btn.dataset.scope;
+      render();
+    }
+  }
+  function onAnalysisChange(e) {
+    if (e.target.id === "an-month") {
+      App.month = e.target.value;
+      updateMonthIndicator();
+      render();
+    }
   }
 
   const RENDERERS = {
@@ -1711,11 +2175,13 @@
     if (App.tab === "entry") onEntryClick(e);
     else if (App.tab === "monthly") onMonthlyClick(e);
     else if (App.tab === "funds") onFundsClick(e);
+    else if (App.tab === "analysis") onAnalysisClick(e);
   });
   view.addEventListener("change", (e) => {
     if (!App.state) return;
     if (App.tab === "entry") onEntryChange(e);
     else if (App.tab === "monthly") onMonthlyChange(e);
+    else if (App.tab === "analysis") onAnalysisChange(e);
   });
   view.addEventListener("submit", (e) => {
     if (!App.state) return;
@@ -1775,6 +2241,9 @@
   App.addLedgerRow = addLedgerRow;
   App.deleteLedgerRow = deleteLedgerRow;
   App.renderAnalysis = renderAnalysis;
+  App.svgLine = svgLine;
+  App.svgDonut = svgDonut;
+  App.svgBars = svgBars;
 
   boot();
 })();
