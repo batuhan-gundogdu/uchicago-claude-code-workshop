@@ -305,6 +305,106 @@
     font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint);
   }
 
+  /* ---- Monthly View page ---- */
+  .monthly-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 22px;
+  }
+  .monthly-head .titles { min-width: 0; }
+  .monthly-head h2 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+  .monthly-head p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+  .month-picker { display: flex; flex-direction: column; gap: 6px; flex: none; }
+  .month-picker label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .month-picker select {
+    font-family: inherit; font-size: 14px; font-weight: 600; color: var(--ink);
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--line); background: #fff; min-width: 170px;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .month-picker select:focus {
+    outline: none; border-color: var(--grape); box-shadow: 0 0 0 3px var(--grape-soft);
+  }
+
+  .sec-title {
+    margin: 24px 0 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .sec-title:first-of-type { margin-top: 4px; }
+
+  .mtable { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+  .mtable thead th {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--ink-faint); text-align: right; padding: 0 14px 4px; white-space: nowrap;
+  }
+  .mtable thead th.h-line { text-align: left; }
+  .mtable tbody td {
+    padding: 12px 14px; background: var(--canvas-tint);
+    font-size: 14px; color: var(--ink);
+    border-top: 1px solid transparent; border-bottom: 1px solid transparent;
+  }
+  .mtable tbody td.c-num {
+    text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .mtable tbody td.c-line:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md); }
+  .mtable tbody td.c-num:last-child { border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+  .mtable tbody tr.mrow.under td { background: var(--ok-soft); }
+  .mtable tbody tr.mrow.over  td { background: var(--blush-soft); }
+  .mtable tbody tr.mrow .c-diff { font-weight: 600; }
+  .mtable tbody tr.mrow.under .c-diff { color: #2f8f6b; }
+  .mtable tbody tr.mrow.over  .c-diff { color: #c25c86; }
+  .mtable .line-name { font-weight: 600; }
+
+  .line-toggle {
+    font-family: inherit; font-size: 14px; font-weight: 600; color: var(--ink);
+    display: inline-flex; align-items: center; gap: 8px;
+    border: none; background: none; padding: 0; cursor: pointer; text-align: left;
+  }
+  .line-toggle:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; border-radius: 4px; }
+  .line-toggle .chev {
+    width: 15px; height: 15px; flex: none; color: var(--ink-faint);
+    transition: transform .16s ease;
+  }
+  .line-toggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
+
+  .mexpand td { background: #fff !important; padding: 4px 14px 12px !important; }
+  .mexpand-list { display: flex; flex-direction: column; gap: 6px; }
+  .mexpand-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 8px 13px; border-radius: var(--radius-sm);
+    background: var(--canvas-tint);
+  }
+  .mexpand-row .me-date {
+    font-size: 12.5px; font-weight: 600; color: var(--ink-soft);
+    width: 96px; flex: none; font-variant-numeric: tabular-nums;
+  }
+  .mexpand-row .me-amount {
+    font-size: 14px; font-weight: 700; color: var(--grape-deep);
+    width: 96px; flex: none; text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .mexpand-row .me-detail {
+    flex: 1; min-width: 0; font-size: 13.5px; color: var(--ink);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .mexpand-row .muted { color: var(--ink-faint); }
+  .mexpand-empty { font-size: 13px; color: var(--ink-faint); padding: 6px 2px; }
+
+  .net-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    margin-top: 20px; padding: 16px 18px; border-radius: var(--radius-md);
+    font-weight: 700;
+  }
+  .net-row .net-label {
+    font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .net-row .net-amount { font-size: 20px; font-variant-numeric: tabular-nums; }
+  .net-row.under { background: var(--ok-soft); color: #2f8f6b; }
+  .net-row.over  { background: var(--blush-soft); color: #c25c86; }
+
+  .monthly-empty { color: var(--ink-soft); font-size: 14px; padding: 20px 2px; }
+
   @media (max-width: 640px) {
     .cat-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
@@ -1031,10 +1131,209 @@
     else if (act === "del-actual") { deleteMonthlyActual(actBtn.dataset.month, actBtn.dataset.line); }
   }
 
-  function renderMonthly() {
-    return placeholder("monthly", "See the month at a glance",
-      "Anticipated against actual for every budget line, so you know where the month is heading.",
-      '<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/>');
+  /* =========================================================================
+   * Monthly View page - planned vs actual for one month.
+   * ========================================================================= */
+
+  // Which detailed lines are currently expanded (lineId -> true). Persists
+  // across re-renders so a click stays open until clicked again.
+  const monthlyExpanded = {};
+
+  // plannedForLine(lineId) - the line's anticipated figure.
+  function plannedForLine(lineId) {
+    const l = lineById(lineId);
+    return l ? Number(l.anticipated) || 0 : 0;
+  }
+
+  // actualForLine(lineId, month) - the realised amount for a line in a month.
+  // Detailed lines aggregate their entries AND any monthlyActuals total (e.g.
+  // car_expenses is detailed but seeded only as a monthly total). Fixed lines
+  // read the recorded monthly actual, falling back to their recurring default.
+  function actualForLine(lineId, month) {
+    const line = lineById(lineId);
+    if (!line) return 0;
+    let entriesSum = 0;
+    (App.state.entries || []).forEach((e) => {
+      if (e.line === lineId && monthKey(e.date) === month) entriesSum += Number(e.amount) || 0;
+    });
+    const monthMap = App.state.monthlyActuals ? App.state.monthlyActuals[month] : null;
+    const ma = monthMap ? monthMap[lineId] : undefined;
+    if (line.detailed) {
+      return entriesSum + (ma || 0);
+    }
+    if (ma !== undefined && ma !== null) return ma;
+    if (line.recurringDefault !== null && line.recurringDefault !== undefined) return line.recurringDefault;
+    return 0;
+  }
+
+  // availableMonths() - every YYYY-MM appearing across entries and monthlyActuals, ascending.
+  function availableMonths() {
+    const set = Object.create(null);
+    (App.state.entries || []).forEach((e) => {
+      const k = monthKey(e.date);
+      if (k) set[k] = true;
+    });
+    Object.keys(App.state.monthlyActuals || {}).forEach((k) => { set[k] = true; });
+    return Object.keys(set).sort();
+  }
+
+  // Entries behind a detailed line for a month, oldest first.
+  function entriesForLineMonth(lineId, month) {
+    return (App.state.entries || [])
+      .filter((e) => e.line === lineId && monthKey(e.date) === month)
+      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  }
+
+  const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+
+  function monthlyExpandHtml(l, m) {
+    const items = entriesForLineMonth(l.id, m);
+    let inner;
+    if (!items.length) {
+      inner = '<div class="mexpand-empty">Recorded as a monthly total - no individual entries to show.</div>';
+    } else {
+      inner = '<div class="mexpand-list">' + items.map((e) => {
+        let detail;
+        if (e.line === "groceries") {
+          detail = e.store ? esc(e.store) : '<span class="muted">No store</span>';
+        } else if (e.line === "enjoy") {
+          detail = e.note ? esc(e.note) : '<span class="muted">Enjoy</span>';
+        } else {
+          detail = e.item ? esc(e.item) : '<span class="muted">No item</span>';
+        }
+        return '<div class="mexpand-row">' +
+          '<span class="me-date">' + esc(e.date) + '</span>' +
+          '<span class="me-amount">' + esc(money(e.amount)) + '</span>' +
+          '<span class="me-detail">' + detail + '</span>' +
+        '</div>';
+      }).join("") + '</div>';
+    }
+    return '<tr class="mexpand"><td colspan="4">' + inner + '</td></tr>';
+  }
+
+  // One expense row (with optional expand row for detailed lines).
+  function monthlyExpenseRow(l, m) {
+    const planned = plannedForLine(l.id);
+    const actual = actualForLine(l.id, m);
+    const diff = planned - actual;
+    const tint = actual > planned ? "over" : "under"; // at or under budget is green
+    let nameCell;
+    if (l.detailed) {
+      const expanded = !!monthlyExpanded[l.id];
+      nameCell = '<button class="line-toggle" type="button" data-expand="' + esc(l.id) + '"' +
+        ' aria-expanded="' + (expanded ? "true" : "false") + '">' +
+        CHEVRON + '<span>' + esc(l.name) + '</span></button>';
+    } else {
+      nameCell = '<span class="line-name">' + esc(l.name) + '</span>';
+    }
+    let row = '<tr class="mrow ' + tint + '">' +
+      '<td class="c-line">' + nameCell + '</td>' +
+      '<td class="c-num">' + esc(money(planned)) + '</td>' +
+      '<td class="c-num">' + esc(money(actual)) + '</td>' +
+      '<td class="c-num c-diff">' + esc(money(diff)) + '</td>' +
+    '</tr>';
+    if (l.detailed && monthlyExpanded[l.id]) {
+      row += monthlyExpandHtml(l, m);
+    }
+    return row;
+  }
+
+  // One income row (no tint - columns match the expense table).
+  function monthlyIncomeRow(l, m) {
+    const planned = plannedForLine(l.id);
+    const actual = actualForLine(l.id, m);
+    const diff = planned - actual;
+    return '<tr class="mrow">' +
+      '<td class="c-line"><span class="line-name">' + esc(l.name) + '</span></td>' +
+      '<td class="c-num">' + esc(money(planned)) + '</td>' +
+      '<td class="c-num">' + esc(money(actual)) + '</td>' +
+      '<td class="c-num c-diff">' + esc(money(diff)) + '</td>' +
+    '</tr>';
+  }
+
+  function monthlyTable(rows) {
+    return '<table class="mtable">' +
+      '<thead><tr>' +
+        '<th class="h-line">Line</th><th>Planned</th><th>Actual</th><th>Difference</th>' +
+      '</tr></thead>' +
+      '<tbody>' + rows + '</tbody>' +
+    '</table>';
+  }
+
+  function renderMonthly(month) {
+    const months = availableMonths();
+    // Default to the passed month, else App.month, else the latest month with data.
+    let m = month || App.month;
+    if (!m || months.indexOf(m) === -1) {
+      m = months.length ? months[months.length - 1] : (App.month || monthKey(todayStr()));
+    }
+    // Keep the global month indicator in sync with what the page shows.
+    if (App.month !== m) App.month = m;
+    updateMonthIndicator();
+
+    const lines = App.state.settings.lines || [];
+    const expenseLines = lines.filter((l) => l.type !== "income");
+    const incomeLines = lines.filter((l) => l.type === "income");
+
+    let picker;
+    if (months.length) {
+      const opts = months.map((k) =>
+        '<option value="' + esc(k) + '"' + (k === m ? " selected" : "") + '>' + esc(monthLabel(k)) + '</option>'
+      ).join("");
+      picker = '<div class="month-picker">' +
+        '<label for="monthly-month">Month</label>' +
+        '<select id="monthly-month">' + opts + '</select>' +
+      '</div>';
+    } else {
+      picker = "";
+    }
+
+    if (!months.length) {
+      return '<div class="card"><div class="monthly-head"><div class="titles">' +
+        '<h2>Monthly View</h2><p>Planned against actual for every line.</p></div></div>' +
+        '<div class="monthly-empty">No months to show yet. Add some entries or monthly amounts first.</div></div>';
+    }
+
+    const expenseRows = expenseLines.map((l) => monthlyExpenseRow(l, m)).join("");
+    const incomeRows = incomeLines.map((l) => monthlyIncomeRow(l, m)).join("");
+
+    const incomeTotal = incomeLines.reduce((s, l) => s + actualForLine(l.id, m), 0);
+    const expenseTotal = expenseLines.reduce((s, l) => s + actualForLine(l.id, m), 0);
+    const net = incomeTotal - expenseTotal;
+    const netTint = net >= 0 ? "under" : "over";
+
+    return '<div class="card">' +
+      '<div class="monthly-head">' +
+        '<div class="titles"><h2>' + esc(monthLabel(m)) + '</h2>' +
+          '<p>Planned against actual for every budget line.</p></div>' +
+        picker +
+      '</div>' +
+      '<h3 class="sec-title">Expenses</h3>' +
+      monthlyTable(expenseRows) +
+      '<h3 class="sec-title">Income</h3>' +
+      monthlyTable(incomeRows) +
+      '<div class="net-row ' + netTint + '">' +
+        '<span class="net-label">Net (income - expenses)</span>' +
+        '<span class="net-amount">' + esc(money(net)) + '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* ---- Monthly page event handling (delegated on #view) ---- */
+  function onMonthlyClick(e) {
+    const toggle = e.target.closest("[data-expand]");
+    if (toggle) {
+      const id = toggle.dataset.expand;
+      monthlyExpanded[id] = !monthlyExpanded[id];
+      render();
+    }
+  }
+  function onMonthlyChange(e) {
+    if (e.target.id === "monthly-month") {
+      App.month = e.target.value;
+      updateMonthIndicator();
+      render();
+    }
   }
   function renderFunds() {
     return placeholder("funds", "Grow your savings funds",
@@ -1130,10 +1429,14 @@
 
   // Entry page uses event delegation on #view (its markup is re-rendered often).
   view.addEventListener("click", (e) => {
-    if (App.tab === "entry" && App.state) onEntryClick(e);
+    if (!App.state) return;
+    if (App.tab === "entry") onEntryClick(e);
+    else if (App.tab === "monthly") onMonthlyClick(e);
   });
   view.addEventListener("change", (e) => {
-    if (App.tab === "entry" && App.state) onEntryChange(e);
+    if (!App.state) return;
+    if (App.tab === "entry") onEntryChange(e);
+    else if (App.tab === "monthly") onMonthlyChange(e);
   });
   view.addEventListener("submit", (e) => {
     if (App.tab === "entry" && App.state && e.target.id === "entry-form") {
@@ -1179,6 +1482,9 @@
   App.deleteMonthlyActual = deleteMonthlyActual;
   App.renderEntry = renderEntry;
   App.renderMonthly = renderMonthly;
+  App.plannedForLine = plannedForLine;
+  App.actualForLine = actualForLine;
+  App.availableMonths = availableMonths;
   App.renderFunds = renderFunds;
   App.renderAnalysis = renderAnalysis;
 
