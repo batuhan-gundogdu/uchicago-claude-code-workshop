@@ -1,0 +1,1665 @@
+{
+  "version": 1,
+  "settings": {
+    "stores": [
+      "Jewel Osco / Costco",
+      "Mexican Market / PETCO",
+      "Trader Joes / WholeFoods",
+      "Turkish Market / Fresh Market",
+      "Walgreens / Fresh Food",
+      "amazon / Chinese"
+    ],
+    "lines": [
+      {
+        "id": "mortgage",
+        "name": "Mortgage",
+        "type": "expense",
+        "category": "Housing",
+        "detailed": false,
+        "anticipated": 4450.0,
+        "recurringDefault": 4450.0
+      },
+      {
+        "id": "hoa",
+        "name": "HOA",
+        "type": "expense",
+        "category": "Housing",
+        "detailed": false,
+        "anticipated": 475.0,
+        "recurringDefault": 475.0
+      },
+      {
+        "id": "internet",
+        "name": "Internet",
+        "type": "expense",
+        "category": "Utilities",
+        "detailed": false,
+        "anticipated": 58.92,
+        "recurringDefault": 58.92
+      },
+      {
+        "id": "comed",
+        "name": "Comed",
+        "type": "expense",
+        "category": "Utilities",
+        "detailed": false,
+        "anticipated": 100.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "water",
+        "name": "Water",
+        "type": "expense",
+        "category": "Utilities",
+        "detailed": false,
+        "anticipated": 50.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "gas",
+        "name": "Gas",
+        "type": "expense",
+        "category": "Utilities",
+        "detailed": false,
+        "anticipated": 200.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "groceries",
+        "name": "Groceries",
+        "type": "expense",
+        "category": "Food",
+        "detailed": true,
+        "anticipated": 1100.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "car_loan",
+        "name": "Car Loan",
+        "type": "expense",
+        "category": "Transportation",
+        "detailed": false,
+        "anticipated": 530.0,
+        "recurringDefault": 530.0
+      },
+      {
+        "id": "car_expenses",
+        "name": "Car Expenses",
+        "type": "expense",
+        "category": "Transportation",
+        "detailed": true,
+        "anticipated": 340.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "home_expenses",
+        "name": "Home Expenses",
+        "type": "expense",
+        "category": "Home",
+        "detailed": true,
+        "anticipated": 205.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "enjoy",
+        "name": "Enjoy (order + eat out)",
+        "type": "expense",
+        "category": "Lifestyle",
+        "detailed": true,
+        "anticipated": 1000.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "vacation_savings",
+        "name": "Vacation Savings",
+        "type": "expense",
+        "category": "Savings",
+        "detailed": false,
+        "anticipated": 490.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "rainy_day_savings",
+        "name": "Rainy Day Savings",
+        "type": "expense",
+        "category": "Savings",
+        "detailed": false,
+        "anticipated": 480.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "payment_to_principal",
+        "name": "Payment to Principal",
+        "type": "expense",
+        "category": "Debt",
+        "detailed": false,
+        "anticipated": 695.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "rent_income",
+        "name": "Rent Income",
+        "type": "income",
+        "category": "Income",
+        "detailed": false,
+        "anticipated": 2150.0,
+        "recurringDefault": null
+      },
+      {
+        "id": "batu_contribution",
+        "name": "Batu Contribution",
+        "type": "income",
+        "category": "Income",
+        "detailed": false,
+        "anticipated": 4500.0,
+        "recurringDefault": 4500.0
+      },
+      {
+        "id": "natalie_contribution",
+        "name": "Natalie Contribution",
+        "type": "income",
+        "category": "Income",
+        "detailed": false,
+        "anticipated": 4500.0,
+        "recurringDefault": 4500.0
+      }
+    ]
+  },
+  "entries": [
+    {
+      "id": "groceries-202511-20",
+      "date": "2025-11-17",
+      "line": "groceries",
+      "amount": 320.0,
+      "item": null,
+      "store": "Trader Joes / WholeFoods",
+      "note": null
+    },
+    {
+      "id": "groceries-202511-26",
+      "date": "2025-11-22",
+      "line": "groceries",
+      "amount": 88.97,
+      "item": null,
+      "store": "Trader Joes / WholeFoods",
+      "note": null
+    },
+    {
+      "id": "groceries-202511-27",
+      "date": "2025-11-25",
+      "line": "groceries",
+      "amount": 210.0,
+      "item": null,
+      "store": "Trader Joes / WholeFoods",
+      "note": null
+    },
+    {
+      "id": "groceries-202511-29",
+      "date": "2025-11-24",
+      "line": "groceries",
+      "amount": 170.0,
+      "item": null,
+      "store": "Trader Joes / WholeFoods",
+      "note": null
+    },
+    {
+      "id": "groceries-202511-34",
+      "date": "2025-11-30",
+      "line": "groceries",
+      "amount": 77.29,
+      "item": null,
+      "store": "Trader Joes / WholeFoods",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-9",
+      "date": "2025-12-05",
+      "line": "groceries",
+      "amount": 355.0,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-10",
+      "date": "2025-12-06",
+      "line": "groceries",
+      "amount": 115.0,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-15",
+      "date": "2025-12-11",
+      "line": "groceries",
+      "amount": 28.42,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-18",
+      "date": "2025-12-13",
+      "line": "groceries",
+      "amount": 49.83,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-19",
+      "date": "2025-12-15",
+      "line": "groceries",
+      "amount": 34.25,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-20",
+      "date": "2025-12-17",
+      "line": "groceries",
+      "amount": 62.58,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-25",
+      "date": "2025-12-22",
+      "line": "groceries",
+      "amount": 85.96,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-26",
+      "date": "2025-12-22",
+      "line": "groceries",
+      "amount": 365.0,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-29",
+      "date": "2025-12-24",
+      "line": "groceries",
+      "amount": 82.0,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202512-32",
+      "date": "2025-12-30",
+      "line": "groceries",
+      "amount": 89.96,
+      "item": null,
+      "store": "Jewel Osco / Costco",
+      "note": null
+    },
+    {
+      "id": "groceries-202601-7",
+      "date": "2026-01-03",
+      "line": "groceries",
+      "amount": 78.22,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
+      "id": "groceries-202601-8",
+      "date": "2026-01-04",
+      "line": "groceries",
+      "amount": 69.32,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
+      "id": "groceries-202601-14",
+      "date": "2026-01-10",
+      "line": "groceries",
+      "amount": 264.9,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
+      "id": "groceries-202601-15",
+      "date": "2026-01-11",
+      "line": "groceries",
+      "amount": 38.47,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
+      "id": "groceries-202601-20",
+      "date": "2026-01-17",
+      "line": "groceries",
+      "amount": 86.81,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
+      "id": "groceries-202601-21",
+      "date": "2026-01-17",
+      "line": "groceries",
+      "amount": 255.0,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
+      "id": "groceries-202601-33",
+      "date": "2026-01-27",
+      "line": "groceries",
+      "amount": 340.0,
+      "item": null,
+      "store": "Turkish Market / Fresh Market",
+      "note": null
+    },
+    {
+      "id": "groceries-202602-12",
+      "date": "2026-02-08",
+      "line": "groceries",
+      "amount": 160.0,
+      "item": null,
+      "store": "amazon / Chinese",
+      "note": null
+    },
+    {
+      "id": "groceries-202602-13",
+      "date": "2026-02-08",
+      "line": "groceries",
+      "amount": 175.0,
+      "item": null,
+      "store": "amazon / Chinese",
+      "note": null
+    },
+    {
+      "id": "groceries-202602-14",
+      "date": "2026-02-10",
+      "line": "groceries",
+      "amount": 39.39,
+      "item": null,
+      "store": "amazon / Chinese",
+      "note": null
+    },
+    {
+      "id": "groceries-202602-19",
+      "date": "2026-02-15",
+      "line": "groceries",
+      "amount": 80.4,
+      "item": null,
+      "store": "amazon / Chinese",
+      "note": null
+    },
+    {
+      "id": "groceries-202602-25",
+      "date": "2026-02-22",
+      "line": "groceries",
+      "amount": 61.74,
+      "item": null,
+      "store": "amazon / Chinese",
+      "note": null
+    },
+    {
+      "id": "groceries-202602-26",
+      "date": "2026-02-22",
+      "line": "groceries",
+      "amount": 205.0,
+      "item": null,
+      "store": "amazon / Chinese",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-6",
+      "date": "2026-03-02",
+      "line": "groceries",
+      "amount": 270.0,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-9",
+      "date": "2026-03-05",
+      "line": "groceries",
+      "amount": 120.0,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-11",
+      "date": "2026-03-07",
+      "line": "groceries",
+      "amount": 105.0,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-14",
+      "date": "2026-03-10",
+      "line": "groceries",
+      "amount": 280.0,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-15",
+      "date": "2026-03-11",
+      "line": "groceries",
+      "amount": 31.86,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-16",
+      "date": "2026-03-13",
+      "line": "groceries",
+      "amount": 140.0,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
+      "note": null
+    },
+    {
+      "id": "groceries-202603-33",
+      "date": "2026-03-27",
+      "line": "groceries",
+      "amount": 165.0,
+      "item": null,
+      "store": "Walgreens / Fresh Food",
+      "note": null
+    },
+    {
+      "id": "groceries-202604-10",
+      "date": "2026-04-06",
+      "line": "groceries",
+      "amount": 145.0,
+      "item": null,
+      "store": "Mexican Market / PETCO",
+      "note": null
+    },
+    {
+      "id": "groceries-202604-19",
+      "date": "2026-04-15",
+      "line": "groceries",
+      "amount": 105.0,
+      "item": null,
+      "store": "Mexican Market / PETCO",
+      "note": null
+    },
+    {
+      "id": "groceries-202604-24",
+      "date": "2026-04-20",
+      "line": "groceries",
+      "amount": 86.74,
+      "item": null,
+      "store": "Mexican Market / PETCO",
+      "note": null
+    },
+    {
+      "id": "groceries-202604-26",
+      "date": "2026-04-22",
+      "line": "groceries",
+      "amount": 40.59,
+      "item": null,
+      "store": "Mexican Market / PETCO",
+      "note": null
+    },
+    {
+      "id": "groceries-202604-28",
+      "date": "2026-04-23",
+      "line": "groceries",
+      "amount": 50.67,
+      "item": null,
+      "store": "Mexican Market / PETCO",
+      "note": null
+    },
+    {
+      "id": "groceries-202604-29",
+      "date": "2026-04-24",
+      "line": "groceries",
+      "amount": 115.0,
+      "item": null,
+      "store": "Mexican Market / PETCO",
+      "note": null
+    },
+    {
+      "id": "groceries-202604-30",
+      "date": "2026-04-25",
+      "line": "groceries",
+      "amount": 63.07,
+      "item": null,
+      "store": "Mexican Market / PETCO",
+      "note": null
+    },
+    {
+      "id": "groceries-202605-10",
+      "date": "2026-05-06",
+      "line": "groceries",
+      "amount": 175.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "groceries-202605-16",
+      "date": "2026-05-13",
+      "line": "groceries",
+      "amount": 86.8,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "groceries-202605-17",
+      "date": "2026-05-13",
+      "line": "groceries",
+      "amount": 43.41,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "groceries-202605-21",
+      "date": "2026-05-17",
+      "line": "groceries",
+      "amount": 220.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "groceries-202605-27",
+      "date": "2026-05-25",
+      "line": "groceries",
+      "amount": 67.48,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "groceries-202605-30",
+      "date": "2026-05-25",
+      "line": "groceries",
+      "amount": 155.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202511-30",
+      "date": "2025-11-30",
+      "line": "enjoy",
+      "amount": 34.67,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202511-31",
+      "date": "2025-11-27",
+      "line": "enjoy",
+      "amount": 31.67,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-4",
+      "date": "2025-12-02",
+      "line": "enjoy",
+      "amount": 36.9,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-9",
+      "date": "2025-12-07",
+      "line": "enjoy",
+      "amount": 28.78,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-12",
+      "date": "2025-12-11",
+      "line": "enjoy",
+      "amount": 40.71,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-14",
+      "date": "2025-12-11",
+      "line": "enjoy",
+      "amount": 92.11,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-15",
+      "date": "2025-12-13",
+      "line": "enjoy",
+      "amount": 39.4,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-16",
+      "date": "2025-12-14",
+      "line": "enjoy",
+      "amount": 58.57,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-21",
+      "date": "2025-12-21",
+      "line": "enjoy",
+      "amount": 99.18,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-22",
+      "date": "2025-12-21",
+      "line": "enjoy",
+      "amount": 16.87,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-23",
+      "date": "2025-12-22",
+      "line": "enjoy",
+      "amount": 17.07,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-28",
+      "date": "2025-12-25",
+      "line": "enjoy",
+      "amount": 181.1594202898551,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202512-29",
+      "date": "2025-12-28",
+      "line": "enjoy",
+      "amount": 110.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-4",
+      "date": "2026-01-02",
+      "line": "enjoy",
+      "amount": 75.36,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-6",
+      "date": "2026-01-04",
+      "line": "enjoy",
+      "amount": 220.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-9",
+      "date": "2026-01-07",
+      "line": "enjoy",
+      "amount": 105.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-11",
+      "date": "2026-01-08",
+      "line": "enjoy",
+      "amount": 190.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-13",
+      "date": "2026-01-10",
+      "line": "enjoy",
+      "amount": 79.04,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-27",
+      "date": "2026-01-23",
+      "line": "enjoy",
+      "amount": 61.59,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-31",
+      "date": "2026-01-27",
+      "line": "enjoy",
+      "amount": 7.77,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-32",
+      "date": "2026-01-30",
+      "line": "enjoy",
+      "amount": 74.38,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202601-33",
+      "date": "2026-01-29",
+      "line": "enjoy",
+      "amount": 105.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-4",
+      "date": "2026-02-02",
+      "line": "enjoy",
+      "amount": 28.78,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-8",
+      "date": "2026-02-06",
+      "line": "enjoy",
+      "amount": 100.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-9",
+      "date": "2026-02-07",
+      "line": "enjoy",
+      "amount": 89.11,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-10",
+      "date": "2026-02-08",
+      "line": "enjoy",
+      "amount": 46.45,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-15",
+      "date": "2026-02-13",
+      "line": "enjoy",
+      "amount": 24.57,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-16",
+      "date": "2026-02-14",
+      "line": "enjoy",
+      "amount": 30.46,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-17",
+      "date": "2026-02-14",
+      "line": "enjoy",
+      "amount": 370.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-20",
+      "date": "2026-02-17",
+      "line": "enjoy",
+      "amount": 52.47,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-22",
+      "date": "2026-02-21",
+      "line": "enjoy",
+      "amount": 105.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-23",
+      "date": "2026-02-22",
+      "line": "enjoy",
+      "amount": 87.4,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202602-30",
+      "date": "2026-02-28",
+      "line": "enjoy",
+      "amount": 150.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202603-4",
+      "date": "2026-03-02",
+      "line": "enjoy",
+      "amount": 32.31,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202603-10",
+      "date": "2026-03-08",
+      "line": "enjoy",
+      "amount": 100.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202603-24",
+      "date": "2026-03-24",
+      "line": "enjoy",
+      "amount": 73.08,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202603-25",
+      "date": "2026-03-24",
+      "line": "enjoy",
+      "amount": 475.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202603-29",
+      "date": "2026-03-28",
+      "line": "enjoy",
+      "amount": 130.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202603-31",
+      "date": "2026-03-27",
+      "line": "enjoy",
+      "amount": 50.32,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-6",
+      "date": "2026-04-04",
+      "line": "enjoy",
+      "amount": 220.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-7",
+      "date": "2026-04-05",
+      "line": "enjoy",
+      "amount": 105.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-12",
+      "date": "2026-04-11",
+      "line": "enjoy",
+      "amount": 185.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-14",
+      "date": "2026-04-11",
+      "line": "enjoy",
+      "amount": 125.38,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-17",
+      "date": "2026-04-14",
+      "line": "enjoy",
+      "amount": 135.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-20",
+      "date": "2026-04-17",
+      "line": "enjoy",
+      "amount": 96.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-21",
+      "date": "2026-04-21",
+      "line": "enjoy",
+      "amount": 21.6,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-22",
+      "date": "2026-04-21",
+      "line": "enjoy",
+      "amount": 43.27,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-24",
+      "date": "2026-04-24",
+      "line": "enjoy",
+      "amount": 95.81,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-25",
+      "date": "2026-04-24",
+      "line": "enjoy",
+      "amount": 69.43,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-26",
+      "date": "2026-04-26",
+      "line": "enjoy",
+      "amount": 40.46,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-27",
+      "date": "2026-04-23",
+      "line": "enjoy",
+      "amount": 280.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202604-28",
+      "date": "2026-04-25",
+      "line": "enjoy",
+      "amount": 24.37,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-11",
+      "date": "2026-05-08",
+      "line": "enjoy",
+      "amount": 76.95,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-12",
+      "date": "2026-05-11",
+      "line": "enjoy",
+      "amount": 115.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-13",
+      "date": "2026-05-10",
+      "line": "enjoy",
+      "amount": 180.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-14",
+      "date": "2026-05-11",
+      "line": "enjoy",
+      "amount": 59.19,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-16",
+      "date": "2026-05-14",
+      "line": "enjoy",
+      "amount": 62.83,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-22",
+      "date": "2026-05-21",
+      "line": "enjoy",
+      "amount": 230.0,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-30",
+      "date": "2026-05-30",
+      "line": "enjoy",
+      "amount": 221.95,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-31",
+      "date": "2026-05-27",
+      "line": "enjoy",
+      "amount": 19.93,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "enjoy-202605-32",
+      "date": "2026-05-30",
+      "line": "enjoy",
+      "amount": 12.86,
+      "item": null,
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-1",
+      "date": "2025-11-13",
+      "line": "home_expenses",
+      "amount": 46.92,
+      "item": "Wallmount",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-2",
+      "date": "2025-11-14",
+      "line": "home_expenses",
+      "amount": 135.0,
+      "item": "Parcel Box",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-3",
+      "date": "2025-11-14",
+      "line": "home_expenses",
+      "amount": 28.08,
+      "item": "House Number",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-4",
+      "date": "2025-11-14",
+      "line": "home_expenses",
+      "amount": 135.0,
+      "item": "Doorbell",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-5",
+      "date": "2025-11-15",
+      "line": "home_expenses",
+      "amount": 230.0,
+      "item": "Lock",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-6",
+      "date": "2025-11-19",
+      "line": "home_expenses",
+      "amount": 32.39,
+      "item": "Plastic Hangers",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-7",
+      "date": "2025-11-22",
+      "line": "home_expenses",
+      "amount": 12.39,
+      "item": "Smart Plug",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-8",
+      "date": "2025-11-28",
+      "line": "home_expenses",
+      "amount": 167.5762,
+      "item": "Stair Carpets",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-9",
+      "date": "2025-11-29",
+      "line": "home_expenses",
+      "amount": 25.79,
+      "item": "Roku Stick",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-10",
+      "date": "2025-12-01",
+      "line": "home_expenses",
+      "amount": 22.92,
+      "item": "Water Filter",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-11",
+      "date": "2025-12-04",
+      "line": "home_expenses",
+      "amount": 21.14,
+      "item": "Toilet Brush",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-12",
+      "date": "2025-12-05",
+      "line": "home_expenses",
+      "amount": 18.13,
+      "item": "Toilet Trash",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-13",
+      "date": "2025-12-10",
+      "line": "home_expenses",
+      "amount": 355.0,
+      "item": "Roomba",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-14",
+      "date": "2025-12-29",
+      "line": "home_expenses",
+      "amount": 23.11,
+      "item": "Handwarmer",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-15",
+      "date": "2025-12-30",
+      "line": "home_expenses",
+      "amount": 15.91,
+      "item": "Kitchen plunger",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-16",
+      "date": "2026-01-07",
+      "line": "home_expenses",
+      "amount": 128.03,
+      "item": "Organizers",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-17",
+      "date": "2026-01-17",
+      "line": "home_expenses",
+      "amount": 110.0,
+      "item": "Drying rack et al.",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-18",
+      "date": "2026-01-29",
+      "line": "home_expenses",
+      "amount": 85.9,
+      "item": "Pan, lighter et al",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-19",
+      "date": "2026-01-29",
+      "line": "home_expenses",
+      "amount": 33.17,
+      "item": "Doggy shoes",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-20",
+      "date": "2026-02-17",
+      "line": "home_expenses",
+      "amount": 28.3,
+      "item": "Mail Organizer ",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-21",
+      "date": "2026-02-04",
+      "line": "home_expenses",
+      "amount": 52.4,
+      "item": "Pan",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-22",
+      "date": "2026-02-04",
+      "line": "home_expenses",
+      "amount": 19.05,
+      "item": "Dog Grooming",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-23",
+      "date": "2026-03-09",
+      "line": "home_expenses",
+      "amount": 365.0,
+      "item": "Shoe Rack",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-24",
+      "date": "2026-03-14",
+      "line": "home_expenses",
+      "amount": 88.85,
+      "item": "Organizers",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-25",
+      "date": "2026-03-30",
+      "line": "home_expenses",
+      "amount": 460.0,
+      "item": "TV",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-26",
+      "date": "2026-04-25",
+      "line": "home_expenses",
+      "amount": 115.0,
+      "item": "Bowl+lunas",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-27",
+      "date": "2026-04-24",
+      "line": "home_expenses",
+      "amount": 72.11,
+      "item": "Animal hosp",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-28",
+      "date": "2026-04-21",
+      "line": "home_expenses",
+      "amount": 185.0,
+      "item": "Airfryer",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-29",
+      "date": "2026-04-20",
+      "line": "home_expenses",
+      "amount": 80.73,
+      "item": "Amazon",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-30",
+      "date": "2026-05-21",
+      "line": "home_expenses",
+      "amount": 175.0,
+      "item": "VCA Animal Hospital",
+      "store": null,
+      "note": null
+    },
+    {
+      "id": "home_expenses-31",
+      "date": "2026-05-26",
+      "line": "home_expenses",
+      "amount": 116.78,
+      "item": "Amazin",
+      "store": null,
+      "note": null
+    }
+  ],
+  "monthlyActuals": {
+    "2025-11": {
+      "comed": 66.61,
+      "water": 0.0,
+      "gas": 0.0,
+      "rent_income": 0.0,
+      "vacation_savings": 0.0,
+      "rainy_day_savings": 0.0,
+      "payment_to_principal": 0.0,
+      "car_loan": 0.0,
+      "car_expenses": 0.0
+    },
+    "2025-12": {
+      "comed": 0.0,
+      "water": 0.0,
+      "gas": 0.0,
+      "rent_income": 1000.0,
+      "vacation_savings": 0.0,
+      "rainy_day_savings": 0.0,
+      "payment_to_principal": 940.0,
+      "car_loan": 0.0,
+      "car_expenses": 246.92000000000002
+    },
+    "2026-01": {
+      "comed": 115.0,
+      "water": 68.87,
+      "gas": 255.0,
+      "rent_income": 2150.0,
+      "vacation_savings": 0.0,
+      "rainy_day_savings": 0.0,
+      "payment_to_principal": 765.0,
+      "car_loan": 0.0,
+      "car_expenses": 239.01999999999998
+    },
+    "2026-02": {
+      "comed": 105.0,
+      "water": 0.0,
+      "gas": 200.0,
+      "rent_income": 2100.0,
+      "vacation_savings": 535.0,
+      "rainy_day_savings": 505.0,
+      "payment_to_principal": 785.0,
+      "car_loan": 505.0,
+      "car_expenses": 232.53
+    },
+    "2026-03": {
+      "comed": 82.48,
+      "water": 84.36,
+      "gas": 235.0,
+      "rent_income": 1850.0,
+      "vacation_savings": 495.0,
+      "rainy_day_savings": 530.0,
+      "payment_to_principal": 740.0,
+      "car_loan": 515.0,
+      "car_expenses": 250.16
+    },
+    "2026-04": {
+      "comed": 60.61,
+      "water": 0.0,
+      "gas": 135.0,
+      "rent_income": 2050.0,
+      "vacation_savings": 480.0,
+      "rainy_day_savings": 490.0,
+      "payment_to_principal": 700.0,
+      "car_loan": 465.0,
+      "car_expenses": 231.31
+    },
+    "2026-05": {
+      "comed": 67.05,
+      "water": 74.84,
+      "gas": 115.0,
+      "rent_income": 2050.0,
+      "vacation_savings": 480.0,
+      "rainy_day_savings": 480.0,
+      "payment_to_principal": 735.0,
+      "car_loan": 480.0,
+      "car_expenses": 205.16
+    },
+    "2026-06": {
+      "rent_income": 2000.0,
+      "vacation_savings": 505.0,
+      "rainy_day_savings": 540.0,
+      "car_loan": 485.0,
+      "car_expenses": 145.0
+    }
+  },
+  "fundsLedger": [
+    {
+      "id": "fund-1",
+      "date": "2025-11-27",
+      "fund": "vacation",
+      "amount": 2150.0,
+      "note": "Return of previous house Security Deposit"
+    },
+    {
+      "id": "fund-2",
+      "date": "2025-11-28",
+      "fund": "house",
+      "amount": 157100.0,
+      "note": "Received from the sales"
+    },
+    {
+      "id": "fund-3",
+      "date": "2025-12-01",
+      "fund": "house",
+      "amount": -26800.0,
+      "note": "Took car loan"
+    },
+    {
+      "id": "fund-4",
+      "date": "2025-12-02",
+      "fund": "house",
+      "amount": -925.0,
+      "note": "Paid to principal"
+    },
+    {
+      "id": "fund-5",
+      "date": "2026-01-01",
+      "fund": "vacation",
+      "amount": 2150.0,
+      "note": "Paid to principal + home"
+    },
+    {
+      "id": "fund-6",
+      "date": "2026-01-01",
+      "fund": "house",
+      "amount": -1950.0,
+      "note": "Paid to principal + home"
+    },
+    {
+      "id": "fund-7",
+      "date": "2026-01-30",
+      "fund": "house",
+      "amount": -2100.0,
+      "note": "Paid to principal + home"
+    },
+    {
+      "id": "fund-8",
+      "date": "2026-02-18",
+      "fund": "house",
+      "amount": -32250.0,
+      "note": "Took student Loan"
+    },
+    {
+      "id": "fund-9",
+      "date": "2026-02-26",
+      "fund": "house",
+      "amount": 480.0,
+      "note": "Car Payment #1"
+    },
+    {
+      "id": "fund-10",
+      "date": "2026-03-02",
+      "fund": "house",
+      "amount": -1950.0,
+      "note": "Paid to principal + home"
+    },
+    {
+      "id": "fund-11",
+      "date": "2026-03-14",
+      "fund": "house",
+      "amount": 540.0,
+      "note": "Student Payment #1"
+    },
+    {
+      "id": "fund-12",
+      "date": "2026-03-15",
+      "fund": "house",
+      "amount": 470.0,
+      "note": "Car Payment #2"
+    },
+    {
+      "id": "fund-13",
+      "date": "2026-04-01",
+      "fund": "house",
+      "amount": 535.0,
+      "note": "Car Payment #3"
+    },
+    {
+      "id": "fund-14",
+      "date": "2026-04-01",
+      "fund": "house",
+      "amount": -1850.0,
+      "note": "Paid to principal + home"
+    },
+    {
+      "id": "fund-15",
+      "date": "2026-04-26",
+      "fund": "house",
+      "amount": 245.0,
+      "note": "Student Payment #2"
+    },
+    {
+      "id": "fund-16",
+      "date": "2026-05-15",
+      "fund": "house",
+      "amount": 775.0,
+      "note": "Student Payment #3"
+    },
+    {
+      "id": "fund-17",
+      "date": "2026-05-20",
+      "fund": "house",
+      "amount": -2000.0,
+      "note": "Car Payment #4"
+    },
+    {
+      "id": "fund-18",
+      "date": "2026-04-27",
+      "fund": "vacation",
+      "amount": -2700.0,
+      "note": "Tulum Vacation"
+    },
+    {
+      "id": "fund-19",
+      "date": "2026-06-01",
+      "fund": "house",
+      "amount": 515.0,
+      "note": "Student Payment #4"
+    },
+    {
+      "id": "fund-20",
+      "date": "2026-06-01",
+      "fund": "house",
+      "amount": 460.0,
+      "note": "Car Payment #5"
+    },
+    {
+      "id": "fund-21",
+      "date": "2026-06-01",
+      "fund": "house",
+      "amount": -2150.0,
+      "note": "Paid to principal + home"
+    }
+  ]
+}
