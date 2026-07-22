@@ -1,0 +1,2438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Home Budget</title>
+<style>
+  /*
+   * Home Budget - a warm, friendly family budget app.
+   * All CSS and JS are inline. No external libraries, no network calls.
+   * Palette: soft pastels (blueberry, mint, peach, sky, blush) on a warm cream canvas.
+   */
+  :root {
+    --canvas: #f7f4fb;
+    --canvas-tint: #efe9f7;
+    --ink: #3a3550;
+    --ink-soft: #6f6987;
+    --ink-faint: #9b95ae;
+    --card: #ffffff;
+    --line: #ece7f4;
+
+    --grape: #7c6bd6;
+    --grape-deep: #5a4bb0;
+    --grape-soft: #ece8fb;
+
+    --mint: #7bd0b0;
+    --mint-soft: #e2f6ee;
+    --peach: #f4b183;
+    --peach-soft: #fdeee1;
+    --sky: #7fb8ec;
+    --sky-soft: #e4f0fc;
+    --blush: #ef9bbf;
+    --blush-soft: #fce7f1;
+    --butter: #f2d17a;
+    --butter-soft: #fdf4dc;
+
+    --ok: #4caf87;
+    --ok-soft: #e2f6ee;
+    --warn: #e0973f;
+    --warn-soft: #fdeede;
+
+    --radius-lg: 22px;
+    --radius-md: 15px;
+    --radius-sm: 10px;
+    --shadow-soft: 0 10px 30px -18px rgba(74, 61, 130, 0.55);
+    --shadow-lift: 0 14px 40px -20px rgba(74, 61, 130, 0.6);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--ink);
+    background:
+      radial-gradient(1200px 600px at 12% -8%, var(--sky-soft), transparent 55%),
+      radial-gradient(1100px 620px at 100% 0%, var(--blush-soft), transparent 52%),
+      radial-gradient(900px 700px at 50% 120%, var(--mint-soft), transparent 55%),
+      var(--canvas);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.45;
+  }
+
+  .shell {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 22px clamp(16px, 4vw, 34px) 60px;
+  }
+
+  /* ---- Top bar ---- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
+  .brand .logo {
+    width: 42px; height: 42px; border-radius: 14px;
+    display: grid; place-items: center;
+    background: linear-gradient(140deg, var(--grape), var(--sky));
+    color: #fff;
+    box-shadow: 0 8px 18px -8px var(--grape);
+    flex: none;
+  }
+  .brand h1 {
+    font-size: 19px; margin: 0; letter-spacing: -0.02em; font-weight: 700;
+  }
+  .brand .sub { font-size: 12px; color: var(--ink-faint); margin: 0; letter-spacing: 0.02em; }
+
+  .savepill {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 600;
+    padding: 7px 13px; border-radius: 999px;
+    background: var(--ok-soft); color: var(--ok);
+    white-space: nowrap; transition: background .2s, color .2s;
+  }
+  .savepill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .savepill[data-status="saving"] { background: var(--butter-soft); color: var(--warn); }
+  .savepill[data-status="unsaved"] { background: var(--blush-soft); color: #c25c86; }
+  .savepill[data-status="idle"] { background: var(--canvas-tint); color: var(--ink-faint); }
+  .savepill[data-status="saving"] .dot { animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  .month {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--grape-deep);
+    background: var(--grape-soft); padding: 8px 14px; border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .actions { display: flex; gap: 8px; }
+  .btn {
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 15px; border-radius: var(--radius-sm);
+    border: 1px solid var(--line); background: #fff; color: var(--ink);
+    cursor: pointer; transition: transform .12s, box-shadow .12s, background .12s, border-color .12s;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); border-color: #dcd4ee; }
+  .btn:active { transform: translateY(0); }
+  .btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+  .btn.primary {
+    background: linear-gradient(140deg, var(--grape), var(--grape-deep));
+    color: #fff; border-color: transparent;
+    box-shadow: 0 10px 22px -12px var(--grape);
+  }
+  .btn.primary:hover { box-shadow: 0 14px 26px -12px var(--grape); }
+  .btn svg { width: 16px; height: 16px; }
+
+  /* ---- Tab strip ---- */
+  .tabs {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin: 20px 0 22px; padding: 6px;
+    background: rgba(255,255,255,0.6); border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.85);
+    box-shadow: var(--shadow-soft); width: fit-content; max-width: 100%;
+  }
+  .tab {
+    font-family: inherit; font-size: 13.5px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 999px;
+    border: none; background: transparent; color: var(--ink-soft);
+    cursor: pointer; transition: color .18s, background .18s, box-shadow .18s;
+  }
+  .tab svg { width: 17px; height: 17px; }
+  .tab:hover { color: var(--ink); background: rgba(124,107,214,0.08); }
+  .tab:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+  .tab[aria-selected="true"] {
+    color: #fff; box-shadow: 0 10px 22px -12px var(--grape);
+  }
+  .tab[data-tab="entry"][aria-selected="true"]    { background: linear-gradient(140deg, #5fc9c9, var(--mint)); box-shadow: 0 10px 22px -12px #5fc9c9; }
+  .tab[data-tab="monthly"][aria-selected="true"]  { background: linear-gradient(140deg, var(--mint), var(--sky)); box-shadow: 0 10px 22px -12px var(--mint); }
+  .tab[data-tab="funds"][aria-selected="true"]    { background: linear-gradient(140deg, var(--peach), var(--blush)); box-shadow: 0 10px 22px -12px var(--peach); }
+  .tab[data-tab="analysis"][aria-selected="true"] { background: linear-gradient(140deg, var(--blush), var(--grape)); box-shadow: 0 10px 22px -12px var(--blush); }
+
+  /* ---- View / cards ---- */
+  main { min-height: 320px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-soft);
+    padding: 26px;
+  }
+
+  .placeholder {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 54px 26px; gap: 14px;
+  }
+  .placeholder .ic {
+    width: 64px; height: 64px; border-radius: 20px; display: grid; place-items: center;
+    color: #fff;
+  }
+  .placeholder h2 { margin: 4px 0 0; font-size: 20px; letter-spacing: -0.02em; }
+  .placeholder p { margin: 0; color: var(--ink-soft); max-width: 380px; }
+  .placeholder .soon {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-faint); background: var(--canvas-tint);
+    padding: 5px 12px; border-radius: 999px;
+  }
+
+  /* ---- Empty / open state ---- */
+  .empty { text-align: center; padding: 64px 26px; }
+  .empty .art {
+    width: 92px; height: 92px; margin: 0 auto 22px; border-radius: 28px;
+    display: grid; place-items: center; color: #fff;
+    background: linear-gradient(140deg, var(--grape), var(--sky));
+    box-shadow: 0 18px 40px -18px var(--grape);
+  }
+  .empty h2 { font-size: 24px; margin: 0 0 8px; letter-spacing: -0.02em; }
+  .empty p { color: var(--ink-soft); margin: 0 auto 24px; max-width: 420px; }
+  .empty .hint {
+    margin-top: 18px; font-size: 12.5px; color: var(--ink-faint);
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .empty .cta { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+  .hidden { display: none !important; }
+
+  /* ---- Entry page ---- */
+  .entry-head { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+  .entry-sub { margin: 0 0 20px; color: var(--ink-soft); font-size: 13.5px; }
+
+  .cat-picker {
+    display: grid; gap: 12px; margin-bottom: 24px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .cat-btn {
+    font-family: inherit; cursor: pointer; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 9px;
+    padding: 16px 10px; border-radius: var(--radius-md);
+    border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+    transition: transform .12s, box-shadow .12s, border-color .12s, background .12s;
+  }
+  .cat-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); border-color: #dcd4ee; }
+  .cat-btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+  .cat-btn .cat-ic {
+    width: 46px; height: 46px; border-radius: 15px; display: grid; place-items: center;
+    color: #fff; flex: none;
+  }
+  .cat-btn .cat-ic svg { width: 24px; height: 24px; }
+  .cat-btn .cat-name { font-size: 12.5px; font-weight: 600; line-height: 1.25; }
+  .cat-btn[aria-pressed="true"] {
+    border-color: transparent; color: var(--cat-deep, var(--grape-deep));
+    background: var(--cat-soft, var(--grape-soft));
+    box-shadow: 0 10px 24px -14px var(--cat, var(--grape));
+  }
+  .cat-btn:focus-visible { outline: 3px solid var(--cat, var(--sky)); }
+
+  /* The form + recent list follow the active category's accent, not purple. */
+  .entry-form { border-top: 1px solid var(--line); padding-top: 22px; }
+  .form-grid {
+    display: grid; gap: 14px 16px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    align-items: end;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-wide { grid-column: 1 / -1; }
+  .field label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .field input, .field select {
+    font-family: inherit; font-size: 14px; color: var(--ink);
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--line); background: #fff; width: 100%;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .field input:focus, .field select:focus {
+    outline: none; border-color: var(--cat, var(--grape));
+    box-shadow: 0 0 0 3px var(--cat-soft, var(--grape-soft));
+  }
+  /* Store picker: clickable color chips, one hue per store. */
+  .store-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .store-chip {
+    font-family: inherit; cursor: pointer; font-size: 13px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 13px; border-radius: 999px;
+    border: 1.5px solid var(--line); background: #fff; color: var(--ink-soft);
+    transition: transform .1s, box-shadow .12s, background .12s, color .12s, border-color .12s;
+  }
+  .store-chip:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+  .store-chip .chip-dot {
+    width: 11px; height: 11px; border-radius: 50%; flex: none;
+    background: var(--chip, var(--ink-faint));
+  }
+  .store-chip[aria-pressed="true"] {
+    color: var(--chip-deep, var(--ink)); background: var(--chip-soft, var(--grape-soft));
+    border-color: var(--chip, transparent);
+    box-shadow: 0 8px 18px -12px var(--chip, var(--grape));
+  }
+  .store-chip:focus-visible { outline: 3px solid var(--chip, var(--sky)); outline-offset: 2px; }
+  .store-other-chip .chip-dot { display: none; }
+  .store-other-input { flex-basis: 100%; margin-top: 2px; }
+
+  .form-actions { display: flex; align-items: center; gap: 14px; margin-top: 16px; flex-wrap: wrap; }
+  .entry-hint { font-size: 13px; color: #c25c86; font-weight: 600; min-height: 1em; }
+  .entry-hint:empty { display: none; }
+
+  .recent { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 20px; }
+  .recent h3 {
+    margin: 0 0 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .recent-empty { color: var(--ink-faint); font-size: 13.5px; padding: 8px 2px; }
+  .entry-list { display: flex; flex-direction: column; gap: 8px; }
+  .entry-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 11px 15px; border-radius: var(--radius-md);
+    background: var(--canvas-tint); border: 1px solid transparent;
+  }
+  .entry-row .e-date {
+    font-size: 12.5px; font-weight: 600; color: var(--ink-soft);
+    width: 92px; flex: none; font-variant-numeric: tabular-nums;
+  }
+  .entry-row .e-amount {
+    font-size: 15px; font-weight: 700; color: var(--cat-deep, var(--grape-deep));
+    width: 96px; flex: none; text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .entry-row .e-detail {
+    flex: 1; min-width: 0; color: var(--ink); font-size: 13.5px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .entry-row .e-detail .muted { color: var(--ink-faint); }
+  .entry-row .e-controls { display: flex; gap: 6px; flex: none; }
+  .icon-btn {
+    font-family: inherit; cursor: pointer; display: grid; place-items: center;
+    width: 32px; height: 32px; border-radius: var(--radius-sm);
+    border: 1px solid var(--line); background: #fff; color: var(--ink-soft);
+    transition: color .12s, border-color .12s, background .12s;
+  }
+  .icon-btn svg { width: 15px; height: 15px; }
+  .icon-btn:hover { color: var(--cat-deep, var(--grape-deep)); border-color: #dcd4ee; background: var(--cat-soft, var(--grape-soft)); }
+  .icon-btn.danger:hover { color: #c25c86; background: var(--blush-soft); border-color: var(--blush); }
+  .icon-btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+  .entry-row.editing { background: #fff; border-color: var(--cat, var(--grape)); box-shadow: 0 0 0 3px var(--cat-soft, var(--grape-soft)); flex-wrap: wrap; }
+  .entry-form .btn.primary { background: linear-gradient(140deg, var(--cat, var(--grape)), var(--cat-deep, var(--grape-deep))); }
+  .entry-row.editing .edit-field { display: flex; flex-direction: column; gap: 4px; }
+  .entry-row.editing .edit-field input, .entry-row.editing .edit-field select {
+    font-family: inherit; font-size: 13.5px; padding: 7px 9px;
+    border-radius: var(--radius-sm); border: 1.5px solid var(--line); background: #fff;
+  }
+  .entry-row.editing .edit-field label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint);
+  }
+
+  /* ---- Monthly View page ---- */
+  .monthly-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 22px;
+  }
+  .monthly-head .titles { min-width: 0; }
+  .monthly-head h2 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+  .monthly-head p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+  .month-picker { display: flex; flex-direction: column; gap: 6px; flex: none; }
+  .month-picker label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .month-picker select {
+    font-family: inherit; font-size: 14px; font-weight: 600; color: var(--ink);
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--line); background: #fff; min-width: 170px;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .month-picker select:focus {
+    outline: none; border-color: var(--grape); box-shadow: 0 0 0 3px var(--grape-soft);
+  }
+
+  .sec-title {
+    margin: 24px 0 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .sec-title:first-of-type { margin-top: 4px; }
+
+  .mtable { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+  .mtable thead th {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--ink-faint); text-align: right; padding: 0 14px 4px; white-space: nowrap;
+  }
+  .mtable thead th.h-line { text-align: left; }
+  .mtable tbody td {
+    padding: 12px 14px; background: var(--canvas-tint);
+    font-size: 14px; color: var(--ink);
+    border-top: 1px solid transparent; border-bottom: 1px solid transparent;
+  }
+  .mtable tbody td.c-num {
+    text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .mtable tbody td.c-line:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md); }
+  .mtable tbody td.c-num:last-child { border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+  .mtable tbody tr.mrow.under td { background: var(--ok-soft); }
+  .mtable tbody tr.mrow.over  td { background: var(--blush-soft); }
+  .mtable tbody tr.mrow .c-diff { font-weight: 600; }
+  .mtable tbody tr.mrow.under .c-diff { color: #2f8f6b; }
+  .mtable tbody tr.mrow.over  .c-diff { color: #c25c86; }
+  .mtable .line-name { font-weight: 600; }
+
+  .line-toggle {
+    font-family: inherit; font-size: 14px; font-weight: 600; color: var(--ink);
+    display: inline-flex; align-items: center; gap: 8px;
+    border: none; background: none; padding: 0; cursor: pointer; text-align: left;
+  }
+  .line-toggle:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; border-radius: 4px; }
+  .line-toggle .chev {
+    width: 15px; height: 15px; flex: none; color: var(--ink-faint);
+    transition: transform .16s ease;
+  }
+  .line-toggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
+
+  .mexpand td { background: #fff !important; padding: 4px 14px 12px !important; }
+  .mexpand-list { display: flex; flex-direction: column; gap: 6px; }
+  .mexpand-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 8px 13px; border-radius: var(--radius-sm);
+    background: var(--canvas-tint);
+  }
+  .mexpand-row .me-date {
+    font-size: 12.5px; font-weight: 600; color: var(--ink-soft);
+    width: 96px; flex: none; font-variant-numeric: tabular-nums;
+  }
+  .mexpand-row .me-amount {
+    font-size: 14px; font-weight: 700; color: var(--grape-deep);
+    width: 96px; flex: none; text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .mexpand-row .me-detail {
+    flex: 1; min-width: 0; font-size: 13.5px; color: var(--ink);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .mexpand-row .muted { color: var(--ink-faint); }
+  .mexpand-empty { font-size: 13px; color: var(--ink-faint); padding: 6px 2px; }
+
+  .net-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    margin-top: 20px; padding: 16px 18px; border-radius: var(--radius-md);
+    font-weight: 700;
+  }
+  .net-row .net-label {
+    font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .net-row .net-amount { font-size: 20px; font-variant-numeric: tabular-nums; }
+  .net-row.under { background: var(--ok-soft); color: #2f8f6b; }
+  .net-row.over  { background: var(--blush-soft); color: #c25c86; }
+
+  .monthly-empty { color: var(--ink-soft); font-size: 14px; padding: 20px 2px; }
+
+  /* ---- Funds page ---- */
+  .funds-head { margin: 0 0 22px; }
+  .funds-head h2 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+  .funds-head p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+
+  .fund-cards {
+    display: grid; gap: 14px; margin-bottom: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  }
+  .fund-card {
+    border-radius: var(--radius-md); padding: 18px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .fund-card.f-vacation  { background: var(--peach-soft); }
+  .fund-card.f-rainy_day { background: var(--sky-soft); }
+  .fund-card.f-house     { background: var(--mint-soft); }
+  .fund-card.f-runway    { background: var(--grape-soft); }
+  .fund-card .fc-top { display: flex; align-items: center; gap: 10px; }
+  .fund-card .fc-ic {
+    width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center;
+    color: #fff; flex: none;
+  }
+  .fund-card .fc-ic svg { width: 18px; height: 18px; }
+  .fund-card.f-vacation  .fc-ic { background: linear-gradient(140deg, var(--peach), var(--blush)); }
+  .fund-card.f-rainy_day .fc-ic { background: linear-gradient(140deg, var(--sky), var(--grape)); }
+  .fund-card.f-house     .fc-ic { background: linear-gradient(140deg, var(--mint), var(--sky)); }
+  .fund-card.f-runway    .fc-ic { background: linear-gradient(140deg, var(--grape), var(--grape-deep)); }
+  .fund-card .fc-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .fund-card .fc-value {
+    font-size: 25px; font-weight: 700; color: var(--ink);
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  }
+  .fund-card.neg .fc-value { color: #c25c86; }
+  .fund-card .fc-sub { font-size: 12px; color: var(--ink-faint); margin-top: -4px; }
+
+  .funds-ledger { border-top: 1px solid var(--line); padding-top: 22px; }
+  .funds-ledger h3 {
+    margin: 0 0 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .fund-row .f-fund { font-weight: 600; color: var(--ink); }
+  .fund-row .f-note { color: var(--ink-soft); }
+  .fund-row .f-note .muted { color: var(--ink-faint); }
+  .entry-row .e-amount.neg { color: #c25c86; }
+  .auto-tag {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--grape-deep); background: var(--grape-soft);
+    padding: 5px 10px; border-radius: 999px; flex: none;
+  }
+  .funds-empty { color: var(--ink-faint); font-size: 13.5px; padding: 8px 2px; }
+
+  /* ---- Analysis page ---- */
+  .an-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 4px;
+  }
+  .an-head .titles { min-width: 0; }
+  .an-head h2 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+  .an-head p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+  .an-controls { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+  .seg-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .seg-wrap > span {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .seg {
+    display: inline-flex; padding: 4px; gap: 4px;
+    background: var(--canvas-tint); border-radius: 999px; border: 1px solid var(--line);
+  }
+  .seg button {
+    font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-soft);
+    border: none; background: transparent; padding: 8px 15px; border-radius: 999px; cursor: pointer;
+    transition: color .16s, background .16s, box-shadow .16s;
+  }
+  .seg button:hover { color: var(--ink); }
+  .seg button[aria-pressed="true"] {
+    color: #fff; background: linear-gradient(140deg, var(--blush), var(--grape));
+    box-shadow: 0 8px 18px -10px var(--blush);
+  }
+  .seg button:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+  .an-card { margin-bottom: 18px; }
+  .an-card:last-child { margin-bottom: 0; }
+  .an-card .sec-title:first-of-type { margin-top: 0; }
+  .chart-box { width: 100%; margin-top: 6px; }
+  .chart-box svg.chart { width: 100%; height: auto; display: block; }
+  .an-grid { display: grid; gap: 20px; grid-template-columns: 1.35fr 1fr; align-items: start; }
+  @media (max-width: 720px) { .an-grid { grid-template-columns: 1fr; } }
+
+  .rank-list { display: flex; flex-direction: column; gap: 13px; margin-top: 8px; }
+  .rank-row { display: grid; grid-template-columns: 1fr auto; gap: 5px 12px; align-items: center; }
+  .rank-row .rk-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .rank-row .rk-val {
+    font-size: 13.5px; font-weight: 700; color: var(--grape-deep); font-variant-numeric: tabular-nums;
+  }
+  .rank-row .rk-track {
+    grid-column: 1 / -1; height: 8px; border-radius: 999px; background: var(--canvas-tint); overflow: hidden;
+  }
+  .rank-row .rk-fill { height: 100%; border-radius: 999px; }
+
+  .big-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .big-row {
+    display: flex; align-items: center; gap: 13px;
+    padding: 11px 15px; border-radius: var(--radius-md); background: var(--canvas-tint);
+  }
+  .big-row .bg-rank {
+    width: 26px; height: 26px; flex: none; border-radius: 8px; display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; color: var(--grape-deep); background: var(--grape-soft);
+  }
+  .big-row .bg-date {
+    font-size: 12.5px; font-weight: 600; color: var(--ink-soft); width: 92px; flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .big-row .bg-amount {
+    font-size: 15px; font-weight: 700; color: var(--grape-deep); width: 92px; flex: none;
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .big-row .bg-detail { flex: 1; min-width: 0; }
+  .big-row .bg-main {
+    font-size: 13.5px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .big-row .bg-main .muted { color: var(--ink-faint); }
+  .big-row .bg-sub { font-size: 12px; color: var(--ink-faint); }
+  .an-empty { color: var(--ink-soft); font-size: 14px; padding: 20px 2px; }
+
+  @media (max-width: 640px) {
+    .cat-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 560px) {
+    .brand .sub { display: none; }
+    .btn span.lbl { display: none; }
+    .btn { padding: 9px 11px; }
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9h14v-9"/><path d="M9.5 19v-5h5v5"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Home Budget</h1>
+          <p class="sub">plan and track together</p>
+        </div>
+      </div>
+
+      <div id="savepill" class="savepill" data-status="idle" role="status" aria-live="polite">
+        <span class="dot"></span><span id="save-text">no file</span>
+      </div>
+
+      <div id="month" class="month" title="Current month in view">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+        <span id="month-label">-</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="btn-open" type="button" title="Open your budget file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span class="lbl">Open</span>
+        </button>
+        <button class="btn" id="btn-export" type="button" title="Download a copy of your budget">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          <span class="lbl">Export</span>
+        </button>
+        <button class="btn" id="btn-import" type="button" title="Load a budget file (Safari fallback)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>
+          <span class="lbl">Import</span>
+        </button>
+        <button class="btn" id="btn-reset" type="button" title="Clear all entries and start fresh (keeps your budget lines)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          <span class="lbl">Start fresh</span>
+        </button>
+        <input type="file" id="file-input" accept="application/json,.json" class="hidden" />
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Budget sections">
+      <button class="tab" data-tab="entry" role="tab" aria-selected="false" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        Entry
+      </button>
+      <button class="tab" data-tab="monthly" role="tab" aria-selected="false" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg>
+        Monthly View
+      </button>
+      <button class="tab" data-tab="funds" role="tab" aria-selected="false" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1a4 4 0 0 1-4 4v2h-2v-2H9v2H7v-2.3A5 5 0 0 1 4 12z"/><path d="M17 9.5a1 1 0 1 0 .01 0M13 6l-1-2"/></svg>
+        Funds
+      </button>
+      <button class="tab" data-tab="analysis" role="tab" aria-selected="false" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4"/><path d="M4 20h16"/><rect x="7" y="12" width="3" height="5" rx="1"/><rect x="12" y="8" width="3" height="9" rx="1"/><rect x="17" y="5" width="3" height="12" rx="1"/></svg>
+        Analysis
+      </button>
+    </nav>
+
+    <main id="view" role="tabpanel" aria-live="polite">
+      <!-- render() fills this -->
+    </main>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =========================================================================
+   * App namespace - the single global surface later tasks build on.
+   * Page code added in later tasks lives in this same file and calls App.*.
+   * ========================================================================= */
+  const App = {
+    state: null,       // parsed budget.json - the single in-memory source of truth (null until loaded)
+    tab: "entry",      // active tab: entry | monthly | funds | analysis
+    month: null,       // "YYYY-MM" currently in view (global month indicator)
+    handle: null,      // FileSystemFileHandle when File System Access is in use
+  };
+  window.App = App;
+
+  /* ---- IndexedDB: persist the file handle so we can reopen silently ---- */
+  const DB_NAME = "nest-budget";
+  const STORE = "handles";
+  const HANDLE_KEY = "budget-file";
+
+  function openDb() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(STORE);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  async function idbSet(key, val) {
+    const db = await openDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, "readwrite");
+      tx.objectStore(STORE).put(val, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+  async function idbGet(key) {
+    const db = await openDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, "readonly");
+      const r = tx.objectStore(STORE).get(key);
+      r.onsuccess = () => resolve(r.result);
+      r.onerror = () => reject(r.error);
+    });
+  }
+
+  /* =========================================================================
+   * Formatting + id helpers
+   * ========================================================================= */
+  const _money = new Intl.NumberFormat("en-US", {
+    style: "currency", currency: "USD",
+    minimumFractionDigits: 2, maximumFractionDigits: 2,
+  });
+  // money(n) -> "$1,234.56"; negatives render as "-$12.00"
+  function money(n) {
+    const v = Number(n);
+    if (!isFinite(v)) return _money.format(0);
+    return _money.format(v);
+  }
+
+  // monthKey("2025-11-17") -> "2025-11"
+  function monthKey(dateStr) {
+    return String(dateStr || "").slice(0, 7);
+  }
+
+  // esc(s) - escape user text before it is interpolated into any innerHTML string.
+  // Guards against XSS from stored store/item/note/line names.
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // todayStr() -> "YYYY-MM-DD" in local time, for defaulting date fields.
+  function todayStr() {
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+
+  // uid("entry") -> "entry-lq3x8-4" (prefix + timestamp + counter, unique per session)
+  let _uidCounter = 0;
+  function uid(prefix) {
+    _uidCounter += 1;
+    return (prefix ? prefix + "-" : "") + Date.now().toString(36) + "-" + _uidCounter;
+  }
+
+  // Human month label: "2026-07" -> "July 2026"
+  function monthLabel(key) {
+    if (!key || key.length < 7) return "-";
+    const [y, m] = key.split("-");
+    const d = new Date(Number(y), Number(m) - 1, 1);
+    return d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  }
+
+  /* =========================================================================
+   * Save indicator
+   * ========================================================================= */
+  const savePill = document.getElementById("savepill");
+  const saveText = document.getElementById("save-text");
+  function setSaveStatus(status, text) {
+    savePill.dataset.status = status;
+    saveText.textContent = text;
+  }
+
+  /* =========================================================================
+   * Storage: openFile / save / exportJson / importJson
+   * ========================================================================= */
+
+  // validateBudget(obj) - true only when obj has the core budget shape:
+  // a settings object with a lines array (each line an object with a string id)
+  // and a stores array, top-level entries + fundsLedger arrays, and a
+  // monthlyActuals object. Optional fields are ignored - this only guards
+  // against loading a file that would break Entry / Monthly / Analysis.
+  function validateBudget(obj) {
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) return false;
+    const s = obj.settings;
+    if (!s || typeof s !== "object" || Array.isArray(s)) return false;
+    if (!Array.isArray(s.lines)) return false;
+    const linesOk = s.lines.every((l) =>
+      l && typeof l === "object" && !Array.isArray(l) && typeof l.id === "string");
+    if (!linesOk) return false;
+    if (!Array.isArray(s.stores)) return false;
+    if (!Array.isArray(obj.entries)) return false;
+    if (!Array.isArray(obj.fundsLedger)) return false;
+    const ma = obj.monthlyActuals;
+    if (!ma || typeof ma !== "object" || Array.isArray(ma)) return false;
+    return true;
+  }
+
+  // Show a friendly, on-brand error when a picked file is not a budget file
+  // (bad JSON or wrong shape). App.state is left untouched.
+  function showLoadError() {
+    setSaveStatus("unsaved", "not a budget file");
+    window.alert(
+      "That file does not look like a budget file. Please pick your budget.json."
+    );
+  }
+
+  // Parse text into App.state, pick a sensible default month, then render.
+  function adoptState(obj) {
+    App.state = obj;
+    App.month = defaultMonth(obj);
+    updateMonthIndicator();
+  }
+
+  function defaultMonth(state) {
+    const actuals = state && state.monthlyActuals;
+    if (actuals) {
+      const keys = Object.keys(actuals).sort();
+      if (keys.length) return keys[keys.length - 1];
+    }
+    // Fallback: derive from the same LOCAL date basis as todayStr(), so the
+    // default month never disagrees with "today" in negative-UTC zones.
+    return monthKey(todayStr());
+  }
+
+  function updateMonthIndicator() {
+    document.getElementById("month-label").textContent = monthLabel(App.month);
+  }
+
+  function hasFsAccess() {
+    return typeof window.showOpenFilePicker === "function";
+  }
+
+  // openFile() - pick budget.json via File System Access, persist handle, load, render.
+  async function openFile() {
+    if (!hasFsAccess()) {
+      // Safari and friends: fall back to the import picker.
+      document.getElementById("file-input").click();
+      return;
+    }
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{ description: "Budget file", accept: { "application/json": [".json"] } }],
+        multiple: false,
+      });
+      App.handle = handle;
+      await idbSet(HANDLE_KEY, handle);
+      await loadFromHandle(handle);
+    } catch (err) {
+      if (err && err.name === "AbortError") return; // user cancelled - no noise
+      console.error("openFile failed:", err);
+      setSaveStatus("unsaved", "could not open");
+    }
+  }
+
+  async function loadFromHandle(handle) {
+    const file = await handle.getFile();
+    const text = await file.text();
+    let obj;
+    try {
+      obj = JSON.parse(text);
+    } catch (err) {
+      showLoadError(); // malformed JSON - leave current state untouched
+      return;
+    }
+    if (!validateBudget(obj)) {
+      showLoadError(); // wrong shape - leave current state untouched
+      return;
+    }
+    adoptState(obj);
+    setSaveStatus("saved", "saved");
+    render();
+  }
+
+  // save() - debounced ~400ms; write App.state back to the file handle.
+  // Any code that mutates App.state should call save().
+  let _saveTimer = null;
+  function save() {
+    if (!App.state) return;
+    if (!App.handle) {
+      // No writable handle (import / export-only mode). Data lives in memory;
+      // the user keeps it by exporting.
+      setSaveStatus("unsaved", "export to keep");
+      return;
+    }
+    setSaveStatus("saving", "saving...");
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(doSave, 400);
+  }
+
+  async function doSave() {
+    _saveTimer = null; // the debounce window has elapsed - no save pending now
+    try {
+      const writable = await App.handle.createWritable();
+      await writable.write(JSON.stringify(App.state, null, 2));
+      await writable.close();
+      setSaveStatus("saved", "saved");
+    } catch (err) {
+      console.error("save failed:", err);
+      setSaveStatus("unsaved", "save failed");
+    }
+  }
+
+  // flushSave() - if a debounced save is pending, cancel the timer and write
+  // immediately. Called on unload so an edit made inside the 400ms window is
+  // not lost. Only meaningful in auto-save mode (a writable handle exists);
+  // in import/export mode there is nothing to flush.
+  function flushSave() {
+    if (!App.state || !App.handle || _saveTimer == null) return;
+    clearTimeout(_saveTimer);
+    _saveTimer = null;
+    doSave();
+  }
+
+  // exportJson() - download App.state as budget.json (works in every browser).
+  function exportJson() {
+    if (!App.state) return;
+    const blob = new Blob([JSON.stringify(App.state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "budget.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // importJson(file) - read a File/Blob, parse into App.state, render.
+  // The fallback path when File System Access is unavailable.
+  async function importJson(file) {
+    const text = await file.text();
+    let obj;
+    try {
+      obj = JSON.parse(text);
+    } catch (err) {
+      showLoadError(); // malformed JSON - leave current state untouched
+      return;
+    }
+    if (!validateBudget(obj)) {
+      showLoadError(); // wrong shape - leave current state untouched
+      return;
+    }
+    adoptState(obj);
+    App.handle = null; // imported copies are not writable back to disk
+    setSaveStatus("unsaved", "in memory");
+    render();
+  }
+
+  // resetData() - wipe all recorded activity but keep the budget structure
+  // (settings.lines, settings.stores). Empties entries, monthlyActuals, and
+  // fundsLedger so the user can clear seeded sample data and enter their own.
+  // No confirm here - callers (the top-bar button) prompt first; calling this
+  // directly performs the wipe immediately.
+  function resetData() {
+    if (!App.state) return;
+    const settings = App.state.settings || { lines: [], stores: [] };
+    App.state = {
+      version: App.state.version || 1,
+      settings: settings,
+      entries: [],
+      monthlyActuals: {},
+      fundsLedger: [],
+    };
+    App.month = defaultMonth(App.state);
+    updateMonthIndicator();
+    save();
+    render();
+  }
+
+  /* =========================================================================
+   * Rendering + tab navigation
+   * ========================================================================= */
+  const view = document.getElementById("view");
+
+  const TAB_META = {
+    entry:    { grad: "linear-gradient(140deg, var(--grape), var(--sky))" },
+    monthly:  { grad: "linear-gradient(140deg, var(--mint), var(--sky))" },
+    funds:    { grad: "linear-gradient(140deg, var(--peach), var(--blush))" },
+    analysis: { grad: "linear-gradient(140deg, var(--blush), var(--grape))" },
+  };
+
+  /* =========================================================================
+   * Entry page - the fast-input page.
+   * ========================================================================= */
+
+  // Which category is active in the picker. Detailed line id, or "bill".
+  let entryCat = "groceries";
+  // Id of the entry currently being edited inline (null = none).
+  let editingId = null;
+
+  // Friendly labels + icons keyed by detailed-line id. Labels fall back to the
+  // line's own name (from settings) for any detailed line not listed here.
+  const CAT_LABELS = {
+    groceries: "Groceries", enjoy: "Enjoy",
+    home_expenses: "Home Expenses", car_expenses: "Car Expenses",
+  };
+  const CAT_ICONS = {
+    groceries: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 3h3l2.6 12.4a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L23 6H6"/>',
+    enjoy: '<path d="M20.8 5.6a5.4 5.4 0 0 0-7.7 0L12 6.7l-1.1-1.1a5.4 5.4 0 1 0-7.7 7.7L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.7z"/>',
+    home_expenses: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9h14v-9"/><path d="M9.5 19v-5h5v5"/>',
+    car_expenses: '<path d="M5 13l1.6-4.6A2 2 0 0 1 8.5 7h7a2 2 0 0 1 1.9 1.4L19 13"/><path d="M4 13h16v4H4z"/><circle cx="7.5" cy="17.5" r="1.2"/><circle cx="16.5" cy="17.5" r="1.2"/>',
+    bill: '<path d="M6 2h9l3 3v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  };
+
+  // Each category gets its own fun color: a gradient for the icon tile and a
+  // solid accent that tints the button when selected and colors the form.
+  const CAT_COLORS = {
+    groceries:     { grad: "linear-gradient(140deg, var(--mint), var(--sky))",     accent: "var(--mint)",   soft: "var(--mint-soft)",   deep: "#2f8f6b" },
+    enjoy:         { grad: "linear-gradient(140deg, var(--blush), var(--peach))",   accent: "var(--blush)",  soft: "var(--blush-soft)",  deep: "#c25c86" },
+    home_expenses: { grad: "linear-gradient(140deg, var(--sky), var(--mint))",      accent: "var(--sky)",    soft: "var(--sky-soft)",    deep: "#3d7fbf" },
+    car_expenses:  { grad: "linear-gradient(140deg, var(--butter), var(--peach))",  accent: "var(--butter)", soft: "var(--butter-soft)", deep: "#b5872a" },
+    bill:          { grad: "linear-gradient(140deg, var(--peach), var(--butter))",  accent: "var(--peach)",  soft: "var(--peach-soft)",  deep: "#c07a3d" },
+  };
+  function catColor(id) { return CAT_COLORS[id] || CAT_COLORS.home_expenses; }
+
+  function catIcon(id) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+      (CAT_ICONS[id] || CAT_ICONS.home_expenses) + '</svg>';
+  }
+
+  // The detailed lines drive the picker; deriving avoids hardcoding the list.
+  function detailedLines() {
+    return (App.state.settings.lines || []).filter((l) => l.detailed);
+  }
+  function nonDetailedLines() {
+    return (App.state.settings.lines || []).filter((l) => !l.detailed);
+  }
+  function lineById(id) {
+    return (App.state.settings.lines || []).find((l) => l.id === id) || null;
+  }
+  function lineName(id) {
+    const l = lineById(id);
+    return l ? l.name : id;
+  }
+
+  // parseAmount("42.50") -> 42.5 ; blank / non-numeric -> NaN
+  function parseAmount(raw) {
+    const s = String(raw == null ? "" : raw).trim();
+    if (s === "") return NaN;
+    const v = Number(s);
+    return isFinite(v) ? v : NaN;
+  }
+
+  function catButton(id, label) {
+    const c = catColor(id);
+    const style = "--cat:" + c.accent + ";--cat-soft:" + c.soft + ";--cat-deep:" + c.deep + ";";
+    return '<button class="cat-btn" type="button" data-cat="' + esc(id) + '"' +
+      ' style="' + style + '"' +
+      ' aria-pressed="' + (entryCat === id ? "true" : "false") + '">' +
+      '<span class="cat-ic" style="background:' + c.grad + '">' + catIcon(id) + '</span>' +
+      '<span class="cat-name">' + esc(label) + '</span>' +
+    '</button>';
+  }
+
+  // A fun, colorful hue per store (by position, so new stores get a color too).
+  const STORE_PALETTE = [
+    { accent: "var(--mint)",   soft: "var(--mint-soft)",   deep: "#2f8f6b" },
+    { accent: "var(--blush)",  soft: "var(--blush-soft)",  deep: "#c25c86" },
+    { accent: "var(--sky)",    soft: "var(--sky-soft)",    deep: "#3d7fbf" },
+    { accent: "var(--butter)", soft: "var(--butter-soft)", deep: "#b5872a" },
+    { accent: "#f28b82",       soft: "#fdeae8",            deep: "#c0564d" },
+    { accent: "#5fc9c9",       soft: "#e0f6f6",            deep: "#2f8f8f" },
+    { accent: "var(--peach)",  soft: "var(--peach-soft)",  deep: "#c07a3d" },
+  ];
+  function storeColor(i) { return STORE_PALETTE[i % STORE_PALETTE.length]; }
+
+  // Clickable store chips (one color each) plus an "Other" chip that reveals a
+  // free-text input. The chosen value lives in a hidden input keyed by prefix.
+  function storeChips(prefix, selected) {
+    const stores = App.state.settings.stores || [];
+    let matched = false;
+    let chips = "";
+    stores.forEach((s, i) => {
+      const on = selected != null && s === selected;
+      if (on) matched = true;
+      const c = storeColor(i);
+      chips += '<button type="button" class="store-chip" data-store-chip="' + esc(prefix) + '"' +
+        ' data-value="' + esc(s) + '"' +
+        ' style="--chip:' + c.accent + ';--chip-soft:' + c.soft + ';--chip-deep:' + c.deep + ';"' +
+        ' aria-pressed="' + (on ? "true" : "false") + '">' +
+        '<span class="chip-dot"></span>' + esc(s) + '</button>';
+    });
+    const otherOn = selected != null && selected !== "" && !matched;
+    chips += '<button type="button" class="store-chip store-other-chip" data-store-chip="' + esc(prefix) + '"' +
+      ' data-value="__other__" aria-pressed="' + (otherOn ? "true" : "false") + '">+ Other</button>';
+    const selVal = matched ? esc(selected) : (otherOn ? "__other__" : "");
+    const otherVal = otherOn ? esc(selected) : "";
+    return '<div class="store-chips" data-store-group="' + esc(prefix) + '">' + chips +
+      '<input type="hidden" id="' + esc(prefix) + '-value" value="' + selVal + '">' +
+      '<input type="text" id="' + esc(prefix) + '-other" class="store-other-input' + (otherOn ? "" : " hidden") +
+        '" placeholder="Type a store name" value="' + otherVal + '"></div>';
+  }
+
+  function fieldsForCategory() {
+    const today = todayStr();
+    if (entryCat === "bill") {
+      const lines = nonDetailedLines();
+      const firstDef = lines.length ? lines[0].recurringDefault : null;
+      let lineOpts = "";
+      lines.forEach((l, i) => {
+        lineOpts += '<option value="' + esc(l.id) + '" data-default="' +
+          (l.recurringDefault == null ? "" : esc(String(l.recurringDefault))) + '"' +
+          (i === 0 ? " selected" : "") + '>' + esc(l.name) + '</option>';
+      });
+      return '' +
+        '<div class="field"><label for="f-month">Month</label>' +
+          '<input id="f-month" type="month" value="' + esc(App.month || monthKey(today)) + '" /></div>' +
+        '<div class="field"><label for="f-line">Line</label>' +
+          '<select id="f-line">' + lineOpts + '</select></div>' +
+        '<div class="field"><label for="f-amount">Amount</label>' +
+          '<input id="f-amount" type="number" step="0.01" inputmode="decimal" placeholder="0.00" value="' +
+          (firstDef == null ? "" : firstDef) + '" /></div>';
+    }
+    // Detailed categories
+    let dyn = "";
+    if (entryCat === "groceries") {
+      dyn = '<div class="field field-wide"><label>Store</label>' +
+        storeChips("f-store", null) + '</div>';
+    } else if (entryCat === "enjoy") {
+      dyn = '<div class="field"><label for="f-note">Note (optional)</label>' +
+        '<input id="f-note" type="text" placeholder="e.g. dinner out" /></div>';
+    } else { // home_expenses, car_expenses
+      dyn = '<div class="field"><label for="f-item">Item</label>' +
+        '<input id="f-item" type="text" placeholder="What was it?" /></div>';
+    }
+    // Amount comes after item for home/car, after store for groceries, so keep a
+    // consistent order: date, then the type-specific field(s), then amount.
+    const dateField = '<div class="field"><label for="f-date">Date</label>' +
+      '<input id="f-date" type="date" value="' + esc(today) + '" /></div>';
+    const amountField = '<div class="field"><label for="f-amount">Amount</label>' +
+      '<input id="f-amount" type="number" step="0.01" inputmode="decimal" placeholder="0.00" /></div>';
+    return dateField + dyn + amountField;
+  }
+
+  // A single row in the recent-entries list (or its inline edit form).
+  function entryRowHtml(e) {
+    if (editingId === e.id) return entryEditRowHtml(e);
+    let detail = "";
+    if (e.line === "groceries") {
+      detail = e.store ? esc(e.store) : '<span class="muted">No store</span>';
+    } else if (e.line === "enjoy") {
+      detail = e.note ? esc(e.note) : '<span class="muted">Enjoy</span>';
+    } else {
+      detail = e.item ? esc(e.item) : '<span class="muted">No item</span>';
+    }
+    return '<div class="entry-row">' +
+      '<span class="e-date">' + esc(e.date) + '</span>' +
+      '<span class="e-amount">' + esc(money(e.amount)) + '</span>' +
+      '<span class="e-detail">' + detail + '</span>' +
+      '<span class="e-controls">' +
+        '<button class="icon-btn" type="button" data-act="edit" data-id="' + esc(e.id) + '" title="Edit" aria-label="Edit entry">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>' +
+        '</button>' +
+        '<button class="icon-btn danger" type="button" data-act="del" data-id="' + esc(e.id) + '" title="Delete" aria-label="Delete entry">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>' +
+        '</button>' +
+      '</span>' +
+    '</div>';
+  }
+
+  function entryEditRowHtml(e) {
+    let dyn = "";
+    if (e.line === "groceries") {
+      dyn = '<div class="edit-field"><label>Store</label>' +
+        storeChips("edit-store", e.store) + '</div>';
+    } else if (e.line === "enjoy") {
+      dyn = '<div class="edit-field"><label>Note</label>' +
+        '<input id="edit-note" type="text" value="' + esc(e.note || "") + '" /></div>';
+    } else {
+      dyn = '<div class="edit-field"><label>Item</label>' +
+        '<input id="edit-item" type="text" value="' + esc(e.item || "") + '" /></div>';
+    }
+    return '<div class="entry-row editing" data-editing="' + esc(e.id) + '">' +
+      '<div class="edit-field"><label>Date</label>' +
+        '<input id="edit-date" type="date" value="' + esc(e.date) + '" /></div>' +
+      dyn +
+      '<div class="edit-field"><label>Amount</label>' +
+        '<input id="edit-amount" type="number" step="0.01" value="' + esc(e.amount) + '" /></div>' +
+      '<span class="e-controls">' +
+        '<button class="icon-btn" type="button" data-act="save" data-id="' + esc(e.id) + '" title="Save" aria-label="Save">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>' +
+        '</button>' +
+        '<button class="icon-btn danger" type="button" data-act="cancel" title="Cancel" aria-label="Cancel">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+        '</button>' +
+      '</span>' +
+    '</div>';
+  }
+
+  function recentDetailedHtml() {
+    const rows = App.state.entries
+      .filter((e) => e.line === entryCat)
+      .slice()
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+      .slice(0, 25);
+    if (!rows.length) {
+      return '<div class="recent-empty">No entries yet. Add your first one above.</div>';
+    }
+    return '<div class="entry-list">' + rows.map(entryRowHtml).join("") + '</div>';
+  }
+
+  function recentActualsHtml() {
+    const actuals = App.state.monthlyActuals || {};
+    const rows = [];
+    Object.keys(actuals).forEach((m) => {
+      Object.keys(actuals[m]).forEach((lineId) => {
+        rows.push({ month: m, lineId: lineId, amount: actuals[m][lineId] });
+      });
+    });
+    rows.sort((a, b) => (a.month < b.month ? 1 : a.month > b.month ? -1 : 0));
+    const top = rows.slice(0, 25);
+    if (!top.length) {
+      return '<div class="recent-empty">No monthly amounts recorded yet.</div>';
+    }
+    const html = top.map((r) =>
+      '<div class="entry-row">' +
+        '<span class="e-date">' + esc(r.month) + '</span>' +
+        '<span class="e-amount">' + esc(money(r.amount)) + '</span>' +
+        '<span class="e-detail">' + esc(lineName(r.lineId)) + '</span>' +
+        '<span class="e-controls">' +
+          '<button class="icon-btn danger" type="button" data-act="del-actual" data-month="' + esc(r.month) +
+            '" data-line="' + esc(r.lineId) + '" title="Delete" aria-label="Delete amount">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>' +
+          '</button>' +
+        '</span>' +
+      '</div>'
+    ).join("");
+    return '<div class="entry-list">' + html + '</div>';
+  }
+
+  function renderEntry() {
+    // Picker: the detailed lines (derived), then the Bill / other option.
+    let picker = detailedLines()
+      .map((l) => catButton(l.id, CAT_LABELS[l.id] || l.name))
+      .join("");
+    picker += catButton("bill", "Bill / other line");
+
+    const isBill = entryCat === "bill";
+    const submitLabel = isBill ? "Record amount" : "Add entry";
+    const recent = isBill ? recentActualsHtml() : recentDetailedHtml();
+    const recentTitle = isBill
+      ? "Recent monthly amounts"
+      : "Recent " + esc(CAT_LABELS[entryCat] || lineName(entryCat));
+
+    // The whole page inherits the active category's accent color.
+    const c = catColor(entryCat);
+    const accent = "--cat:" + c.accent + ";--cat-soft:" + c.soft + ";--cat-deep:" + c.deep + ";";
+
+    return '<div class="card" style="' + accent + '">' +
+      '<h2 class="entry-head">Log what you spent</h2>' +
+      '<p class="entry-sub">Pick a category, fill the fields, and it lands in your budget right away.</p>' +
+      '<div class="cat-picker" id="cat-picker" role="group" aria-label="Entry category">' + picker + '</div>' +
+      '<form class="entry-form" id="entry-form" autocomplete="off" novalidate>' +
+        '<div class="form-grid">' + fieldsForCategory() + '</div>' +
+        '<div class="form-actions">' +
+          '<button class="btn primary" type="submit">' +
+            '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>' +
+            esc(submitLabel) + '</button>' +
+          '<span class="entry-hint" id="entry-hint" role="alert"></span>' +
+        '</div>' +
+      '</form>' +
+      '<div class="recent"><h3>' + recentTitle + '</h3>' + recent + '</div>' +
+    '</div>';
+  }
+  /* ---- Entry mutations (all persist via save() and re-render) ---- */
+
+  // addEntry({date, line, amount, item?, store?, note?}) - push a new entry.
+  function addEntry(obj) {
+    if (!App.state) return null;
+    const entry = {
+      id: uid("e_"),
+      date: obj.date || todayStr(),
+      line: obj.line,
+      amount: Number(obj.amount) || 0,
+      item: obj.item != null ? obj.item : null,
+      store: obj.store != null ? obj.store : null,
+      note: obj.note != null ? obj.note : null,
+    };
+    App.state.entries.push(entry);
+    save();
+    render();
+    return entry;
+  }
+
+  // updateEntry(id, patch) - shallow-merge patch into the matching entry.
+  function updateEntry(id, patch) {
+    if (!App.state) return;
+    const e = App.state.entries.find((x) => x.id === id);
+    if (!e) return;
+    Object.assign(e, patch);
+    if (patch.amount != null) e.amount = Number(patch.amount) || 0;
+    save();
+    render();
+  }
+
+  // deleteEntry(id) - remove the matching entry.
+  function deleteEntry(id) {
+    if (!App.state) return;
+    const i = App.state.entries.findIndex((x) => x.id === id);
+    if (i === -1) return;
+    App.state.entries.splice(i, 1);
+    save();
+    render();
+  }
+
+  // addMonthlyActual(month, lineId, amount) - set one line's actual for a month.
+  function addMonthlyActual(month, lineId, amount) {
+    if (!App.state) return;
+    if (!App.state.monthlyActuals) App.state.monthlyActuals = {};
+    if (!App.state.monthlyActuals[month]) App.state.monthlyActuals[month] = {};
+    App.state.monthlyActuals[month][lineId] = Number(amount) || 0;
+    save();
+    render();
+  }
+
+  // deleteMonthlyActual(month, lineId) - remove one recorded amount.
+  function deleteMonthlyActual(month, lineId) {
+    if (!App.state || !App.state.monthlyActuals || !App.state.monthlyActuals[month]) return;
+    delete App.state.monthlyActuals[month][lineId];
+    if (Object.keys(App.state.monthlyActuals[month]).length === 0) {
+      delete App.state.monthlyActuals[month];
+    }
+    save();
+    render();
+  }
+
+  /* ---- Entry page event handling (delegated once onto #view) ---- */
+
+  function entrySetHint(msg) {
+    const h = document.getElementById("entry-hint");
+    if (h) h.textContent = msg || "";
+  }
+
+  function readStore(prefix) {
+    const hidden = document.getElementById(prefix + "-value");
+    const v = hidden ? hidden.value : "";
+    if (v === "__other__") {
+      const other = document.getElementById(prefix + "-other");
+      return other ? other.value.trim() : "";
+    }
+    return v;
+  }
+
+  function submitEntryForm() {
+    entrySetHint("");
+    if (entryCat === "bill") {
+      const month = (document.getElementById("f-month").value || "").trim();
+      const lineId = document.getElementById("f-line").value;
+      const amount = parseAmount(document.getElementById("f-amount").value);
+      if (!/^\d{4}-\d{2}$/.test(month)) { entrySetHint("Pick a month first."); return; }
+      if (!lineId) { entrySetHint("Choose a line."); return; }
+      if (isNaN(amount)) { entrySetHint("Enter an amount, e.g. 100.00"); return; }
+      addMonthlyActual(month, lineId, amount);
+      return;
+    }
+    const date = document.getElementById("f-date").value || todayStr();
+    const amount = parseAmount(document.getElementById("f-amount").value);
+    if (isNaN(amount)) { entrySetHint("Enter an amount, e.g. 42.50"); return; }
+    const obj = { line: entryCat, date: date, amount: amount };
+    if (entryCat === "groceries") {
+      obj.store = readStore("f-store") || null;
+    } else if (entryCat === "enjoy") {
+      const n = document.getElementById("f-note").value.trim();
+      obj.note = n || null;
+    } else {
+      const it = document.getElementById("f-item").value.trim();
+      obj.item = it || null;
+    }
+    addEntry(obj);
+  }
+
+  function saveEditRow(id) {
+    const e = App.state.entries.find((x) => x.id === id);
+    if (!e) return;
+    const amount = parseAmount(document.getElementById("edit-amount").value);
+    if (isNaN(amount)) { entrySetHint("Enter a valid amount to save this edit."); return; }
+    const patch = {
+      date: document.getElementById("edit-date").value || e.date,
+      amount: amount,
+    };
+    if (e.line === "groceries") {
+      patch.store = readStore("edit-store") || null;
+    } else if (e.line === "enjoy") {
+      patch.note = document.getElementById("edit-note").value.trim() || null;
+    } else {
+      patch.item = document.getElementById("edit-item").value.trim() || null;
+    }
+    editingId = null;
+    updateEntry(id, patch);
+  }
+
+  // Toggle the free-text store input when "Other" is chosen in a store select.
+  function onEntryChange(e) {
+    if (e.target.id === "f-line") {
+      const opt = e.target.selectedOptions && e.target.selectedOptions[0];
+      const def = opt ? opt.dataset.default : "";
+      const amountEl = document.getElementById("f-amount");
+      if (amountEl) amountEl.value = def || "";
+    }
+  }
+
+  function onEntryClick(e) {
+    const catBtn = e.target.closest(".cat-btn");
+    if (catBtn) { entryCat = catBtn.dataset.cat; editingId = null; render(); return; }
+    // Store chip: single-select within its group; "Other" reveals a text input.
+    const chip = e.target.closest(".store-chip");
+    if (chip) {
+      const group = chip.closest(".store-chips");
+      group.querySelectorAll(".store-chip").forEach((b) => {
+        b.setAttribute("aria-pressed", b === chip ? "true" : "false");
+      });
+      const val = chip.dataset.value;
+      const hidden = group.querySelector('input[type="hidden"]');
+      const other = group.querySelector(".store-other-input");
+      if (hidden) hidden.value = val;
+      if (other) {
+        other.classList.toggle("hidden", val !== "__other__");
+        if (val === "__other__") other.focus();
+      }
+      return;
+    }
+    const actBtn = e.target.closest("[data-act]");
+    if (!actBtn) return;
+    const act = actBtn.dataset.act;
+    if (act === "edit") { editingId = actBtn.dataset.id; render(); }
+    else if (act === "cancel") { editingId = null; render(); }
+    else if (act === "save") { saveEditRow(actBtn.dataset.id); }
+    else if (act === "del") { deleteEntry(actBtn.dataset.id); }
+    else if (act === "del-actual") { deleteMonthlyActual(actBtn.dataset.month, actBtn.dataset.line); }
+  }
+
+  /* =========================================================================
+   * Monthly View page - planned vs actual for one month.
+   * ========================================================================= */
+
+  // Which detailed lines are currently expanded (lineId -> true). Persists
+  // across re-renders so a click stays open until clicked again.
+  const monthlyExpanded = {};
+
+  // plannedForLine(lineId) - the line's anticipated figure.
+  function plannedForLine(lineId) {
+    const l = lineById(lineId);
+    return l ? Number(l.anticipated) || 0 : 0;
+  }
+
+  // actualForLine(lineId, month) - the realised amount for a line in a month.
+  // Detailed lines aggregate their entries AND any monthlyActuals total (e.g.
+  // car_expenses is detailed but seeded only as a monthly total). Fixed lines
+  // read the recorded monthly actual, falling back to their recurring default.
+  function actualForLine(lineId, month) {
+    const line = lineById(lineId);
+    if (!line) return 0;
+    let entriesSum = 0;
+    (App.state.entries || []).forEach((e) => {
+      if (e.line === lineId && monthKey(e.date) === month) entriesSum += Number(e.amount) || 0;
+    });
+    const monthMap = App.state.monthlyActuals ? App.state.monthlyActuals[month] : null;
+    const ma = monthMap ? monthMap[lineId] : undefined;
+    if (line.detailed) {
+      return entriesSum + (ma || 0);
+    }
+    if (ma !== undefined && ma !== null) return ma;
+    if (line.recurringDefault !== null && line.recurringDefault !== undefined) return line.recurringDefault;
+    return 0;
+  }
+
+  // availableMonths() - every YYYY-MM appearing across entries and monthlyActuals, ascending.
+  function availableMonths() {
+    const set = Object.create(null);
+    (App.state.entries || []).forEach((e) => {
+      const k = monthKey(e.date);
+      if (k) set[k] = true;
+    });
+    Object.keys(App.state.monthlyActuals || {}).forEach((k) => { set[k] = true; });
+    return Object.keys(set).sort();
+  }
+
+  // Entries behind a detailed line for a month, oldest first.
+  function entriesForLineMonth(lineId, month) {
+    return (App.state.entries || [])
+      .filter((e) => e.line === lineId && monthKey(e.date) === month)
+      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  }
+
+  const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+
+  function monthlyExpandHtml(l, m) {
+    const items = entriesForLineMonth(l.id, m);
+    let inner;
+    if (!items.length) {
+      inner = '<div class="mexpand-empty">Recorded as a monthly total - no individual entries to show.</div>';
+    } else {
+      inner = '<div class="mexpand-list">' + items.map((e) => {
+        let detail;
+        if (e.line === "groceries") {
+          detail = e.store ? esc(e.store) : '<span class="muted">No store</span>';
+        } else if (e.line === "enjoy") {
+          detail = e.note ? esc(e.note) : '<span class="muted">Enjoy</span>';
+        } else {
+          detail = e.item ? esc(e.item) : '<span class="muted">No item</span>';
+        }
+        return '<div class="mexpand-row">' +
+          '<span class="me-date">' + esc(e.date) + '</span>' +
+          '<span class="me-amount">' + esc(money(e.amount)) + '</span>' +
+          '<span class="me-detail">' + detail + '</span>' +
+        '</div>';
+      }).join("") + '</div>';
+    }
+    return '<tr class="mexpand"><td colspan="4">' + inner + '</td></tr>';
+  }
+
+  // One expense row (with optional expand row for detailed lines).
+  function monthlyExpenseRow(l, m) {
+    const planned = plannedForLine(l.id);
+    const actual = actualForLine(l.id, m);
+    const diff = planned - actual;
+    const tint = actual > planned ? "over" : "under"; // at or under budget is green
+    let nameCell;
+    if (l.detailed) {
+      const expanded = !!monthlyExpanded[l.id];
+      nameCell = '<button class="line-toggle" type="button" data-expand="' + esc(l.id) + '"' +
+        ' aria-expanded="' + (expanded ? "true" : "false") + '">' +
+        CHEVRON + '<span>' + esc(l.name) + '</span></button>';
+    } else {
+      nameCell = '<span class="line-name">' + esc(l.name) + '</span>';
+    }
+    let row = '<tr class="mrow ' + tint + '">' +
+      '<td class="c-line">' + nameCell + '</td>' +
+      '<td class="c-num">' + esc(money(planned)) + '</td>' +
+      '<td class="c-num">' + esc(money(actual)) + '</td>' +
+      '<td class="c-num c-diff">' + esc(money(diff)) + '</td>' +
+    '</tr>';
+    if (l.detailed && monthlyExpanded[l.id]) {
+      row += monthlyExpandHtml(l, m);
+    }
+    return row;
+  }
+
+  // One income row (no tint - columns match the expense table).
+  function monthlyIncomeRow(l, m) {
+    const planned = plannedForLine(l.id);
+    const actual = actualForLine(l.id, m);
+    const diff = planned - actual;
+    return '<tr class="mrow">' +
+      '<td class="c-line"><span class="line-name">' + esc(l.name) + '</span></td>' +
+      '<td class="c-num">' + esc(money(planned)) + '</td>' +
+      '<td class="c-num">' + esc(money(actual)) + '</td>' +
+      '<td class="c-num c-diff">' + esc(money(diff)) + '</td>' +
+    '</tr>';
+  }
+
+  function monthlyTable(rows) {
+    return '<table class="mtable">' +
+      '<thead><tr>' +
+        '<th class="h-line">Line</th><th>Planned</th><th>Actual</th><th>Difference</th>' +
+      '</tr></thead>' +
+      '<tbody>' + rows + '</tbody>' +
+    '</table>';
+  }
+
+  function renderMonthly(month) {
+    const months = availableMonths();
+    // Default to the passed month, else App.month, else the latest month with data.
+    let m = month || App.month;
+    if (!m || months.indexOf(m) === -1) {
+      m = months.length ? months[months.length - 1] : (App.month || monthKey(todayStr()));
+    }
+    // Keep the global month indicator in sync with what the page shows.
+    if (App.month !== m) App.month = m;
+    updateMonthIndicator();
+
+    const lines = App.state.settings.lines || [];
+    const expenseLines = lines.filter((l) => l.type !== "income");
+    const incomeLines = lines.filter((l) => l.type === "income");
+
+    let picker;
+    if (months.length) {
+      const opts = months.map((k) =>
+        '<option value="' + esc(k) + '"' + (k === m ? " selected" : "") + '>' + esc(monthLabel(k)) + '</option>'
+      ).join("");
+      picker = '<div class="month-picker">' +
+        '<label for="monthly-month">Month</label>' +
+        '<select id="monthly-month">' + opts + '</select>' +
+      '</div>';
+    } else {
+      picker = "";
+    }
+
+    if (!months.length) {
+      return '<div class="card"><div class="monthly-head"><div class="titles">' +
+        '<h2>Monthly View</h2><p>Planned against actual for every line.</p></div></div>' +
+        '<div class="monthly-empty">No months to show yet. Add some entries or monthly amounts first.</div></div>';
+    }
+
+    const expenseRows = expenseLines.map((l) => monthlyExpenseRow(l, m)).join("");
+    const incomeRows = incomeLines.map((l) => monthlyIncomeRow(l, m)).join("");
+
+    const incomeTotal = incomeLines.reduce((s, l) => s + actualForLine(l.id, m), 0);
+    const expenseTotal = expenseLines.reduce((s, l) => s + actualForLine(l.id, m), 0);
+    const net = incomeTotal - expenseTotal;
+    const netTint = net >= 0 ? "under" : "over";
+
+    return '<div class="card">' +
+      '<div class="monthly-head">' +
+        '<div class="titles"><h2>' + esc(monthLabel(m)) + '</h2>' +
+          '<p>Planned against actual for every budget line.</p></div>' +
+        picker +
+      '</div>' +
+      '<h3 class="sec-title">Expenses</h3>' +
+      monthlyTable(expenseRows) +
+      '<h3 class="sec-title">Income</h3>' +
+      monthlyTable(incomeRows) +
+      '<div class="net-row ' + netTint + '">' +
+        '<span class="net-label">Net (income - expenses)</span>' +
+        '<span class="net-amount">' + esc(money(net)) + '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* ---- Monthly page event handling (delegated on #view) ---- */
+  function onMonthlyClick(e) {
+    const toggle = e.target.closest("[data-expand]");
+    if (toggle) {
+      const id = toggle.dataset.expand;
+      monthlyExpanded[id] = !monthlyExpanded[id];
+      render();
+    }
+  }
+  function onMonthlyChange(e) {
+    if (e.target.id === "monthly-month") {
+      App.month = e.target.value;
+      updateMonthIndicator();
+      render();
+    }
+  }
+  /* =========================================================================
+   * Funds page - balance cards, months of runway, and a ledger that merges
+   * auto-fed monthly contributions with manual one-off movements.
+   * ========================================================================= */
+
+  // The three funds, derived centrally so labels/icons/feed-lines live in one
+  // place. `feed` is the monthly-savings line that auto-contributes into the
+  // fund; null means the fund is fed only by manual ledger rows (house/cash,
+  // whose principal payments are already recorded manually with correct signs).
+  const FUNDS = [
+    { id: "vacation",  label: "Vacation Funds", feed: "vacation_savings",
+      icon: '<path d="M2 22s4-3 10-3 10 3 10 3"/><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v4M12 3l3 2"/>' },
+    { id: "rainy_day", label: "Rainy Day", feed: "rainy_day_savings",
+      icon: '<path d="M7 14a4 4 0 1 1 1-7.9A5 5 0 0 1 18 7a3.5 3.5 0 0 1-.5 7H7z"/><path d="M8 18l-1 2M12 18l-1 2M16 18l-1 2"/>' },
+    { id: "house", label: "House / Cash", feed: null,
+      icon: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9h14v-9"/><path d="M9.5 19v-5h5v5"/>' },
+  ];
+  const RUNWAY_ICON = '<path d="M12 2a3 3 0 0 1 3 3c0 2-3 6-3 6s-3-4-3-6a3 3 0 0 1 3-3z"/><path d="M9 13l-3 4 6-1 6 1-3-4"/><path d="M12 11v9"/>';
+
+  function fundById(id) {
+    return FUNDS.find((f) => f.id === id) || null;
+  }
+  function fundLabel(id) {
+    const f = fundById(id);
+    return f ? f.label : id;
+  }
+
+  // autoContributions() - synthetic contribution rows for the auto-fed funds
+  // (vacation, rainy_day) across every available month, skipping zero amounts.
+  function autoContributions() {
+    const rows = [];
+    const months = availableMonths();
+    FUNDS.forEach((f) => {
+      if (!f.feed) return;
+      months.forEach((m) => {
+        const amount = actualForLine(f.feed, m);
+        if (amount > 0) {
+          rows.push({ date: m + "-01", fund: f.id, amount: amount, note: "Monthly contribution", auto: true });
+        }
+      });
+    });
+    return rows;
+  }
+
+  // fundBalance(fundId) - manual ledger rows for the fund, plus (for auto-fed
+  // funds) the synthetic monthly contributions. House gets manual rows only.
+  function fundBalance(fundId) {
+    let sum = 0;
+    (App.state.fundsLedger || []).forEach((r) => {
+      if (r.fund === fundId) sum += Number(r.amount) || 0;
+    });
+    autoContributions().forEach((r) => {
+      if (r.fund === fundId) sum += Number(r.amount) || 0;
+    });
+    return sum;
+  }
+
+  // Lines that are wealth transfers, not living-expense consumption: savings
+  // contributions and debt paydown are already reflected in fund balances /
+  // home equity, so they must not count as "burn" for runway purposes.
+  var RUNWAY_EXCLUDE = ["vacation_savings", "rainy_day_savings", "payment_to_principal"];
+
+  // monthsOfRunway() - total funds divided by the average monthly expense burn
+  // (mean, over available months, of every expense-type line's actual, minus
+  // the savings/paydown lines in RUNWAY_EXCLUDE - runway measures how long
+  // funds cover real spending, not how long they cover savings to themselves).
+  function monthsOfRunway() {
+    const total = FUNDS.reduce((s, f) => s + fundBalance(f.id), 0);
+    const months = availableMonths();
+    if (!months.length || !total) return 0;
+    const expenseLines = (App.state.settings.lines || [])
+      .filter((l) => l.type !== "income" && RUNWAY_EXCLUDE.indexOf(l.id) === -1);
+    let burnSum = 0;
+    months.forEach((m) => {
+      expenseLines.forEach((l) => { burnSum += actualForLine(l.id, m); });
+    });
+    const avgBurn = burnSum / months.length;
+    if (!avgBurn) return Infinity;
+    return total / avgBurn;
+  }
+
+  // addLedgerRow({date, fund, amount, note}) - push a manual movement.
+  function addLedgerRow(obj) {
+    if (!App.state) return;
+    if (!App.state.fundsLedger) App.state.fundsLedger = [];
+    App.state.fundsLedger.push({
+      id: uid("f_"),
+      date: obj.date || todayStr(),
+      fund: obj.fund,
+      amount: Number(obj.amount) || 0,
+      note: obj.note != null ? obj.note : "",
+    });
+    save();
+    render();
+  }
+
+  // deleteLedgerRow(id) - remove a manual row (auto rows carry no id, so are
+  // never deletable through this path).
+  function deleteLedgerRow(id) {
+    if (!App.state || !App.state.fundsLedger) return;
+    const i = App.state.fundsLedger.findIndex((r) => r.id === id);
+    if (i === -1) return;
+    App.state.fundsLedger.splice(i, 1);
+    save();
+    render();
+  }
+
+  function fundCardHtml(f) {
+    const bal = fundBalance(f.id);
+    const neg = bal < 0 ? " neg" : "";
+    return '<div class="fund-card f-' + esc(f.id) + neg + '">' +
+      '<div class="fc-top">' +
+        '<span class="fc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + f.icon + '</svg></span>' +
+        '<span class="fc-label">' + esc(f.label) + '</span>' +
+      '</div>' +
+      '<div class="fc-value">' + esc(money(bal)) + '</div>' +
+    '</div>';
+  }
+
+  function runwayCardHtml() {
+    const r = monthsOfRunway();
+    const display = isFinite(r) ? (Math.round(r * 10) / 10).toFixed(1) + " months" : "unlimited";
+    return '<div class="fund-card f-runway">' +
+      '<div class="fc-top">' +
+        '<span class="fc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + RUNWAY_ICON + '</svg></span>' +
+        '<span class="fc-label">Months of runway</span>' +
+      '</div>' +
+      '<div class="fc-value">' + esc(display) + '</div>' +
+      '<div class="fc-sub">Total funds at your average monthly burn</div>' +
+    '</div>';
+  }
+
+  // One ledger row. Auto rows are read-only with an "auto" tag; manual rows
+  // carry a delete control. `note` is always escaped.
+  function fundLedgerRowHtml(r) {
+    const neg = (Number(r.amount) || 0) < 0 ? " neg" : "";
+    const noteHtml = r.note ? esc(r.note) : '<span class="muted">No note</span>';
+    let controls;
+    if (r.auto) {
+      controls = '<span class="auto-tag" title="Auto-fed from monthly savings">auto</span>';
+    } else {
+      controls = '<span class="e-controls">' +
+        '<button class="icon-btn danger" type="button" data-act="del-fund" data-id="' + esc(r.id) + '" title="Delete" aria-label="Delete movement">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>' +
+        '</button>' +
+      '</span>';
+    }
+    return '<div class="entry-row fund-row">' +
+      '<span class="e-date">' + esc(r.date) + '</span>' +
+      '<span class="e-amount' + neg + '">' + esc(money(r.amount)) + '</span>' +
+      '<span class="e-detail"><span class="f-fund">' + esc(fundLabel(r.fund)) + '</span> ' +
+        '<span class="f-note">' + noteHtml + '</span></span>' +
+      controls +
+    '</div>';
+  }
+
+  function fundLedgerHtml() {
+    const manual = (App.state.fundsLedger || []).map((r) => ({
+      id: r.id, date: r.date, fund: r.fund, amount: r.amount, note: r.note, auto: false,
+    }));
+    const merged = manual.concat(autoContributions());
+    merged.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0)); // newest first
+    if (!merged.length) {
+      return '<div class="funds-empty">No fund movements yet. Add your first one above.</div>';
+    }
+    return '<div class="entry-list">' + merged.map(fundLedgerRowHtml).join("") + '</div>';
+  }
+
+  function fundFormHtml() {
+    const today = todayStr();
+    const opts = FUNDS.map((f, i) =>
+      '<option value="' + esc(f.id) + '"' + (i === 0 ? " selected" : "") + '>' + esc(f.label) + '</option>'
+    ).join("");
+    return '<form class="entry-form" id="funds-form" autocomplete="off" novalidate>' +
+      '<div class="form-grid">' +
+        '<div class="field"><label for="ff-date">Date</label>' +
+          '<input id="ff-date" type="date" value="' + esc(today) + '" /></div>' +
+        '<div class="field"><label for="ff-fund">Fund</label>' +
+          '<select id="ff-fund">' + opts + '</select></div>' +
+        '<div class="field"><label for="ff-amount">Amount</label>' +
+          '<input id="ff-amount" type="number" step="0.01" inputmode="decimal" placeholder="0.00" /></div>' +
+        '<div class="field"><label for="ff-note">Note</label>' +
+          '<input id="ff-note" type="text" placeholder="What was it?" /></div>' +
+      '</div>' +
+      '<div class="form-actions">' +
+        '<button class="btn primary" type="submit">' +
+          '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>' +
+          'Add movement</button>' +
+        '<span class="entry-hint" id="funds-hint" role="alert"></span>' +
+      '</div>' +
+    '</form>';
+  }
+
+  function renderFunds() {
+    const cards = FUNDS.map(fundCardHtml).join("") + runwayCardHtml();
+    return '<div class="card">' +
+      '<div class="funds-head">' +
+        '<h2>Savings funds</h2>' +
+        '<p>Balances update as monthly savings flow in; add one-off movements below.</p>' +
+      '</div>' +
+      '<div class="fund-cards">' + cards + '</div>' +
+      fundFormHtml() +
+      '<div class="funds-ledger"><h3>Fund movements</h3>' + fundLedgerHtml() + '</div>' +
+    '</div>';
+  }
+
+  /* ---- Funds page event handling (delegated on #view) ---- */
+  function fundsSetHint(msg) {
+    const h = document.getElementById("funds-hint");
+    if (h) h.textContent = msg || "";
+  }
+
+  function onFundsClick(e) {
+    const actBtn = e.target.closest("[data-act]");
+    if (!actBtn) return;
+    if (actBtn.dataset.act === "del-fund") deleteLedgerRow(actBtn.dataset.id);
+  }
+
+  function submitFundsForm() {
+    fundsSetHint("");
+    const date = document.getElementById("ff-date").value || todayStr();
+    const fund = document.getElementById("ff-fund").value;
+    const amount = parseAmount(document.getElementById("ff-amount").value);
+    const note = document.getElementById("ff-note").value.trim();
+    if (!fundById(fund)) { fundsSetHint("Choose a fund."); return; }
+    if (isNaN(amount)) { fundsSetHint("Enter an amount, e.g. 250 (or -50 for a withdrawal)."); return; }
+    addLedgerRow({ date: date, fund: fund, amount: amount, note: note });
+  }
+  /* =========================================================================
+   * Analysis page - hand-drawn inline SVG charts + stat lists.
+   *
+   * Three reusable chart builders (svgLine / svgDonut / svgBars) each return a
+   * self-contained SVG string sized by a viewBox, so they scale to whatever
+   * container width they land in. No external chart library, no network.
+   * ========================================================================= */
+
+  // Ordered pastel palette for categories / slices. Solid hex (not CSS vars)
+  // so the SVG renders identically wherever it is placed.
+  const CHART_COLORS = [
+    "#7c6bd6", // grape
+    "#7fb8ec", // sky
+    "#7bd0b0", // mint
+    "#f4b183", // peach
+    "#ef9bbf", // blush
+    "#f2d17a", // butter
+    "#5a4bb0", // grape-deep
+    "#9b95ae", // ink-faint
+  ];
+  const C_GRID = "#ece7f4";
+  const C_INK = "#3a3550";
+  const C_INK_SOFT = "#6f6987";
+  const C_INK_FAINT = "#9b95ae";
+
+  // Round a raw maximum up to a friendly axis top (1 / 2 / 2.5 / 5 x 10^n).
+  function niceMax(v) {
+    if (!(v > 0)) return 1;
+    const pow = Math.pow(10, Math.floor(Math.log10(v)));
+    const n = v / pow;
+    let nice;
+    if (n <= 1) nice = 1;
+    else if (n <= 2) nice = 2;
+    else if (n <= 2.5) nice = 2.5;
+    else if (n <= 5) nice = 5;
+    else nice = 10;
+    return nice * pow;
+  }
+
+  // Compact money for axis ticks / donut center: "$4.5k", "$320".
+  function moneyShort(v) {
+    const n = Number(v) || 0;
+    const abs = Math.abs(n);
+    if (abs >= 1000) return "$" + (Math.round((n / 1000) * 10) / 10) + "k";
+    return "$" + Math.round(n);
+  }
+
+  // "2025-11" -> "Nov '25"
+  function shortMonth(key) {
+    if (!key || key.length < 7) return esc(key || "");
+    const [y, m] = key.split("-");
+    const d = new Date(Number(y), Number(m) - 1, 1);
+    return d.toLocaleDateString("en-US", { month: "short" }) + " '" + y.slice(2);
+  }
+
+  // svgLine(series, opts) - line chart. series = [{label, value}].
+  // Axes, gridlines, money y-scale, labeled x ticks, soft area fill + points.
+  function svgLine(series, opts) {
+    opts = opts || {};
+    const W = 720, H = 260;
+    const padL = 60, padR = 18, padT = 18, padB = 42;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const n = series.length;
+    const color = opts.color || CHART_COLORS[0];
+    let max = 0;
+    series.forEach((s) => { max = Math.max(max, Number(s.value) || 0); });
+    max = niceMax(max);
+    const x = (i) => (n <= 1 ? padL + iw / 2 : padL + (iw * i) / (n - 1));
+    const y = (v) => padT + ih - ih * (v / max);
+
+    const ticks = 4;
+    let grid = "";
+    for (let t = 0; t <= ticks; t++) {
+      const gv = (max * t) / ticks;
+      const gy = y(gv);
+      grid += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy +
+        '" stroke="' + C_GRID + '" stroke-width="1"/>';
+      grid += '<text x="' + (padL - 10) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="11" fill="' +
+        C_INK_FAINT + '">' + moneyShort(gv) + '</text>';
+    }
+    let xlab = "";
+    series.forEach((s, i) => {
+      xlab += '<text x="' + x(i) + '" y="' + (H - padB + 20) + '" text-anchor="middle" font-size="11" fill="' +
+        C_INK_SOFT + '">' + esc(s.label) + '</text>';
+    });
+    const linePts = series.map((s, i) => x(i) + "," + y(Number(s.value) || 0)).join(" ");
+    const areaPts = padL + "," + (padT + ih) + " " + linePts + " " + x(n - 1) + "," + (padT + ih);
+    let dots = "";
+    series.forEach((s, i) => {
+      dots += '<circle cx="' + x(i) + '" cy="' + y(Number(s.value) || 0) +
+        '" r="4" fill="#fff" stroke="' + color + '" stroke-width="2.5"/>';
+    });
+    return '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" preserveAspectRatio="xMidYMid meet">' +
+      grid +
+      '<polygon points="' + areaPts + '" fill="' + color + '" opacity="0.08"/>' +
+      '<polyline points="' + linePts + '" fill="none" stroke="' + color +
+        '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+      dots + xlab +
+    '</svg>';
+  }
+
+  // svgDonut(slices, opts) - donut with center total and an SVG legend
+  // (colour swatch + label + money + percentage) on the right.
+  // slices = [{label, value, color?}].
+  function svgDonut(slices, opts) {
+    opts = opts || {};
+    const W = 560, H = 300;
+    const cx = 150, cy = 150, r = 96, thick = 34;
+    const circ = 2 * Math.PI * r;
+    const total = slices.reduce((s, x) => s + (Number(x.value) || 0), 0);
+
+    let segs = "";
+    if (total <= 0) {
+      segs = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + C_GRID +
+        '" stroke-width="' + thick + '"/>';
+    } else {
+      let acc = 0;
+      slices.forEach((sl, i) => {
+        const val = Number(sl.value) || 0;
+        if (val <= 0) return;
+        const len = (val / total) * circ;
+        const color = sl.color || CHART_COLORS[i % CHART_COLORS.length];
+        segs += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + color +
+          '" stroke-width="' + thick + '" stroke-dasharray="' + len + " " + (circ - len) +
+          '" stroke-dashoffset="' + (-acc) + '" transform="rotate(-90 ' + cx + " " + cy + ')"/>';
+        acc += len;
+      });
+    }
+    const center =
+      '<text x="' + cx + '" y="' + (cy - 4) + '" text-anchor="middle" font-size="12.5" fill="' +
+        C_INK_FAINT + '">Total</text>' +
+      '<text x="' + cx + '" y="' + (cy + 20) + '" text-anchor="middle" font-size="21" font-weight="700" fill="' +
+        C_INK + '">' + esc(moneyShort(total)) + '</text>';
+
+    let leg = "";
+    const lx = 300;
+    let ly = 42;
+    if (!slices.length) {
+      leg = '<text x="' + lx + '" y="' + ly + '" font-size="12.5" fill="' + C_INK_FAINT +
+        '">No spending in range.</text>';
+    }
+    slices.forEach((sl, i) => {
+      const val = Number(sl.value) || 0;
+      const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+      const color = sl.color || CHART_COLORS[i % CHART_COLORS.length];
+      leg += '<rect x="' + lx + '" y="' + (ly - 11) + '" width="13" height="13" rx="3" fill="' + color + '"/>';
+      leg += '<text x="' + (lx + 20) + '" y="' + ly + '" font-size="12.5" fill="' + C_INK + '">' +
+        esc(sl.label) + '</text>';
+      leg += '<text x="' + (W - 14) + '" y="' + ly + '" text-anchor="end" font-size="12.5" font-weight="600" fill="' +
+        C_INK_SOFT + '">' + esc(money(val)) + '  ' + pct + '%</text>';
+      ly += 29;
+    });
+    return '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" preserveAspectRatio="xMidYMid meet">' +
+      segs + center + leg +
+    '</svg>';
+  }
+
+  // svgBars(pairs, opts) - grouped/paired bars. pairs = [{label, a, b}].
+  // Two bars per label (default Planned vs Actual) with a small top legend.
+  function svgBars(pairs, opts) {
+    opts = opts || {};
+    const W = 760, H = 300;
+    const padL = 58, padR = 16, padT = 30, padB = 66;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const n = pairs.length;
+    const colA = opts.colorA || CHART_COLORS[1]; // sky - planned
+    const colB = opts.colorB || CHART_COLORS[0]; // grape - actual
+    const labA = opts.labelA || "Planned";
+    const labB = opts.labelB || "Actual";
+    let max = 0;
+    pairs.forEach((p) => { max = Math.max(max, Number(p.a) || 0, Number(p.b) || 0); });
+    max = niceMax(max);
+    const y = (v) => padT + ih - ih * (v / max);
+    const groupW = n > 0 ? iw / n : iw;
+    const barW = Math.max(6, Math.min(20, groupW * 0.32));
+    const gap = 4;
+
+    const ticks = 4;
+    let grid = "";
+    for (let t = 0; t <= ticks; t++) {
+      const gv = (max * t) / ticks;
+      const gy = y(gv);
+      grid += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy +
+        '" stroke="' + C_GRID + '" stroke-width="1"/>';
+      grid += '<text x="' + (padL - 10) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="11" fill="' +
+        C_INK_FAINT + '">' + moneyShort(gv) + '</text>';
+    }
+    const baseline = padT + ih;
+    let bars = "";
+    pairs.forEach((p, i) => {
+      const gx = padL + groupW * i + groupW / 2;
+      const a = Number(p.a) || 0, b = Number(p.b) || 0;
+      const ax = gx - barW - gap / 2, bx = gx + gap / 2;
+      // Negative (or NaN-derived zero) values are clamped to a zero-height bar so the rect stays valid SVG.
+      const ha = Math.max(0, baseline - y(a)) || 0;
+      const hb = Math.max(0, baseline - y(b)) || 0;
+      bars += '<rect x="' + ax + '" y="' + (baseline - ha) + '" width="' + barW + '" height="' + ha +
+        '" rx="3" fill="' + colA + '"/>';
+      bars += '<rect x="' + bx + '" y="' + (baseline - hb) + '" width="' + barW + '" height="' + hb +
+        '" rx="3" fill="' + colB + '"/>';
+      const ly = padT + ih + 15;
+      bars += '<text x="' + gx + '" y="' + ly + '" text-anchor="end" font-size="10.5" fill="' + C_INK_SOFT +
+        '" transform="rotate(-35 ' + gx + " " + ly + ')">' + esc(p.label) + '</text>';
+    });
+    const leg =
+      '<rect x="' + padL + '" y="8" width="12" height="12" rx="3" fill="' + colA + '"/>' +
+      '<text x="' + (padL + 18) + '" y="18" font-size="12" fill="' + C_INK + '">' + esc(labA) + '</text>' +
+      '<rect x="' + (padL + 92) + '" y="8" width="12" height="12" rx="3" fill="' + colB + '"/>' +
+      '<text x="' + (padL + 110) + '" y="18" font-size="12" fill="' + C_INK + '">' + esc(labB) + '</text>';
+    return '<svg class="chart" viewBox="0 0 ' + W + " " + H + '" role="img" preserveAspectRatio="xMidYMid meet">' +
+      grid + bars + leg +
+    '</svg>';
+  }
+
+  /* ---- Analysis data helpers (all derived from settings, nothing hardcoded) ---- */
+
+  // Scope for the category donut / biggest lists: "month" or "all".
+  let analysisScope = "month";
+
+  function analysisExpenseLines() {
+    return (App.state.settings.lines || []).filter((l) => l.type !== "income");
+  }
+
+  // Total expense for one month = sum of every expense line's actual.
+  function monthTotalExpense(m) {
+    return analysisExpenseLines().reduce((s, l) => s + actualForLine(l.id, m), 0);
+  }
+
+  // Category -> summed actual across the given months, sorted high to low.
+  function categoryTotals(months) {
+    const map = Object.create(null);
+    const order = [];
+    analysisExpenseLines().forEach((l) => {
+      let sum = 0;
+      months.forEach((m) => { sum += actualForLine(l.id, m); });
+      if (sum > 0) {
+        const cat = l.category || "Other";
+        if (!(cat in map)) { map[cat] = 0; order.push(cat); }
+        map[cat] += sum;
+      }
+    });
+    return order.map((c) => ({ label: c, value: map[c] })).sort((a, b) => b.value - a.value);
+  }
+
+  // Individual entries within scope, largest first, capped at `limit`.
+  function biggestEntries(months, limit) {
+    const inScope = Object.create(null);
+    months.forEach((m) => { inScope[m] = true; });
+    return (App.state.entries || [])
+      .filter((e) => inScope[monthKey(e.date)])
+      .slice()
+      .sort((a, b) => (Number(b.amount) || 0) - (Number(a.amount) || 0))
+      .slice(0, limit || 8);
+  }
+
+  function entryDetailText(e) {
+    if (e.line === "groceries") return e.store || "";
+    if (e.line === "enjoy") return e.note || "";
+    return e.item || "";
+  }
+
+  function bigExpenseRowHtml(e, rank) {
+    const main = entryDetailText(e);
+    const mainHtml = main ? esc(main) : '<span class="muted">' + esc(lineName(e.line)) + "</span>";
+    const line = lineById(e.line);
+    const cat = line && line.category ? line.category : "";
+    const sub = esc(lineName(e.line)) + (cat ? "  " + esc(cat) : "");
+    return '<div class="big-row">' +
+      '<span class="bg-rank">' + rank + "</span>" +
+      '<span class="bg-date">' + esc(e.date) + "</span>" +
+      '<span class="bg-amount">' + esc(money(e.amount)) + "</span>" +
+      '<span class="bg-detail">' +
+        '<div class="bg-main">' + mainHtml + "</div>" +
+        '<div class="bg-sub">' + sub + "</div>" +
+      "</span>" +
+    "</div>";
+  }
+
+  function rankRowHtml(item, max, i) {
+    const color = CHART_COLORS[i % CHART_COLORS.length];
+    const pct = max > 0 ? Math.round((item.value / max) * 100) : 0;
+    return '<div class="rank-row">' +
+      '<span class="rk-name">' + esc(item.label) + "</span>" +
+      '<span class="rk-val">' + esc(money(item.value)) + "</span>" +
+      '<span class="rk-track"><span class="rk-fill" style="width:' + pct + "%;background:" + color + '"></span></span>' +
+    "</div>";
+  }
+
+  function renderAnalysis() {
+    const months = availableMonths();
+    if (!months.length) {
+      return '<div class="card"><div class="an-head"><div class="titles">' +
+        "<h2>Analysis</h2><p>Trends and breakdowns across your budget.</p></div></div>" +
+        '<div class="an-empty">No data to analyse yet. Add some entries or monthly amounts first.</div></div>';
+    }
+
+    // No actual spending anywhere (e.g. only income recorded, or freshly reset)
+    // - show a gentle empty state rather than all-zero / NaN charts.
+    const totalSpend = months.reduce((s, m) => s + monthTotalExpense(m), 0);
+    if (!(totalSpend > 0)) {
+      return '<div class="card"><div class="an-head"><div class="titles">' +
+        "<h2>Analysis</h2><p>Trends and breakdowns across your budget.</p></div></div>" +
+        '<div class="an-empty">No spending to analyze yet. Log a few expenses and the charts appear here.</div></div>';
+    }
+
+    // Selected month drives the bars and (in month scope) the donut / lists.
+    let sel = App.month;
+    if (!sel || months.indexOf(sel) === -1) sel = months[months.length - 1];
+    if (App.month !== sel) { App.month = sel; updateMonthIndicator(); }
+
+    const scopeMonths = analysisScope === "all" ? months : [sel];
+    const scopeName = analysisScope === "all" ? "all time" : monthLabel(sel);
+
+    // 1. Month-by-month total spending trend (always all months).
+    const trend = months.map((m) => ({ label: shortMonth(m), value: monthTotalExpense(m) }));
+
+    // 2. Spending by category donut for the current scope.
+    const cats = categoryTotals(scopeMonths);
+    const catSlices = cats.map((c, i) => ({ label: c.label, value: c.value, color: CHART_COLORS[i % CHART_COLORS.length] }));
+
+    // 3. Planned vs actual per expense line for the selected month.
+    const barPairs = analysisExpenseLines().map((l) => ({
+      label: l.name, a: plannedForLine(l.id), b: actualForLine(l.id, sel),
+    }));
+
+    // 4. Biggest single expenses - a hall of fame across all history (individual
+    //    entries only, so this stays all-time rather than following the scope
+    //    toggle, which can land on a month with monthly totals but no entries).
+    const bigE = biggestEntries(months, 8);
+    // 5. Biggest categories follow the donut scope.
+    const topCats = cats.slice(0, 6);
+    const catMax = topCats.length ? topCats[0].value : 0;
+
+    // Controls: scope segmented toggle + month picker.
+    const monthOpts = months.map((k) =>
+      '<option value="' + esc(k) + '"' + (k === sel ? " selected" : "") + ">" + esc(monthLabel(k)) + "</option>"
+    ).join("");
+    const controls =
+      '<div class="an-controls">' +
+        '<div class="seg-wrap"><span>Scope</span>' +
+          '<div class="seg" id="an-scope" role="group" aria-label="Analysis scope">' +
+            '<button type="button" data-scope="month" aria-pressed="' + (analysisScope === "month") + '">This month</button>' +
+            '<button type="button" data-scope="all" aria-pressed="' + (analysisScope === "all") + '">All time</button>' +
+          "</div>" +
+        "</div>" +
+        '<div class="month-picker"><label for="an-month">Month</label>' +
+          '<select id="an-month">' + monthOpts + "</select></div>" +
+      "</div>";
+
+    const headCard =
+      '<div class="card an-card"><div class="an-head">' +
+        '<div class="titles"><h2>Analysis</h2>' +
+          "<p>Fancy graphs and stats - hand-drawn, no libraries. Showing <b>" + esc(scopeName) + "</b>.</p></div>" +
+        controls +
+      "</div></div>";
+
+    const trendCard =
+      '<div class="card an-card">' +
+        '<h3 class="sec-title">Monthly spending trend</h3>' +
+        '<div class="chart-box">' + svgLine(trend, {}) + "</div>" +
+      "</div>";
+
+    const catList = topCats.length
+      ? '<div class="rank-list">' + topCats.map((c, i) => rankRowHtml(c, catMax, i)).join("") + "</div>"
+      : '<div class="an-empty">No spending in this range.</div>';
+    const donutCard =
+      '<div class="card an-card"><div class="an-grid">' +
+        "<div>" +
+          '<h3 class="sec-title">Spending by category</h3>' +
+          '<div class="chart-box">' + svgDonut(catSlices, {}) + "</div>" +
+        "</div>" +
+        "<div>" +
+          '<h3 class="sec-title">Biggest categories</h3>' + catList +
+        "</div>" +
+      "</div></div>";
+
+    const barsCard =
+      '<div class="card an-card">' +
+        '<h3 class="sec-title">Planned vs actual - ' + esc(monthLabel(sel)) + "</h3>" +
+        '<div class="chart-box">' + svgBars(barPairs, {}) + "</div>" +
+      "</div>";
+
+    const bigList = bigE.length
+      ? '<div class="big-list">' + bigE.map((e, i) => bigExpenseRowHtml(e, i + 1)).join("") + "</div>"
+      : '<div class="an-empty">No individual entries in this range.</div>';
+    const bigCard =
+      '<div class="card an-card">' +
+        '<h3 class="sec-title">Biggest single expenses - all time</h3>' + bigList +
+      "</div>";
+
+    return headCard + trendCard + donutCard + barsCard + bigCard;
+  }
+
+  /* ---- Analysis page event handling (delegated on #view) ---- */
+  function onAnalysisClick(e) {
+    const btn = e.target.closest("[data-scope]");
+    if (btn) {
+      analysisScope = btn.dataset.scope;
+      render();
+    }
+  }
+  function onAnalysisChange(e) {
+    if (e.target.id === "an-month") {
+      App.month = e.target.value;
+      updateMonthIndicator();
+      render();
+    }
+  }
+
+  const RENDERERS = {
+    entry: renderEntry,
+    monthly: renderMonthly,
+    funds: renderFunds,
+    analysis: renderAnalysis,
+  };
+
+  // render() - re-render the active tab into <main id="view">.
+  function render() {
+    if (!App.state) {
+      view.innerHTML = emptyStateHtml();
+      wireEmptyState();
+      return;
+    }
+    view.innerHTML = (RENDERERS[App.tab] || renderEntry)();
+  }
+
+  // setTab(name) - name in entry|monthly|funds|analysis; sets active tab and renders.
+  function setTab(name) {
+    if (!RENDERERS[name]) return;
+    App.tab = name;
+    document.querySelectorAll(".tab").forEach((el) => {
+      el.setAttribute("aria-selected", el.dataset.tab === name ? "true" : "false");
+    });
+    render();
+  }
+
+  /* ---- Empty / open state (shown until a file is loaded) ---- */
+  function emptyStateHtml() {
+    const note = hasFsAccess()
+      ? "Your file stays on your computer. Home Budget reopens it automatically next time."
+      : "This browser can't open files directly. Use Import to load your budget, and Export to save changes.";
+    return '' +
+      '<div class="card"><div class="empty">' +
+        '<div class="art" aria-hidden="true">' +
+          '<svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v4M10 13h4"/></svg>' +
+        '</div>' +
+        '<h2>Open your budget file</h2>' +
+        '<p>Pick your <b>budget.json</b> to see the whole picture - entries, monthly view, funds, and analysis.</p>' +
+        '<div class="cta">' +
+          '<button class="btn primary" id="empty-open" type="button">' +
+            '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>' +
+            'Open budget file</button>' +
+          '<button class="btn" id="empty-import" type="button">Import instead</button>' +
+        '</div>' +
+        '<div class="hint">' +
+          '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>' +
+          note +
+        '</div>' +
+      '</div></div>';
+  }
+
+  function wireEmptyState() {
+    const o = document.getElementById("empty-open");
+    const i = document.getElementById("empty-import");
+    if (o) o.addEventListener("click", openFile);
+    if (i) i.addEventListener("click", () => document.getElementById("file-input").click());
+  }
+
+  /* =========================================================================
+   * Wiring
+   * ========================================================================= */
+  document.getElementById("btn-open").addEventListener("click", openFile);
+  document.getElementById("btn-export").addEventListener("click", exportJson);
+  document.getElementById("btn-import").addEventListener("click", () =>
+    document.getElementById("file-input").click());
+  document.getElementById("btn-reset").addEventListener("click", () => {
+    if (!App.state) return;
+    const ok = window.confirm(
+      "Start fresh? This clears every entry, monthly amount, and fund movement, " +
+      "but keeps your budget lines and stores. This cannot be undone. " +
+      "Consider Export first to keep a copy."
+    );
+    if (ok) resetData();
+  });
+
+  document.getElementById("file-input").addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) importJson(file).catch((err) => {
+      console.error("import failed:", err);
+      setSaveStatus("unsaved", "bad file");
+    });
+    e.target.value = ""; // allow re-picking the same file
+  });
+
+  document.getElementById("tabs").addEventListener("click", (e) => {
+    const tab = e.target.closest(".tab");
+    if (tab) setTab(tab.dataset.tab);
+  });
+
+  // Durability: if the tab is closing / backgrounding while a debounced save is
+  // still pending, write it out now so the last edit is not lost. No-op unless
+  // there is a writable handle with a save queued (see flushSave).
+  window.addEventListener("beforeunload", flushSave);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushSave();
+  });
+
+  // Entry page uses event delegation on #view (its markup is re-rendered often).
+  view.addEventListener("click", (e) => {
+    if (!App.state) return;
+    if (App.tab === "entry") onEntryClick(e);
+    else if (App.tab === "monthly") onMonthlyClick(e);
+    else if (App.tab === "funds") onFundsClick(e);
+    else if (App.tab === "analysis") onAnalysisClick(e);
+  });
+  view.addEventListener("change", (e) => {
+    if (!App.state) return;
+    if (App.tab === "entry") onEntryChange(e);
+    else if (App.tab === "monthly") onMonthlyChange(e);
+    else if (App.tab === "analysis") onAnalysisChange(e);
+  });
+  view.addEventListener("submit", (e) => {
+    if (!App.state) return;
+    if (App.tab === "entry" && e.target.id === "entry-form") {
+      e.preventDefault();
+      submitEntryForm();
+    } else if (App.tab === "funds" && e.target.id === "funds-form") {
+      e.preventDefault();
+      submitFundsForm();
+    }
+  });
+
+  /* ---- On load: try to silently reopen the stored handle ---- */
+  async function boot() {
+    setTab("entry"); // marks the Entry tab active; render() shows empty state while state is null
+    if (!hasFsAccess()) return;
+    try {
+      const handle = await idbGet(HANDLE_KEY);
+      if (!handle) return;
+      const perm = await handle.queryPermission({ mode: "readwrite" });
+      if (perm === "granted") {
+        App.handle = handle;
+        await loadFromHandle(handle);
+      }
+      // If permission is "prompt", requesting it needs a user gesture, so we
+      // leave the friendly empty state up; clicking Open re-grants and loads.
+    } catch (err) {
+      console.warn("could not reopen stored file:", err);
+    }
+  }
+
+  /* ---- Expose the interface surface later tasks depend on ---- */
+  App.openFile = openFile;
+  App.save = save;
+  App.flushSave = flushSave;
+  App.defaultMonth = defaultMonth;
+  App.validateBudget = validateBudget;
+  App.exportJson = exportJson;
+  App.importJson = importJson;
+  App.resetData = resetData;
+  App.render = render;
+  App.setTab = setTab;
+  App.money = money;
+  App.monthKey = monthKey;
+  App.uid = uid;
+  App.esc = esc;
+  App.addEntry = addEntry;
+  App.updateEntry = updateEntry;
+  App.deleteEntry = deleteEntry;
+  App.addMonthlyActual = addMonthlyActual;
+  App.deleteMonthlyActual = deleteMonthlyActual;
+  App.renderEntry = renderEntry;
+  App.renderMonthly = renderMonthly;
+  App.plannedForLine = plannedForLine;
+  App.actualForLine = actualForLine;
+  App.availableMonths = availableMonths;
+  App.renderFunds = renderFunds;
+  App.autoContributions = autoContributions;
+  App.fundBalance = fundBalance;
+  App.monthsOfRunway = monthsOfRunway;
+  App.addLedgerRow = addLedgerRow;
+  App.deleteLedgerRow = deleteLedgerRow;
+  App.renderAnalysis = renderAnalysis;
+  App.svgLine = svgLine;
+  App.svgDonut = svgDonut;
+  App.svgBars = svgBars;
+
+  boot();
+})();
+</script>
+</body>
+</html>
