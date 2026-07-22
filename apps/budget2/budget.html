@@ -728,6 +728,36 @@
    * Storage: openFile / save / exportJson / importJson
    * ========================================================================= */
 
+  // validateBudget(obj) - true only when obj has the core budget shape:
+  // a settings object with a lines array (each line an object with a string id)
+  // and a stores array, top-level entries + fundsLedger arrays, and a
+  // monthlyActuals object. Optional fields are ignored - this only guards
+  // against loading a file that would break Entry / Monthly / Analysis.
+  function validateBudget(obj) {
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) return false;
+    const s = obj.settings;
+    if (!s || typeof s !== "object" || Array.isArray(s)) return false;
+    if (!Array.isArray(s.lines)) return false;
+    const linesOk = s.lines.every((l) =>
+      l && typeof l === "object" && !Array.isArray(l) && typeof l.id === "string");
+    if (!linesOk) return false;
+    if (!Array.isArray(s.stores)) return false;
+    if (!Array.isArray(obj.entries)) return false;
+    if (!Array.isArray(obj.fundsLedger)) return false;
+    const ma = obj.monthlyActuals;
+    if (!ma || typeof ma !== "object" || Array.isArray(ma)) return false;
+    return true;
+  }
+
+  // Show a friendly, on-brand error when a picked file is not a budget file
+  // (bad JSON or wrong shape). App.state is left untouched.
+  function showLoadError() {
+    setSaveStatus("unsaved", "not a budget file");
+    window.alert(
+      "That file does not look like a budget file. Please pick your budget.json."
+    );
+  }
+
   // Parse text into App.state, pick a sensible default month, then render.
   function adoptState(obj) {
     App.state = obj;
@@ -741,7 +771,9 @@
       const keys = Object.keys(actuals).sort();
       if (keys.length) return keys[keys.length - 1];
     }
-    return monthKey(new Date().toISOString());
+    // Fallback: derive from the same LOCAL date basis as todayStr(), so the
+    // default month never disagrees with "today" in negative-UTC zones.
+    return monthKey(todayStr());
   }
 
   function updateMonthIndicator() {
@@ -777,7 +809,18 @@
   async function loadFromHandle(handle) {
     const file = await handle.getFile();
     const text = await file.text();
-    adoptState(JSON.parse(text));
+    let obj;
+    try {
+      obj = JSON.parse(text);
+    } catch (err) {
+      showLoadError(); // malformed JSON - leave current state untouched
+      return;
+    }
+    if (!validateBudget(obj)) {
+      showLoadError(); // wrong shape - leave current state untouched
+      return;
+    }
+    adoptState(obj);
     setSaveStatus("saved", "saved");
     render();
   }
@@ -799,6 +842,7 @@
   }
 
   async function doSave() {
+    _saveTimer = null; // the debounce window has elapsed - no save pending now
     try {
       const writable = await App.handle.createWritable();
       await writable.write(JSON.stringify(App.state, null, 2));
@@ -808,6 +852,17 @@
       console.error("save failed:", err);
       setSaveStatus("unsaved", "save failed");
     }
+  }
+
+  // flushSave() - if a debounced save is pending, cancel the timer and write
+  // immediately. Called on unload so an edit made inside the 400ms window is
+  // not lost. Only meaningful in auto-save mode (a writable handle exists);
+  // in import/export mode there is nothing to flush.
+  function flushSave() {
+    if (!App.state || !App.handle || _saveTimer == null) return;
+    clearTimeout(_saveTimer);
+    _saveTimer = null;
+    doSave();
   }
 
   // exportJson() - download App.state as budget.json (works in every browser).
@@ -828,7 +883,18 @@
   // The fallback path when File System Access is unavailable.
   async function importJson(file) {
     const text = await file.text();
-    adoptState(JSON.parse(text));
+    let obj;
+    try {
+      obj = JSON.parse(text);
+    } catch (err) {
+      showLoadError(); // malformed JSON - leave current state untouched
+      return;
+    }
+    if (!validateBudget(obj)) {
+      showLoadError(); // wrong shape - leave current state untouched
+      return;
+    }
+    adoptState(obj);
     App.handle = null; // imported copies are not writable back to disk
     setSaveStatus("unsaved", "in memory");
     render();
@@ -866,22 +932,6 @@
     funds:    { grad: "linear-gradient(140deg, var(--peach), var(--blush))" },
     analysis: { grad: "linear-gradient(140deg, var(--blush), var(--grape))" },
   };
-
-  function iconSvg(paths) {
-    return '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + paths + '</svg>';
-  }
-
-  // Shared placeholder for the four pages until later tasks fill them in.
-  function placeholder(tab, title, blurb, paths) {
-    const grad = TAB_META[tab].grad;
-    return '' +
-      '<div class="card"><div class="placeholder">' +
-        '<div class="ic" style="background:' + grad + '">' + iconSvg(paths) + '</div>' +
-        '<span class="soon">Coming soon</span>' +
-        '<h2>' + title + '</h2>' +
-        '<p>' + blurb + '</p>' +
-      '</div></div>';
-  }
 
   /* =========================================================================
    * Entry page - the fast-input page.
@@ -2216,6 +2266,14 @@
     if (tab) setTab(tab.dataset.tab);
   });
 
+  // Durability: if the tab is closing / backgrounding while a debounced save is
+  // still pending, write it out now so the last edit is not lost. No-op unless
+  // there is a writable handle with a save queued (see flushSave).
+  window.addEventListener("beforeunload", flushSave);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushSave();
+  });
+
   // Entry page uses event delegation on #view (its markup is re-rendered often).
   view.addEventListener("click", (e) => {
     if (!App.state) return;
@@ -2263,6 +2321,9 @@
   /* ---- Expose the interface surface later tasks depend on ---- */
   App.openFile = openFile;
   App.save = save;
+  App.flushSave = flushSave;
+  App.defaultMonth = defaultMonth;
+  App.validateBudget = validateBudget;
   App.exportJson = exportJson;
   App.importJson = importJson;
   App.resetData = resetData;
