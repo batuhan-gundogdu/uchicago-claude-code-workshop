@@ -1426,7 +1426,7 @@
       if (!f.feed) return;
       months.forEach((m) => {
         const amount = actualForLine(f.feed, m);
-        if (amount) {
+        if (amount > 0) {
           rows.push({ date: m + "-01", fund: f.id, amount: amount, note: "Monthly contribution", auto: true });
         }
       });
@@ -1447,19 +1447,27 @@
     return sum;
   }
 
+  // Lines that are wealth transfers, not living-expense consumption: savings
+  // contributions and debt paydown are already reflected in fund balances /
+  // home equity, so they must not count as "burn" for runway purposes.
+  var RUNWAY_EXCLUDE = ["vacation_savings", "rainy_day_savings", "payment_to_principal"];
+
   // monthsOfRunway() - total funds divided by the average monthly expense burn
-  // (mean, over available months, of every expense-type line's actual).
+  // (mean, over available months, of every expense-type line's actual, minus
+  // the savings/paydown lines in RUNWAY_EXCLUDE - runway measures how long
+  // funds cover real spending, not how long they cover savings to themselves).
   function monthsOfRunway() {
     const total = FUNDS.reduce((s, f) => s + fundBalance(f.id), 0);
     const months = availableMonths();
-    if (!months.length) return 0;
-    const expenseLines = (App.state.settings.lines || []).filter((l) => l.type !== "income");
+    if (!months.length || !total) return 0;
+    const expenseLines = (App.state.settings.lines || [])
+      .filter((l) => l.type !== "income" && RUNWAY_EXCLUDE.indexOf(l.id) === -1);
     let burnSum = 0;
     months.forEach((m) => {
       expenseLines.forEach((l) => { burnSum += actualForLine(l.id, m); });
     });
     const avgBurn = burnSum / months.length;
-    if (!avgBurn) return 0;
+    if (!avgBurn) return Infinity;
     return total / avgBurn;
   }
 
