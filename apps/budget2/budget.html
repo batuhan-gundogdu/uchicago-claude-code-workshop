@@ -405,6 +405,61 @@
 
   .monthly-empty { color: var(--ink-soft); font-size: 14px; padding: 20px 2px; }
 
+  /* ---- Funds page ---- */
+  .funds-head { margin: 0 0 22px; }
+  .funds-head h2 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+  .funds-head p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+
+  .fund-cards {
+    display: grid; gap: 14px; margin-bottom: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  }
+  .fund-card {
+    border-radius: var(--radius-md); padding: 18px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .fund-card.f-vacation  { background: var(--peach-soft); }
+  .fund-card.f-rainy_day { background: var(--sky-soft); }
+  .fund-card.f-house     { background: var(--mint-soft); }
+  .fund-card.f-runway    { background: var(--grape-soft); }
+  .fund-card .fc-top { display: flex; align-items: center; gap: 10px; }
+  .fund-card .fc-ic {
+    width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center;
+    color: #fff; flex: none;
+  }
+  .fund-card .fc-ic svg { width: 18px; height: 18px; }
+  .fund-card.f-vacation  .fc-ic { background: linear-gradient(140deg, var(--peach), var(--blush)); }
+  .fund-card.f-rainy_day .fc-ic { background: linear-gradient(140deg, var(--sky), var(--grape)); }
+  .fund-card.f-house     .fc-ic { background: linear-gradient(140deg, var(--mint), var(--sky)); }
+  .fund-card.f-runway    .fc-ic { background: linear-gradient(140deg, var(--grape), var(--grape-deep)); }
+  .fund-card .fc-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .fund-card .fc-value {
+    font-size: 25px; font-weight: 700; color: var(--ink);
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  }
+  .fund-card.neg .fc-value { color: #c25c86; }
+  .fund-card .fc-sub { font-size: 12px; color: var(--ink-faint); margin-top: -4px; }
+
+  .funds-ledger { border-top: 1px solid var(--line); padding-top: 22px; }
+  .funds-ledger h3 {
+    margin: 0 0 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .fund-row .f-fund { font-weight: 600; color: var(--ink); }
+  .fund-row .f-note { color: var(--ink-soft); }
+  .fund-row .f-note .muted { color: var(--ink-faint); }
+  .entry-row .e-amount.neg { color: #c25c86; }
+  .auto-tag {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--grape-deep); background: var(--grape-soft);
+    padding: 5px 10px; border-radius: 999px; flex: none;
+  }
+  .funds-empty { color: var(--ink-faint); font-size: 13.5px; padding: 8px 2px; }
+
   @media (max-width: 640px) {
     .cat-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
@@ -1335,10 +1390,225 @@
       render();
     }
   }
+  /* =========================================================================
+   * Funds page - balance cards, months of runway, and a ledger that merges
+   * auto-fed monthly contributions with manual one-off movements.
+   * ========================================================================= */
+
+  // The three funds, derived centrally so labels/icons/feed-lines live in one
+  // place. `feed` is the monthly-savings line that auto-contributes into the
+  // fund; null means the fund is fed only by manual ledger rows (house/cash,
+  // whose principal payments are already recorded manually with correct signs).
+  const FUNDS = [
+    { id: "vacation",  label: "Vacation Funds", feed: "vacation_savings",
+      icon: '<path d="M2 22s4-3 10-3 10 3 10 3"/><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v4M12 3l3 2"/>' },
+    { id: "rainy_day", label: "Rainy Day", feed: "rainy_day_savings",
+      icon: '<path d="M7 14a4 4 0 1 1 1-7.9A5 5 0 0 1 18 7a3.5 3.5 0 0 1-.5 7H7z"/><path d="M8 18l-1 2M12 18l-1 2M16 18l-1 2"/>' },
+    { id: "house", label: "House / Cash", feed: null,
+      icon: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9h14v-9"/><path d="M9.5 19v-5h5v5"/>' },
+  ];
+  const RUNWAY_ICON = '<path d="M12 2a3 3 0 0 1 3 3c0 2-3 6-3 6s-3-4-3-6a3 3 0 0 1 3-3z"/><path d="M9 13l-3 4 6-1 6 1-3-4"/><path d="M12 11v9"/>';
+
+  function fundById(id) {
+    return FUNDS.find((f) => f.id === id) || null;
+  }
+  function fundLabel(id) {
+    const f = fundById(id);
+    return f ? f.label : id;
+  }
+
+  // autoContributions() - synthetic contribution rows for the auto-fed funds
+  // (vacation, rainy_day) across every available month, skipping zero amounts.
+  function autoContributions() {
+    const rows = [];
+    const months = availableMonths();
+    FUNDS.forEach((f) => {
+      if (!f.feed) return;
+      months.forEach((m) => {
+        const amount = actualForLine(f.feed, m);
+        if (amount) {
+          rows.push({ date: m + "-01", fund: f.id, amount: amount, note: "Monthly contribution", auto: true });
+        }
+      });
+    });
+    return rows;
+  }
+
+  // fundBalance(fundId) - manual ledger rows for the fund, plus (for auto-fed
+  // funds) the synthetic monthly contributions. House gets manual rows only.
+  function fundBalance(fundId) {
+    let sum = 0;
+    (App.state.fundsLedger || []).forEach((r) => {
+      if (r.fund === fundId) sum += Number(r.amount) || 0;
+    });
+    autoContributions().forEach((r) => {
+      if (r.fund === fundId) sum += Number(r.amount) || 0;
+    });
+    return sum;
+  }
+
+  // monthsOfRunway() - total funds divided by the average monthly expense burn
+  // (mean, over available months, of every expense-type line's actual).
+  function monthsOfRunway() {
+    const total = FUNDS.reduce((s, f) => s + fundBalance(f.id), 0);
+    const months = availableMonths();
+    if (!months.length) return 0;
+    const expenseLines = (App.state.settings.lines || []).filter((l) => l.type !== "income");
+    let burnSum = 0;
+    months.forEach((m) => {
+      expenseLines.forEach((l) => { burnSum += actualForLine(l.id, m); });
+    });
+    const avgBurn = burnSum / months.length;
+    if (!avgBurn) return 0;
+    return total / avgBurn;
+  }
+
+  // addLedgerRow({date, fund, amount, note}) - push a manual movement.
+  function addLedgerRow(obj) {
+    if (!App.state) return;
+    if (!App.state.fundsLedger) App.state.fundsLedger = [];
+    App.state.fundsLedger.push({
+      id: uid("f_"),
+      date: obj.date || todayStr(),
+      fund: obj.fund,
+      amount: Number(obj.amount) || 0,
+      note: obj.note != null ? obj.note : "",
+    });
+    save();
+    render();
+  }
+
+  // deleteLedgerRow(id) - remove a manual row (auto rows carry no id, so are
+  // never deletable through this path).
+  function deleteLedgerRow(id) {
+    if (!App.state || !App.state.fundsLedger) return;
+    const i = App.state.fundsLedger.findIndex((r) => r.id === id);
+    if (i === -1) return;
+    App.state.fundsLedger.splice(i, 1);
+    save();
+    render();
+  }
+
+  function fundCardHtml(f) {
+    const bal = fundBalance(f.id);
+    const neg = bal < 0 ? " neg" : "";
+    return '<div class="fund-card f-' + esc(f.id) + neg + '">' +
+      '<div class="fc-top">' +
+        '<span class="fc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + f.icon + '</svg></span>' +
+        '<span class="fc-label">' + esc(f.label) + '</span>' +
+      '</div>' +
+      '<div class="fc-value">' + esc(money(bal)) + '</div>' +
+    '</div>';
+  }
+
+  function runwayCardHtml() {
+    const r = monthsOfRunway();
+    const display = isFinite(r) ? (Math.round(r * 10) / 10).toFixed(1) + " months" : "unlimited";
+    return '<div class="fund-card f-runway">' +
+      '<div class="fc-top">' +
+        '<span class="fc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + RUNWAY_ICON + '</svg></span>' +
+        '<span class="fc-label">Months of runway</span>' +
+      '</div>' +
+      '<div class="fc-value">' + esc(display) + '</div>' +
+      '<div class="fc-sub">Total funds at your average monthly burn</div>' +
+    '</div>';
+  }
+
+  // One ledger row. Auto rows are read-only with an "auto" tag; manual rows
+  // carry a delete control. `note` is always escaped.
+  function fundLedgerRowHtml(r) {
+    const neg = (Number(r.amount) || 0) < 0 ? " neg" : "";
+    const noteHtml = r.note ? esc(r.note) : '<span class="muted">No note</span>';
+    let controls;
+    if (r.auto) {
+      controls = '<span class="auto-tag" title="Auto-fed from monthly savings">auto</span>';
+    } else {
+      controls = '<span class="e-controls">' +
+        '<button class="icon-btn danger" type="button" data-act="del-fund" data-id="' + esc(r.id) + '" title="Delete" aria-label="Delete movement">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>' +
+        '</button>' +
+      '</span>';
+    }
+    return '<div class="entry-row fund-row">' +
+      '<span class="e-date">' + esc(r.date) + '</span>' +
+      '<span class="e-amount' + neg + '">' + esc(money(r.amount)) + '</span>' +
+      '<span class="e-detail"><span class="f-fund">' + esc(fundLabel(r.fund)) + '</span> ' +
+        '<span class="f-note">' + noteHtml + '</span></span>' +
+      controls +
+    '</div>';
+  }
+
+  function fundLedgerHtml() {
+    const manual = (App.state.fundsLedger || []).map((r) => ({
+      id: r.id, date: r.date, fund: r.fund, amount: r.amount, note: r.note, auto: false,
+    }));
+    const merged = manual.concat(autoContributions());
+    merged.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0)); // newest first
+    if (!merged.length) {
+      return '<div class="funds-empty">No fund movements yet. Add your first one above.</div>';
+    }
+    return '<div class="entry-list">' + merged.map(fundLedgerRowHtml).join("") + '</div>';
+  }
+
+  function fundFormHtml() {
+    const today = todayStr();
+    const opts = FUNDS.map((f, i) =>
+      '<option value="' + esc(f.id) + '"' + (i === 0 ? " selected" : "") + '>' + esc(f.label) + '</option>'
+    ).join("");
+    return '<form class="entry-form" id="funds-form" autocomplete="off" novalidate>' +
+      '<div class="form-grid">' +
+        '<div class="field"><label for="ff-date">Date</label>' +
+          '<input id="ff-date" type="date" value="' + esc(today) + '" /></div>' +
+        '<div class="field"><label for="ff-fund">Fund</label>' +
+          '<select id="ff-fund">' + opts + '</select></div>' +
+        '<div class="field"><label for="ff-amount">Amount</label>' +
+          '<input id="ff-amount" type="number" step="0.01" inputmode="decimal" placeholder="0.00" /></div>' +
+        '<div class="field"><label for="ff-note">Note</label>' +
+          '<input id="ff-note" type="text" placeholder="What was it?" /></div>' +
+      '</div>' +
+      '<div class="form-actions">' +
+        '<button class="btn primary" type="submit">' +
+          '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>' +
+          'Add movement</button>' +
+        '<span class="entry-hint" id="funds-hint" role="alert"></span>' +
+      '</div>' +
+    '</form>';
+  }
+
   function renderFunds() {
-    return placeholder("funds", "Grow your savings funds",
-      "Track the vacation, rainy day, and house funds as money flows in and out over time.",
-      '<path d="M4 11a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1a4 4 0 0 1-4 4v2h-2v-2H9v2H7v-2.3A5 5 0 0 1 4 12z"/><path d="M17 9.5a1 1 0 1 0 .01 0M13 6l-1-2"/>');
+    const cards = FUNDS.map(fundCardHtml).join("") + runwayCardHtml();
+    return '<div class="card">' +
+      '<div class="funds-head">' +
+        '<h2>Savings funds</h2>' +
+        '<p>Balances update as monthly savings flow in; add one-off movements below.</p>' +
+      '</div>' +
+      '<div class="fund-cards">' + cards + '</div>' +
+      fundFormHtml() +
+      '<div class="funds-ledger"><h3>Fund movements</h3>' + fundLedgerHtml() + '</div>' +
+    '</div>';
+  }
+
+  /* ---- Funds page event handling (delegated on #view) ---- */
+  function fundsSetHint(msg) {
+    const h = document.getElementById("funds-hint");
+    if (h) h.textContent = msg || "";
+  }
+
+  function onFundsClick(e) {
+    const actBtn = e.target.closest("[data-act]");
+    if (!actBtn) return;
+    if (actBtn.dataset.act === "del-fund") deleteLedgerRow(actBtn.dataset.id);
+  }
+
+  function submitFundsForm() {
+    fundsSetHint("");
+    const date = document.getElementById("ff-date").value || todayStr();
+    const fund = document.getElementById("ff-fund").value;
+    const amount = parseAmount(document.getElementById("ff-amount").value);
+    const note = document.getElementById("ff-note").value.trim();
+    if (!fundById(fund)) { fundsSetHint("Choose a fund."); return; }
+    if (isNaN(amount)) { fundsSetHint("Enter an amount, e.g. 250 (or -50 for a withdrawal)."); return; }
+    addLedgerRow({ date: date, fund: fund, amount: amount, note: note });
   }
   function renderAnalysis() {
     return placeholder("analysis", "Spot the trends",
@@ -1432,6 +1702,7 @@
     if (!App.state) return;
     if (App.tab === "entry") onEntryClick(e);
     else if (App.tab === "monthly") onMonthlyClick(e);
+    else if (App.tab === "funds") onFundsClick(e);
   });
   view.addEventListener("change", (e) => {
     if (!App.state) return;
@@ -1439,9 +1710,13 @@
     else if (App.tab === "monthly") onMonthlyChange(e);
   });
   view.addEventListener("submit", (e) => {
-    if (App.tab === "entry" && App.state && e.target.id === "entry-form") {
+    if (!App.state) return;
+    if (App.tab === "entry" && e.target.id === "entry-form") {
       e.preventDefault();
       submitEntryForm();
+    } else if (App.tab === "funds" && e.target.id === "funds-form") {
+      e.preventDefault();
+      submitFundsForm();
     }
   });
 
@@ -1486,6 +1761,11 @@
   App.actualForLine = actualForLine;
   App.availableMonths = availableMonths;
   App.renderFunds = renderFunds;
+  App.autoContributions = autoContributions;
+  App.fundBalance = fundBalance;
+  App.monthsOfRunway = monthsOfRunway;
+  App.addLedgerRow = addLedgerRow;
+  App.deleteLedgerRow = deleteLedgerRow;
   App.renderAnalysis = renderAnalysis;
 
   boot();
