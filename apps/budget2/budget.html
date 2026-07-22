@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Nest - family budget</title>
+<title>Home Budget</title>
 <style>
   /*
-   * Nest - a warm, friendly family budget app.
+   * Home Budget - a warm, friendly family budget app.
    * All CSS and JS are inline. No external libraries, no network calls.
    * Palette: soft pastels (blueberry, mint, peach, sky, blush) on a warm cream canvas.
    */
@@ -160,7 +160,7 @@
   .tab[aria-selected="true"] {
     color: #fff; box-shadow: 0 10px 22px -12px var(--grape);
   }
-  .tab[data-tab="entry"][aria-selected="true"]    { background: linear-gradient(140deg, var(--grape), var(--sky)); }
+  .tab[data-tab="entry"][aria-selected="true"]    { background: linear-gradient(140deg, #5fc9c9, var(--mint)); box-shadow: 0 10px 22px -12px #5fc9c9; }
   .tab[data-tab="monthly"][aria-selected="true"]  { background: linear-gradient(140deg, var(--mint), var(--sky)); box-shadow: 0 10px 22px -12px var(--mint); }
   .tab[data-tab="funds"][aria-selected="true"]    { background: linear-gradient(140deg, var(--peach), var(--blush)); box-shadow: 0 10px 22px -12px var(--peach); }
   .tab[data-tab="analysis"][aria-selected="true"] { background: linear-gradient(140deg, var(--blush), var(--grape)); box-shadow: 0 10px 22px -12px var(--blush); }
@@ -231,10 +231,13 @@
   .cat-btn .cat-ic svg { width: 24px; height: 24px; }
   .cat-btn .cat-name { font-size: 12.5px; font-weight: 600; line-height: 1.25; }
   .cat-btn[aria-pressed="true"] {
-    border-color: transparent; color: var(--grape-deep);
-    background: var(--grape-soft); box-shadow: 0 10px 24px -14px var(--grape);
+    border-color: transparent; color: var(--cat-deep, var(--grape-deep));
+    background: var(--cat-soft, var(--grape-soft));
+    box-shadow: 0 10px 24px -14px var(--cat, var(--grape));
   }
+  .cat-btn:focus-visible { outline: 3px solid var(--cat, var(--sky)); }
 
+  /* The form + recent list follow the active category's accent, not purple. */
   .entry-form { border-top: 1px solid var(--line); padding-top: 22px; }
   .form-grid {
     display: grid; gap: 14px 16px;
@@ -242,6 +245,7 @@
     align-items: end;
   }
   .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-wide { grid-column: 1 / -1; }
   .field label {
     font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
     color: var(--ink-faint);
@@ -253,8 +257,32 @@
     transition: border-color .12s, box-shadow .12s;
   }
   .field input:focus, .field select:focus {
-    outline: none; border-color: var(--grape); box-shadow: 0 0 0 3px var(--grape-soft);
+    outline: none; border-color: var(--cat, var(--grape));
+    box-shadow: 0 0 0 3px var(--cat-soft, var(--grape-soft));
   }
+  /* Store picker: clickable color chips, one hue per store. */
+  .store-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .store-chip {
+    font-family: inherit; cursor: pointer; font-size: 13px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 13px; border-radius: 999px;
+    border: 1.5px solid var(--line); background: #fff; color: var(--ink-soft);
+    transition: transform .1s, box-shadow .12s, background .12s, color .12s, border-color .12s;
+  }
+  .store-chip:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+  .store-chip .chip-dot {
+    width: 11px; height: 11px; border-radius: 50%; flex: none;
+    background: var(--chip, var(--ink-faint));
+  }
+  .store-chip[aria-pressed="true"] {
+    color: var(--chip-deep, var(--ink)); background: var(--chip-soft, var(--grape-soft));
+    border-color: var(--chip, transparent);
+    box-shadow: 0 8px 18px -12px var(--chip, var(--grape));
+  }
+  .store-chip:focus-visible { outline: 3px solid var(--chip, var(--sky)); outline-offset: 2px; }
+  .store-other-chip .chip-dot { display: none; }
+  .store-other-input { flex-basis: 100%; margin-top: 2px; }
+
   .form-actions { display: flex; align-items: center; gap: 14px; margin-top: 16px; flex-wrap: wrap; }
   .entry-hint { font-size: 13px; color: #c25c86; font-weight: 600; min-height: 1em; }
   .entry-hint:empty { display: none; }
@@ -276,7 +304,7 @@
     width: 92px; flex: none; font-variant-numeric: tabular-nums;
   }
   .entry-row .e-amount {
-    font-size: 15px; font-weight: 700; color: var(--grape-deep);
+    font-size: 15px; font-weight: 700; color: var(--cat-deep, var(--grape-deep));
     width: 96px; flex: none; text-align: right; font-variant-numeric: tabular-nums;
   }
   .entry-row .e-detail {
@@ -292,10 +320,11 @@
     transition: color .12s, border-color .12s, background .12s;
   }
   .icon-btn svg { width: 15px; height: 15px; }
-  .icon-btn:hover { color: var(--grape-deep); border-color: #dcd4ee; background: var(--grape-soft); }
+  .icon-btn:hover { color: var(--cat-deep, var(--grape-deep)); border-color: #dcd4ee; background: var(--cat-soft, var(--grape-soft)); }
   .icon-btn.danger:hover { color: #c25c86; background: var(--blush-soft); border-color: var(--blush); }
   .icon-btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
-  .entry-row.editing { background: #fff; border-color: var(--grape); box-shadow: 0 0 0 3px var(--grape-soft); flex-wrap: wrap; }
+  .entry-row.editing { background: #fff; border-color: var(--cat, var(--grape)); box-shadow: 0 0 0 3px var(--cat-soft, var(--grape-soft)); flex-wrap: wrap; }
+  .entry-form .btn.primary { background: linear-gradient(140deg, var(--cat, var(--grape)), var(--cat-deep, var(--grape-deep))); }
   .entry-row.editing .edit-field { display: flex; flex-direction: column; gap: 4px; }
   .entry-row.editing .edit-field input, .entry-row.editing .edit-field select {
     font-family: inherit; font-size: 13.5px; padding: 7px 9px;
@@ -555,8 +584,8 @@
           </svg>
         </div>
         <div>
-          <h1>Nest</h1>
-          <p class="sub">family budget</p>
+          <h1>Home Budget</h1>
+          <p class="sub">plan and track together</p>
         </div>
       </div>
 
@@ -956,6 +985,17 @@
     bill: '<path d="M6 2h9l3 3v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
   };
 
+  // Each category gets its own fun color: a gradient for the icon tile and a
+  // solid accent that tints the button when selected and colors the form.
+  const CAT_COLORS = {
+    groceries:     { grad: "linear-gradient(140deg, var(--mint), var(--sky))",     accent: "var(--mint)",   soft: "var(--mint-soft)",   deep: "#2f8f6b" },
+    enjoy:         { grad: "linear-gradient(140deg, var(--blush), var(--peach))",   accent: "var(--blush)",  soft: "var(--blush-soft)",  deep: "#c25c86" },
+    home_expenses: { grad: "linear-gradient(140deg, var(--sky), var(--mint))",      accent: "var(--sky)",    soft: "var(--sky-soft)",    deep: "#3d7fbf" },
+    car_expenses:  { grad: "linear-gradient(140deg, var(--butter), var(--peach))",  accent: "var(--butter)", soft: "var(--butter-soft)", deep: "#b5872a" },
+    bill:          { grad: "linear-gradient(140deg, var(--peach), var(--butter))",  accent: "var(--peach)",  soft: "var(--peach-soft)",  deep: "#c07a3d" },
+  };
+  function catColor(id) { return CAT_COLORS[id] || CAT_COLORS.home_expenses; }
+
   function catIcon(id) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
       (CAT_ICONS[id] || CAT_ICONS.home_expenses) + '</svg>';
@@ -985,30 +1025,53 @@
   }
 
   function catButton(id, label) {
-    const grad = TAB_META.entry.grad;
+    const c = catColor(id);
+    const style = "--cat:" + c.accent + ";--cat-soft:" + c.soft + ";--cat-deep:" + c.deep + ";";
     return '<button class="cat-btn" type="button" data-cat="' + esc(id) + '"' +
+      ' style="' + style + '"' +
       ' aria-pressed="' + (entryCat === id ? "true" : "false") + '">' +
-      '<span class="cat-ic" style="background:' + grad + '">' + catIcon(id) + '</span>' +
+      '<span class="cat-ic" style="background:' + c.grad + '">' + catIcon(id) + '</span>' +
       '<span class="cat-name">' + esc(label) + '</span>' +
     '</button>';
   }
 
-  // A <select> of the known stores, plus a free-text "Other" escape hatch.
-  function storeSelect(id, otherId, selected) {
+  // A fun, colorful hue per store (by position, so new stores get a color too).
+  const STORE_PALETTE = [
+    { accent: "var(--mint)",   soft: "var(--mint-soft)",   deep: "#2f8f6b" },
+    { accent: "var(--blush)",  soft: "var(--blush-soft)",  deep: "#c25c86" },
+    { accent: "var(--sky)",    soft: "var(--sky-soft)",    deep: "#3d7fbf" },
+    { accent: "var(--butter)", soft: "var(--butter-soft)", deep: "#b5872a" },
+    { accent: "#f28b82",       soft: "#fdeae8",            deep: "#c0564d" },
+    { accent: "#5fc9c9",       soft: "#e0f6f6",            deep: "#2f8f8f" },
+    { accent: "var(--peach)",  soft: "var(--peach-soft)",  deep: "#c07a3d" },
+  ];
+  function storeColor(i) { return STORE_PALETTE[i % STORE_PALETTE.length]; }
+
+  // Clickable store chips (one color each) plus an "Other" chip that reveals a
+  // free-text input. The chosen value lives in a hidden input keyed by prefix.
+  function storeChips(prefix, selected) {
     const stores = App.state.settings.stores || [];
-    let opts = '<option value="">Choose a store...</option>';
     let matched = false;
-    stores.forEach((s) => {
-      const sel = selected != null && s === selected;
-      if (sel) matched = true;
-      opts += '<option value="' + esc(s) + '"' + (sel ? " selected" : "") + '>' + esc(s) + '</option>';
+    let chips = "";
+    stores.forEach((s, i) => {
+      const on = selected != null && s === selected;
+      if (on) matched = true;
+      const c = storeColor(i);
+      chips += '<button type="button" class="store-chip" data-store-chip="' + esc(prefix) + '"' +
+        ' data-value="' + esc(s) + '"' +
+        ' style="--chip:' + c.accent + ';--chip-soft:' + c.soft + ';--chip-deep:' + c.deep + ';"' +
+        ' aria-pressed="' + (on ? "true" : "false") + '">' +
+        '<span class="chip-dot"></span>' + esc(s) + '</button>';
     });
-    const otherSel = selected != null && selected !== "" && !matched;
-    opts += '<option value="__other__"' + (otherSel ? " selected" : "") + '>Other (type it in)</option>';
-    const otherVal = otherSel ? esc(selected) : "";
-    return '<select id="' + id + '" data-store-select>' + opts + '</select>' +
-      '<input id="' + otherId + '" class="' + (otherSel ? "" : "hidden") +
-        '" type="text" placeholder="Store name" value="' + otherVal + '" />';
+    const otherOn = selected != null && selected !== "" && !matched;
+    chips += '<button type="button" class="store-chip store-other-chip" data-store-chip="' + esc(prefix) + '"' +
+      ' data-value="__other__" aria-pressed="' + (otherOn ? "true" : "false") + '">+ Other</button>';
+    const selVal = matched ? esc(selected) : (otherOn ? "__other__" : "");
+    const otherVal = otherOn ? esc(selected) : "";
+    return '<div class="store-chips" data-store-group="' + esc(prefix) + '">' + chips +
+      '<input type="hidden" id="' + esc(prefix) + '-value" value="' + selVal + '">' +
+      '<input type="text" id="' + esc(prefix) + '-other" class="store-other-input' + (otherOn ? "" : " hidden") +
+        '" placeholder="Type a store name" value="' + otherVal + '"></div>';
   }
 
   function fieldsForCategory() {
@@ -1034,8 +1097,8 @@
     // Detailed categories
     let dyn = "";
     if (entryCat === "groceries") {
-      dyn = '<div class="field"><label for="f-store">Store</label>' +
-        storeSelect("f-store", "f-store-other", null) + '</div>';
+      dyn = '<div class="field field-wide"><label>Store</label>' +
+        storeChips("f-store", null) + '</div>';
     } else if (entryCat === "enjoy") {
       dyn = '<div class="field"><label for="f-note">Note (optional)</label>' +
         '<input id="f-note" type="text" placeholder="e.g. dinner out" /></div>';
@@ -1082,7 +1145,7 @@
     let dyn = "";
     if (e.line === "groceries") {
       dyn = '<div class="edit-field"><label>Store</label>' +
-        storeSelect("edit-store", "edit-store-other", e.store) + '</div>';
+        storeChips("edit-store", e.store) + '</div>';
     } else if (e.line === "enjoy") {
       dyn = '<div class="edit-field"><label>Note</label>' +
         '<input id="edit-note" type="text" value="' + esc(e.note || "") + '" /></div>';
@@ -1162,7 +1225,11 @@
       ? "Recent monthly amounts"
       : "Recent " + esc(CAT_LABELS[entryCat] || lineName(entryCat));
 
-    return '<div class="card">' +
+    // The whole page inherits the active category's accent color.
+    const c = catColor(entryCat);
+    const accent = "--cat:" + c.accent + ";--cat-soft:" + c.soft + ";--cat-deep:" + c.deep + ";";
+
+    return '<div class="card" style="' + accent + '">' +
       '<h2 class="entry-head">Log what you spent</h2>' +
       '<p class="entry-sub">Pick a category, fill the fields, and it lands in your budget right away.</p>' +
       '<div class="cat-picker" id="cat-picker" role="group" aria-label="Entry category">' + picker + '</div>' +
@@ -1247,14 +1314,14 @@
     if (h) h.textContent = msg || "";
   }
 
-  function readStore(selectId, otherId) {
-    const sel = document.getElementById(selectId);
-    if (!sel) return "";
-    if (sel.value === "__other__") {
-      const other = document.getElementById(otherId);
+  function readStore(prefix) {
+    const hidden = document.getElementById(prefix + "-value");
+    const v = hidden ? hidden.value : "";
+    if (v === "__other__") {
+      const other = document.getElementById(prefix + "-other");
       return other ? other.value.trim() : "";
     }
-    return sel.value;
+    return v;
   }
 
   function submitEntryForm() {
@@ -1274,7 +1341,7 @@
     if (isNaN(amount)) { entrySetHint("Enter an amount, e.g. 42.50"); return; }
     const obj = { line: entryCat, date: date, amount: amount };
     if (entryCat === "groceries") {
-      obj.store = readStore("f-store", "f-store-other") || null;
+      obj.store = readStore("f-store") || null;
     } else if (entryCat === "enjoy") {
       const n = document.getElementById("f-note").value.trim();
       obj.note = n || null;
@@ -1295,7 +1362,7 @@
       amount: amount,
     };
     if (e.line === "groceries") {
-      patch.store = readStore("edit-store", "edit-store-other") || null;
+      patch.store = readStore("edit-store") || null;
     } else if (e.line === "enjoy") {
       patch.note = document.getElementById("edit-note").value.trim() || null;
     } else {
@@ -1307,13 +1374,6 @@
 
   // Toggle the free-text store input when "Other" is chosen in a store select.
   function onEntryChange(e) {
-    const sel = e.target.closest("[data-store-select]");
-    if (sel) {
-      const other = sel.parentNode.querySelector('input[type="text"]');
-      if (other) other.classList.toggle("hidden", sel.value !== "__other__");
-      if (sel.value === "__other__" && other) other.focus();
-      return;
-    }
     if (e.target.id === "f-line") {
       const opt = e.target.selectedOptions && e.target.selectedOptions[0];
       const def = opt ? opt.dataset.default : "";
@@ -1325,6 +1385,23 @@
   function onEntryClick(e) {
     const catBtn = e.target.closest(".cat-btn");
     if (catBtn) { entryCat = catBtn.dataset.cat; editingId = null; render(); return; }
+    // Store chip: single-select within its group; "Other" reveals a text input.
+    const chip = e.target.closest(".store-chip");
+    if (chip) {
+      const group = chip.closest(".store-chips");
+      group.querySelectorAll(".store-chip").forEach((b) => {
+        b.setAttribute("aria-pressed", b === chip ? "true" : "false");
+      });
+      const val = chip.dataset.value;
+      const hidden = group.querySelector('input[type="hidden"]');
+      const other = group.querySelector(".store-other-input");
+      if (hidden) hidden.value = val;
+      if (other) {
+        other.classList.toggle("hidden", val !== "__other__");
+        if (val === "__other__") other.focus();
+      }
+      return;
+    }
     const actBtn = e.target.closest("[data-act]");
     if (!actBtn) return;
     const act = actBtn.dataset.act;
@@ -2206,7 +2283,7 @@
   /* ---- Empty / open state (shown until a file is loaded) ---- */
   function emptyStateHtml() {
     const note = hasFsAccess()
-      ? "Your file stays on your computer. Nest reopens it automatically next time."
+      ? "Your file stays on your computer. Home Budget reopens it automatically next time."
       : "This browser can't open files directly. Use Import to load your budget, and Export to save changes.";
     return '' +
       '<div class="card"><div class="empty">' +
