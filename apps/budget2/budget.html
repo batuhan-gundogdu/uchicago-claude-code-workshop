@@ -582,6 +582,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>
           <span class="lbl">Import</span>
         </button>
+        <button class="btn" id="btn-reset" type="button" title="Clear all entries and start fresh (keeps your budget lines)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          <span class="lbl">Start fresh</span>
+        </button>
         <input type="file" id="file-input" accept="application/json,.json" class="hidden" />
       </div>
     </header>
@@ -830,16 +834,37 @@
     render();
   }
 
+  // resetData() - wipe all recorded activity but keep the budget structure
+  // (settings.lines, settings.stores). Empties entries, monthlyActuals, and
+  // fundsLedger so the user can clear seeded sample data and enter their own.
+  // No confirm here - callers (the top-bar button) prompt first; calling this
+  // directly performs the wipe immediately.
+  function resetData() {
+    if (!App.state) return;
+    const settings = App.state.settings || { lines: [], stores: [] };
+    App.state = {
+      version: App.state.version || 1,
+      settings: settings,
+      entries: [],
+      monthlyActuals: {},
+      fundsLedger: [],
+    };
+    App.month = defaultMonth(App.state);
+    updateMonthIndicator();
+    save();
+    render();
+  }
+
   /* =========================================================================
    * Rendering + tab navigation
    * ========================================================================= */
   const view = document.getElementById("view");
 
   const TAB_META = {
-    entry:    { grad: "linear-gradient(140deg, var(--grape), var(--sky))",  icon: "M12 20h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" },
-    monthly:  { grad: "linear-gradient(140deg, var(--mint), var(--sky))",   icon: "" },
-    funds:    { grad: "linear-gradient(140deg, var(--peach), var(--blush))", icon: "" },
-    analysis: { grad: "linear-gradient(140deg, var(--blush), var(--grape))", icon: "" },
+    entry:    { grad: "linear-gradient(140deg, var(--grape), var(--sky))" },
+    monthly:  { grad: "linear-gradient(140deg, var(--mint), var(--sky))" },
+    funds:    { grad: "linear-gradient(140deg, var(--peach), var(--blush))" },
+    analysis: { grad: "linear-gradient(140deg, var(--blush), var(--grape))" },
   };
 
   function iconSvg(paths) {
@@ -944,7 +969,7 @@
       let lineOpts = "";
       lines.forEach((l, i) => {
         lineOpts += '<option value="' + esc(l.id) + '" data-default="' +
-          (l.recurringDefault == null ? "" : l.recurringDefault) + '"' +
+          (l.recurringDefault == null ? "" : esc(String(l.recurringDefault))) + '"' +
           (i === 0 ? " selected" : "") + '>' + esc(l.name) + '</option>';
       });
       return '' +
@@ -1988,6 +2013,15 @@
         '<div class="an-empty">No data to analyse yet. Add some entries or monthly amounts first.</div></div>';
     }
 
+    // No actual spending anywhere (e.g. only income recorded, or freshly reset)
+    // - show a gentle empty state rather than all-zero / NaN charts.
+    const totalSpend = months.reduce((s, m) => s + monthTotalExpense(m), 0);
+    if (!(totalSpend > 0)) {
+      return '<div class="card"><div class="an-head"><div class="titles">' +
+        "<h2>Analysis</h2><p>Trends and breakdowns across your budget.</p></div></div>" +
+        '<div class="an-empty">No spending to analyze yet. Log a few expenses and the charts appear here.</div></div>';
+    }
+
     // Selected month drives the bars and (in month scope) the donut / lists.
     let sel = App.month;
     if (!sel || months.indexOf(sel) === -1) sel = months[months.length - 1];
@@ -2158,6 +2192,15 @@
   document.getElementById("btn-export").addEventListener("click", exportJson);
   document.getElementById("btn-import").addEventListener("click", () =>
     document.getElementById("file-input").click());
+  document.getElementById("btn-reset").addEventListener("click", () => {
+    if (!App.state) return;
+    const ok = window.confirm(
+      "Start fresh? This clears every entry, monthly amount, and fund movement, " +
+      "but keeps your budget lines and stores. This cannot be undone. " +
+      "Consider Export first to keep a copy."
+    );
+    if (ok) resetData();
+  });
 
   document.getElementById("file-input").addEventListener("change", (e) => {
     const file = e.target.files && e.target.files[0];
@@ -2222,6 +2265,7 @@
   App.save = save;
   App.exportJson = exportJson;
   App.importJson = importJson;
+  App.resetData = resetData;
   App.render = render;
   App.setTab = setTab;
   App.money = money;
