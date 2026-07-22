@@ -184,23 +184,69 @@ def _parse_monthly_budget(ws):
     return lines, monthly_actuals
 
 
-def _grocery_like_entries(ws, line_id, include_store):
+def _color_key(cell):
+    """A stable identifier for a cell's solid fill color (rgb or theme+tint),
+    or None if the cell has no solid fill. Used to decode which store a
+    grocery purchase belongs to, since the store is encoded by cell color.
+    """
+    f = cell.fill
+    if not f or f.patternType != "solid":
+        return None
+    fg = f.fgColor
+    rgb = getattr(fg, "rgb", None)
+    if isinstance(rgb, str) and rgb != "00000000":
+        return "rgb:" + rgb
+    if getattr(fg, "type", None) == "theme":
+        tint = round(getattr(fg, "tint", 0.0) or 0.0, 3)
+        return "theme:%s:%s" % (fg.theme, tint)
+    return None
+
+
+def _find_month_row(ws):
+    for r in range(1, ws.max_row + 1):
+        if ws.cell(row=r, column=1).value == "Month":
+            return r
+    raise ValueError("Could not find 'Month' header row")
+
+
+def _store_legend(ws):
+    """The Groceries sheet carries a color legend in the two rows above the
+    'Month' header: each store name is filled with the color that marks its
+    purchases in the grid below. Returns (ordered_store_names, color_to_store).
+
+    Two stores share pure red (Costco and Mexican Market) and three have no
+    fill (Fresh Market, Walgreens, PETCO) - the workbook itself is ambiguous
+    there. We resolve deterministically: first store seen for a color wins, so
+    red maps to Costco; unfilled cells stay unattributed (store = None).
+    """
+    header_row = _find_month_row(ws)
+    names = []
+    color_to_store = {}
+    for c in range(2, ws.max_column + 1):
+        for r in (header_row - 2, header_row - 1):
+            val = ws.cell(row=r, column=c).value
+            if not isinstance(val, str) or not val.strip():
+                continue
+            name = val.strip()
+            if name not in names:
+                names.append(name)
+            key = _color_key(ws.cell(row=r, column=c))
+            if key is not None and key not in color_to_store:
+                color_to_store[key] = name
+    return names, color_to_store
+
+
+def _grocery_like_entries(ws, line_id, color_to_store=None):
     """Parse a Groceries/Enjoy-shaped sheet: a 'Month' header row, a TOTAL row,
     then a leftmost day-serial column with numeric cells under each month
     column. Every numeric cell under a month column becomes one entry - we
     capture all transactions rather than trying to match the spreadsheet's
     own (sometimes incomplete) cached TOTAL.
-    """
-    # Find the header row (contains "Month" in column A) and the row above
-    # it that may carry store names (for Groceries only).
-    header_row = None
-    for r in range(1, ws.max_row + 1):
-        if ws.cell(row=r, column=1).value == "Month":
-            header_row = r
-            break
-    if header_row is None:
-        raise ValueError("Could not find 'Month' header row")
 
+    When color_to_store is given (Groceries), each purchase's store is decoded
+    from its cell fill color. Enjoy has no store legend, so store stays None.
+    """
+    header_row = _find_month_row(ws)
     first_data_row = header_row + 2  # skip the TOTAL row right below the header
 
     month_cols = []  # (col_index_1based, (year, month))
@@ -211,19 +257,16 @@ def _grocery_like_entries(ws, line_id, include_store):
 
     entries = []
     for c, (year, month) in month_cols:
-        store = None
-        if include_store:
-            name1 = ws.cell(row=header_row - 2, column=c).value
-            name2 = ws.cell(row=header_row - 1, column=c).value
-            names = [n for n in (name1, name2) if n]
-            store = " / ".join(names) if names else None
-
         for r in range(first_data_row, ws.max_row + 1):
+            cell = ws.cell(row=r, column=c)
             day_serial = _to_num(ws.cell(row=r, column=1).value)
-            amount = _to_num(ws.cell(row=r, column=c).value)
+            amount = _to_num(cell.value)
             if day_serial is None or amount is None:
                 continue
             day = int(round(day_serial))
+            store = None
+            if color_to_store is not None:
+                store = color_to_store.get(_color_key(cell))
             entries.append({
                 "id": f"{line_id}-{year}{month:02d}-{r}",
                 "date": _iso(year, month, day),
@@ -309,8 +352,9 @@ def build_budget(xlsx_path):
 
     line_data, monthly_actuals = _parse_monthly_budget(wb["Monthly Budget"])
 
-    groceries_entries = _grocery_like_entries(wb["Groceries"], "groceries", include_store=True)
-    enjoy_entries = _grocery_like_entries(wb["Enjoy"], "enjoy", include_store=False)
+    store_names, color_to_store = _store_legend(wb["Groceries"])
+    groceries_entries = _grocery_like_entries(wb["Groceries"], "groceries", color_to_store)
+    enjoy_entries = _grocery_like_entries(wb["Enjoy"], "enjoy", None)
     home_entries = _parse_home_expenses(wb["Home Expenses"])
     entries = groceries_entries + enjoy_entries + home_entries
 
@@ -329,7 +373,9 @@ def build_budget(xlsx_path):
             "recurringDefault": d["recurringDefault"],
         })
 
-    stores = sorted({e["store"] for e in groceries_entries if e["store"]})
+    # The store master list is the full legend (individual stores), so all of
+    # them are selectable even if a given store has no seeded purchases.
+    stores = store_names
 
     return {
         "version": 1,

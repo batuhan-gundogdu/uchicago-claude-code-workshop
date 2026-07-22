@@ -22,3 +22,13 @@ def test_totals_match_spreadsheet():
     assert abs(nov_home - 813.1462) < 0.01
     # Funds ledger has the house-sale one-off
     assert any(abs(f["amount"] - 157100) < 0.01 for f in b["fundsLedger"])
+    # Stores are individual, not glued legend pairs. The store per purchase is
+    # decoded from cell fill color.
+    stores = b["settings"]["stores"]
+    for s in ("Trader Joes", "WholeFoods", "amazon", "Chinese", "Mexican Market", "PETCO"):
+        assert s in stores, s
+    assert not any("/" in s for s in stores)
+    # A color-decoded store lands on real grocery entries.
+    groc_stores = {e["store"] for e in b["entries"] if e["line"] == "groceries"}
+    assert "amazon" in groc_stores
+    assert "Trader Joes" in groc_stores

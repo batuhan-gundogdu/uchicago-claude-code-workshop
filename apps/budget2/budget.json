@@ -2,12 +2,18 @@
   "version": 1,
   "settings": {
     "stores": [
-      "Jewel Osco / Costco",
-      "Mexican Market / PETCO",
-      "Trader Joes / WholeFoods",
-      "Turkish Market / Fresh Market",
-      "Walgreens / Fresh Food",
-      "amazon / Chinese"
+      "Trader Joes",
+      "WholeFoods",
+      "Jewel Osco",
+      "Costco",
+      "Turkish Market",
+      "Fresh Market",
+      "amazon",
+      "Chinese",
+      "Walgreens",
+      "Fresh Food",
+      "Mexican Market",
+      "PETCO"
     ],
     "lines": [
       {
@@ -172,7 +178,7 @@
       "line": "groceries",
       "amount": 320.0,
       "item": null,
-      "store": "Trader Joes / WholeFoods",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -181,7 +187,7 @@
       "line": "groceries",
       "amount": 88.97,
       "item": null,
-      "store": "Trader Joes / WholeFoods",
+      "store": "Trader Joes",
       "note": null
     },
     {
@@ -190,7 +196,7 @@
       "line": "groceries",
       "amount": 210.0,
       "item": null,
-      "store": "Trader Joes / WholeFoods",
+      "store": "WholeFoods",
       "note": null
     },
     {
@@ -199,7 +205,7 @@
       "line": "groceries",
       "amount": 170.0,
       "item": null,
-      "store": "Trader Joes / WholeFoods",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -208,7 +214,7 @@
       "line": "groceries",
       "amount": 77.29,
       "item": null,
-      "store": "Trader Joes / WholeFoods",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -217,7 +223,7 @@
       "line": "groceries",
       "amount": 355.0,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "Costco",
       "note": null
     },
     {
@@ -226,7 +232,7 @@
       "line": "groceries",
       "amount": 115.0,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "Turkish Market",
       "note": null
     },
     {
@@ -235,7 +241,7 @@
       "line": "groceries",
       "amount": 28.42,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": null,
       "note": null
     },
     {
@@ -244,7 +250,7 @@
       "line": "groceries",
       "amount": 49.83,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "WholeFoods",
       "note": null
     },
     {
@@ -253,7 +259,7 @@
       "line": "groceries",
       "amount": 34.25,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "amazon",
       "note": null
     },
     {
@@ -262,7 +268,7 @@
       "line": "groceries",
       "amount": 62.58,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "WholeFoods",
       "note": null
     },
     {
@@ -271,7 +277,7 @@
       "line": "groceries",
       "amount": 85.96,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -280,7 +286,7 @@
       "line": "groceries",
       "amount": 365.0,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "Costco",
       "note": null
     },
     {
@@ -289,7 +295,7 @@
       "line": "groceries",
       "amount": 82.0,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "Turkish Market",
       "note": null
     },
     {
@@ -298,7 +304,7 @@
       "line": "groceries",
       "amount": 89.96,
       "item": null,
-      "store": "Jewel Osco / Costco",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -307,7 +313,7 @@
       "line": "groceries",
       "amount": 65.06,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "amazon",
       "note": null
     },
     {
@@ -316,7 +322,7 @@
       "line": "groceries",
       "amount": 78.22,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "Turkish Market",
       "note": null
     },
     {
@@ -325,7 +331,7 @@
       "line": "groceries",
       "amount": 69.32,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "Trader Joes",
       "note": null
     },
     {
@@ -334,7 +340,7 @@
       "line": "groceries",
       "amount": 264.9,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -343,7 +349,7 @@
       "line": "groceries",
       "amount": 38.47,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "amazon",
       "note": null
     },
     {
@@ -352,7 +358,7 @@
       "line": "groceries",
       "amount": 86.81,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "amazon",
       "note": null
     },
     {
@@ -361,7 +367,7 @@
       "line": "groceries",
       "amount": 255.0,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -370,7 +376,7 @@
       "line": "groceries",
       "amount": 340.0,
       "item": null,
-      "store": "Turkish Market / Fresh Market",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -379,7 +385,7 @@
       "line": "groceries",
       "amount": 160.0,
       "item": null,
-      "store": "amazon / Chinese",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -388,7 +394,7 @@
       "line": "groceries",
       "amount": 175.0,
       "item": null,
-      "store": "amazon / Chinese",
+      "store": "Turkish Market",
       "note": null
     },
     {
@@ -397,7 +403,7 @@
       "line": "groceries",
       "amount": 39.39,
       "item": null,
-      "store": "amazon / Chinese",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -406,7 +412,7 @@
       "line": "groceries",
       "amount": 80.4,
       "item": null,
-      "store": "amazon / Chinese",
+      "store": "Chinese",
       "note": null
     },
     {
@@ -415,7 +421,7 @@
       "line": "groceries",
       "amount": 61.74,
       "item": null,
-      "store": "amazon / Chinese",
+      "store": null,
       "note": null
     },
     {
@@ -424,7 +430,7 @@
       "line": "groceries",
       "amount": 205.0,
       "item": null,
-      "store": "amazon / Chinese",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -433,7 +439,7 @@
       "line": "groceries",
       "amount": 42.2,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": "amazon",
       "note": null
     },
     {
@@ -442,7 +448,7 @@
       "line": "groceries",
       "amount": 270.0,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -451,7 +457,7 @@
       "line": "groceries",
       "amount": 120.0,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": "Fresh Food",
       "note": null
     },
     {
@@ -460,7 +466,7 @@
       "line": "groceries",
       "amount": 105.0,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": "Costco",
       "note": null
     },
     {
@@ -469,7 +475,7 @@
       "line": "groceries",
       "amount": 280.0,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -478,7 +484,7 @@
       "line": "groceries",
       "amount": 31.86,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": null,
       "note": null
     },
     {
@@ -487,7 +493,7 @@
       "line": "groceries",
       "amount": 140.0,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": "Fresh Food",
       "note": null
     },
     {
@@ -496,7 +502,7 @@
       "line": "groceries",
       "amount": 165.0,
       "item": null,
-      "store": "Walgreens / Fresh Food",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -505,7 +511,7 @@
       "line": "groceries",
       "amount": 145.0,
       "item": null,
-      "store": "Mexican Market / PETCO",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -514,7 +520,7 @@
       "line": "groceries",
       "amount": 105.0,
       "item": null,
-      "store": "Mexican Market / PETCO",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -523,7 +529,7 @@
       "line": "groceries",
       "amount": 86.74,
       "item": null,
-      "store": "Mexican Market / PETCO",
+      "store": "WholeFoods",
       "note": null
     },
     {
@@ -532,7 +538,7 @@
       "line": "groceries",
       "amount": 40.59,
       "item": null,
-      "store": "Mexican Market / PETCO",
+      "store": "Chinese",
       "note": null
     },
     {
@@ -541,7 +547,7 @@
       "line": "groceries",
       "amount": 50.67,
       "item": null,
-      "store": "Mexican Market / PETCO",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -550,7 +556,7 @@
       "line": "groceries",
       "amount": 115.0,
       "item": null,
-      "store": "Mexican Market / PETCO",
+      "store": "Costco",
       "note": null
     },
     {
@@ -559,7 +565,7 @@
       "line": "groceries",
       "amount": 63.07,
       "item": null,
-      "store": "Mexican Market / PETCO",
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -568,7 +574,7 @@
       "line": "groceries",
       "amount": 175.0,
       "item": null,
-      "store": null,
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -577,7 +583,7 @@
       "line": "groceries",
       "amount": 86.8,
       "item": null,
-      "store": null,
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -586,7 +592,7 @@
       "line": "groceries",
       "amount": 43.41,
       "item": null,
-      "store": null,
+      "store": "Jewel Osco",
       "note": null
     },
     {
@@ -595,7 +601,7 @@
       "line": "groceries",
       "amount": 220.0,
       "item": null,
-      "store": null,
+      "store": "Turkish Market",
       "note": null
     },
     {
@@ -604,7 +610,7 @@
       "line": "groceries",
       "amount": 67.48,
       "item": null,
-      "store": null,
+      "store": "amazon",
       "note": null
     },
     {
@@ -613,7 +619,7 @@
       "line": "groceries",
       "amount": 155.0,
       "item": null,
-      "store": null,
+      "store": "Jewel Osco",
       "note": null
     },
     {
