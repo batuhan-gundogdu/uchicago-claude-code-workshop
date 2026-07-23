@@ -35,6 +35,28 @@ Copy `templates/report.tex` into the working directory and fill it in. The repor
 
 For detailed formatting and style rules, read `references/report_style.md`.
 
+## Step 4 — Compile to PDF (always finish here)
+
+Do not stop at the `.tex` source. Compile the report to `report.pdf` and confirm it built before you finish.
+
+The report ships with the Springer `sn-jnl` class, which uses BibTeX, so the build has multiple passes. Use whichever toolchain is available:
+
+```bash
+# Preferred: a single self-contained command (fetches packages on demand, runs
+# the LaTeX and BibTeX passes for you). Install with `brew install tectonic` if missing.
+tectonic -X compile report.tex
+
+# Or a classic TeX Live toolchain:
+pdflatex report && bibtex report && pdflatex report && pdflatex report
+```
+
+After compiling:
+- Verify `report.pdf` exists and open the log for errors. Fix any compile error rather than leaving a broken build.
+- Sanity-check the rendered output: citations must appear as numbered `[1]` brackets (not author-year), the related-work table must fit the page width, and the reference list must be populated. Render a page to an image if you need to confirm.
+- The Springer `sn-jnl.cls` and matching `.bst` are required to build. If they are missing, tell the user where to get them (see Output) and stop; do not fabricate a PDF.
+
+If you had to work around a class or engine incompatibility (for example, missing package loads or a `dvips`-only `breakurl` under a XeTeX engine), document the fix in the `report.tex` preamble so the build stays reproducible.
+
 ## Non-negotiable constraints
 
 - **Single author**, exactly as written: Batuhan Gundogdu, University of Chicago Data Science Institute.
@@ -55,4 +77,4 @@ If a cell cannot be determined from the abstract or MeSH terms, write "not speci
 
 ## Output
 
-Leave `report.tex` and `references.bib` in the working directory, ready to compile. The Springer `sn-jnl.cls` and matching `.bst` are required to build; they ship with the official Springer Nature LaTeX template. Tell the user where to get them if they are missing.
+Leave `report.tex`, `references.bib`, and the compiled `report.pdf` in the working directory. The PDF is the final deliverable: the task is not done until it has been built and verified (Step 4). The Springer `sn-jnl.cls` and matching `.bst` are required to build; they ship with the official Springer Nature LaTeX template (https://www.springernature.com/gp/authors/campaigns/latex-author-support). Tell the user where to get them if they are missing.
