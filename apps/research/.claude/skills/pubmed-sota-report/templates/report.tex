@@ -1,0 +1,64 @@
+%% Springer Nature sn-jnl template, numbered reference style.
+%% Requires sn-jnl.cls and sn-mathphys-num.bst from the official Springer template:
+%%   https://www.springernature.com/gp/authors/campaigns/latex-author-support
+%% Compile: pdflatex report -> bibtex report -> pdflatex report x2
+\documentclass[sn-mathphys-num]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+%% hyperref is loaded by sn-jnl; \href is available for the table links.
+
+\begin{document}
+
+\title[State of the Art: <SHORT TITLE>]{<FULL TITLE>: A State-of-the-Art Review}
+
+%% Single author. Do not add co-authors.
+\author[1]{\fnm{Batuhan} \sur{Gundogdu}}\email{}
+\affil[1]{\orgdiv{Data Science Institute}, \orgname{University of Chicago},
+  \city{Chicago}, \state{IL}, \country{USA}}
+
+\abstract{%% ~150 words. State the topic, why it matters, and what the review covers:
+%% the pioneering work, the most impactful contributions, and the most recent advances.
+%% No em dashes.
+}
+
+\keywords{<keyword>, <keyword>, <keyword>}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+%% Frame the topic and scope. Cite foundational references with \cite{key}.
+
+\section{Pioneering Work}\label{sec:pioneers}
+%% The earliest foundational contributions that defined the problem.
+
+\section{Most Impactful Contributions}\label{sec:impact}
+%% Rank by relative_citation_ratio (RCR) from corpus.json; cite raw citation_count
+%% in support. If impact_source is "unavailable", say ranking is approximate.
+
+\section{Recent Advances}\label{sec:recent}
+%% Work from the last two years and open directions.
+
+\section{Related Work}\label{sec:related}
+Table~\ref{tab:related} summarizes the reviewed literature.
+
+\begin{table*}[t]
+  \caption{Reviewed work, ordered by year. Cells marked ``not specified'' were not
+  determinable from the abstract or MeSH terms.}\label{tab:related}
+  \begin{tabular}{@{}lllll@{}}
+    \toprule
+    Work & Year & Physics model & Method & Body part \\
+    \midrule
+    %% One row per paper, ascending by year. Example row:
+    %% \href{https://pubmed.ncbi.nlm.nih.gov/30022098/}{Doe et al.} & 2019 & NODDI &
+    %%   Physics-informed DL & Brain \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\section{Conclusion}\label{sec:conclusion}
+
+\bibliography{references}
+
+\end{document}
