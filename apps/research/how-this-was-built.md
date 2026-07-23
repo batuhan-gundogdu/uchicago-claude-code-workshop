@@ -9,7 +9,7 @@
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 @"/Users/batuhangundogdu/Downloads/files/build_corpus.py" @"/Users/batuhangundogdu/Downloads/files/report_style.md" @"/Users/batuhangundogdu/Downloads/files/report.tex" @"/Users/batuhangundogdu/Downloads/files/SKILL.md"
 We will create a new app, called research. Prepare is new app with the following skill structure, as I'll be pointing at some skills. Prepare the data structure and I'll give you my prompts for the research.
@@ -75,7 +75,7 @@ Ready for your research prompts.
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 research should be under apps
 
@@ -101,7 +101,7 @@ Ready for your research prompts.
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 Conduct research on "quantitative MRI-based tissue microstructure profiling" and write the report as specified in the pubmed-sota-report skill. Include a table of the relevant work with columns: Work (author et al., linked), Year (ordered by year), Physics model (IVIM etc.), Method (NLLS, physics-informed deep learning, digital twin, etc.), and Body part (brain, breast, prostate, kidney, etc.).
 
@@ -229,7 +229,7 @@ One judgment call worth flagging: the relevance search surfaced a tomato-tissue 
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 prepare the pdf
 
@@ -629,7 +629,7 @@ One note for full fidelity: this used the v2 class from a community mirror. If y
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 Ran the `/create-pr` slash command.
 
@@ -691,7 +691,7 @@ Done. The PR is open.
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 add to the skill (prepare report) that it should finish with compiling with a pdf.
 
@@ -742,7 +742,7 @@ Note: I updated only the committed copy at `apps/research/`. The stale `research
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 push to main
 

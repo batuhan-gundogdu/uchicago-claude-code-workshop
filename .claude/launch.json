@@ -2,6 +2,13 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "transcripts",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8790", "--directory", "."],
+      "port": 8790,
+      "url": "http://localhost:8790/apps/research/how-this-was-built.html"
+    },
+    {
       "name": "quiz",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8753", "--directory", "apps/quiz"],

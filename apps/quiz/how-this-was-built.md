@@ -9,7 +9,7 @@
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 We will build a quiz app under apps. In the folder I put a pdf. In this document you'll see a bunch of test questions and the answer sheet at the bottom. Can you write the code that creates a quiz app that shows the questions to me one by one and marks the correct answer as I click. I should be able to take the exam again and again as needed. Use pastel colors. Show me the progress on an artifact.
 
@@ -283,7 +283,7 @@ One note: I added `.claude/launch.json` (a small preview config for the browser 
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 Ran the `/create-pr` slash command.
 
@@ -338,7 +338,7 @@ One thing worth flagging for review: the PR includes the **7 MB source PDF**. I 
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 When I look at the apps/quiz folder, I don't see any other files that you might have created for this app. Where did they go?
 
@@ -371,7 +371,7 @@ So nothing went missing - the app just is `quiz.html`. If you'd actually prefer 
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 nope, you can merge
 

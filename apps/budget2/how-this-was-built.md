@@ -9,7 +9,7 @@
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 We will build a budget app. This will replace my excel-way way of following things. My excel is @budget_fake.xlsx
 
@@ -168,7 +168,7 @@ Does this foundation look right? Once you confirm, I'll lay out the 4 pages (Par
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 Yes. Go on
 
@@ -206,7 +206,7 @@ Approve, or want to adjust any page?
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 I approve it.
 
@@ -237,7 +237,7 @@ One heads-up while you read: the spec renames a couple of spreadsheet lines to m
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 go on
 
@@ -277,7 +277,7 @@ Since you wanted to design together with the artifact on the side, I lean toward
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 1
 
@@ -468,7 +468,7 @@ No response requested.
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 please continue
 
@@ -640,7 +640,7 @@ Which option?
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 Before I merge, few comments:
 
@@ -874,7 +874,7 @@ Anything else you'd like to tweak, or shall I proceed with the merge? Your optio
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 Lastly, I don't know why the amazon/Chinese, Mexican Market/PETCO etc. were merged into one? They are supposed to be different.
 
@@ -974,7 +974,7 @@ Ready to merge now, or any other tweaks? Options: 1) Merge to `main` locally, 2)
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 commit to main
 
@@ -1004,7 +1004,7 @@ Want me to push `main` to the remote, or leave it local?
 
 ---
 
-### 🧑 Batu
+### 🧔🏻‍♂️ Batu
 
 push to main
 
