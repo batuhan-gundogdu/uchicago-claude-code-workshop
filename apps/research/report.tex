@@ -1,0 +1,161 @@
+%% Springer Nature sn-jnl template, numbered reference style.
+%% Requires sn-jnl.cls and sn-mathphys-num.bst from the official Springer template:
+%%   https://www.springernature.com/gp/authors/campaigns/latex-author-support
+%% Compile: pdflatex report -> bibtex report -> pdflatex report x2
+%% v2 of sn-jnl.cls selects the numbered Math & Physical Sciences style with the
+%% pair [sn-mathphys,Numbered]. v3.1 folds this into the single option
+%% "sn-mathphys-num"; swap accordingly if compiling against v3 class files.
+\documentclass[sn-mathphys,Numbered]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{amsmath}
+%% This v2 sn-jnl.cls uses manyfoot macros (\SetFootnoteHook, \DeclareNewFootnote)
+%% in its begin-document hook but does not load the package itself; load it here.
+\usepackage{manyfoot}
+%% This mirror's class also uses xcolor macros (\definecolor, \color, \textcolor,
+%% \colorbox) in its begin-document hook without loading the package; load it here.
+\usepackage{xcolor}
+%% hyperref is loaded by sn-jnl; \href is available for the table links.
+%% The class loads breakurl on the non-pdfTeX branch (here, the XeTeX engine used by
+%% Tectonic). breakurl's PostScript hook \headerps@out only exists in the dvips driver,
+%% so neutralize it with a no-op. Our table links use \href with short visible text,
+%% so breakurl's URL line-breaking is not needed. (Harmless under pdflatex too.)
+\makeatletter
+\providecommand\headerps@out[1]{}
+\makeatother
+%% breakurl also supplies \doiurl (used by the .bbl for DOIs) via its \pdf@box
+%% machinery, which is likewise dvips-only. Override it after the class loads with a
+%% plain hyperref link that works under any engine.
+\def\doiurl#1{\href{https://doi.org/#1}{#1}}
+
+\begin{document}
+
+\title[State of the Art: Quantitative MRI Microstructure]{Quantitative MRI-Based Tissue Microstructure Profiling: A State-of-the-Art Review}
+
+%% Single author. Do not add co-authors. No \email: an empty one makes the class
+%% print a stray "Contributing authors: ;" line, and the style calls for no
+%% corresponding-author footnote beyond the affiliation.
+\author[1]{\fnm{Batuhan} \sur{Gundogdu}}
+\affil[1]{\orgdiv{Data Science Institute}, \orgname{University of Chicago},
+  \city{Chicago}, \state{IL}, \country{USA}}
+
+\abstract{Quantitative MRI (qMRI) aims to convert the MR signal into physical measurements of tissue composition and microstructure, offering a noninvasive route to information that once required biopsy. This review surveys the field of qMRI-based tissue microstructure profiling as represented in a PubMed/MEDLINE corpus, ranked for influence using NIH iCite citation data. It begins with the pioneering relaxometry and diffusion studies that established that voxel-scale contrast reflects sub-voxel properties such as myelin content, cellularity, and tissue compartments. It then examines the most impactful contributions, led by comprehensive treatments of diffusion-based brain microstructure imaging and by time-dependent diffusion methods validated against histology in prostate cancer. Finally, it covers recent advances in which physics-informed and self-supervised deep learning replace slow model fitting, shorten acquisition, and push qMRI toward a practical virtual histology. Open problems in standardization, metrology, and clinical validation are highlighted throughout.}
+
+\keywords{quantitative MRI, tissue microstructure, diffusion MRI, relaxometry, physics-informed deep learning}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+Conventional MRI is read qualitatively: images are formed so that a radiologist can visually discriminate tissue types and pathology, rather than to yield numbers.
+Quantitative MRI (qMRI) reframes the problem.
+It treats each voxel as a measurement of physical parameters that represent tissue composition and microstructure, and in doing so it supports objective disease detection, staging, and treatment monitoring \cite{pmid33710907}.
+The central idea of microstructure imaging is that the MR signal depends on properties of tissue at a scale far below the image resolution, so a model that links those properties to the measured signal can recover microscopic detail from macroscopic images \cite{pmid29193413}.
+This ambition has become one of the main branches of qMRI \cite{pmid29097317}.
+
+The appeal is clear.
+If the reconstructed parameters can be tied to histology, then MRI becomes a form of in vivo histology, quantifying myelin, axonal content, cellularity, or tissue water without a needle.
+Realizing this appeal is difficult because MRI provides only an indirect measure of the properties of interest, and single techniques are often modestly specific to any one microscopic substrate \cite{pmid29097317}.
+Multiparametric acquisition, which combines relaxometry, proton density, magnetization transfer, and diffusion into one protocol, is one response to that limitation \cite{pmid36040334}.
+The other recurring theme, and a prerequisite for clinical adoption, is metrology: a quantitative value is meaningful only when its reproducibility and uncertainty are characterized \cite{pmid33710907}.
+This review traces the arc of the field from its foundations, through its most influential contributions, to the machine-learning methods now reshaping it.
+Impact is ranked using the Relative Citation Ratio (RCR) and raw citation counts from NIH iCite, both available for the retrieved corpus.
+
+\section{Pioneering Work}\label{sec:pioneers}
+The foundational insight of the field is that intrinsic relaxation times carry microstructural information.
+Early work on age-related brain change argued that conventional MRI cannot detect the microstructural alterations documented at post-mortem examination, whereas magnetization transfer imaging, diffusion tensor imaging, and proton spectroscopy are sensitive to microstructural and metabolic change in gray and white matter across the lifespan \cite{pmid16041287}.
+Quantitative relaxometry then supplied the biophysical grounding.
+A widely cited treatment of brain relaxometry set out how the longitudinal and transverse relaxation times $T_1$, $T_2$, and $T_2^{*}$ can be measured in vivo and how they inform on disease-related tissue change and developmental plasticity, while noting that the links between microstructure and relaxation remained to be firmly established \cite{pmid21613875}.
+With 194 citations and an RCR of 6.41, this remains one of the most cited works in the corpus and a reference point for later relaxometry.
+
+Two lines of application soon demonstrated the promise.
+In neurodevelopment, qMRI based on morphology and microstructure-dependent contrast was shown to open a unique window on the neonatal brain, with the goal of dissociating cell proliferation, neuronal maturation, and myelination by combining different signal contrasts \cite{pmid23872867}.
+In neurodegeneration, longitudinal and transverse relaxation mapping ($qT_1$, $qT_2$) revealed tissue microstructural change in dementia with Lewy bodies in regions without evident atrophy, indicating that relaxometry can detect subtle change invisible to structural volumetric imaging \cite{pmid25355453}.
+Together these studies established the paradigm that quantitative contrast can act as a surrogate for microscopic tissue state.
+
+\section{Most Impactful Contributions}\label{sec:impact}
+Ranked by RCR, which normalizes for field and publication year, the single most influential work in the corpus is a review of brain microstructure imaging with diffusion MRI (RCR 18.36, 305 citations, 99th percentile) \cite{pmid29193413}.
+It codified the microstructure-imaging paradigm: estimate and map microscopic tissue properties through a model linking them to the voxel-scale signal, and it laid out the practicalities of model selection, experiment design, parameter estimation, and validation as the field moved from technical research into biomedical application.
+Its influence reflects how it organized a fragmented methodology into a coherent programme.
+
+The most impactful primary study is a prostate cancer application of time-dependent diffusion MRI (RCR 9.96, 103 citations, 98th percentile) \cite{pmid35258368}.
+Using pulsed and oscillating gradient sequences and a two-compartment model, it estimated cell diameter, intracellular volume fraction, and cellularity, and showed that cellularity discriminated clinically significant from insignificant cancer with 92\% accuracy, with the fitted parameters validated against histopathology.
+This result matters because it closes the loop between a microstructural model and the underlying pathology in a clinically important organ.
+The same corpus contains an equally rigorous histologic validation of hybrid multidimensional MRI in the prostate (RCR 4.09, 39 citations) \cite{pmid34751615}, in which a three-compartment diffusion-relaxation model recovered stroma, epithelium, and lumen volume fractions that agreed closely with whole-mount prostatectomy (Pearson $r$ up to 0.93).
+
+Beyond diffusion, several high-impact works broadened the scope.
+A review of musculoskeletal qMRI (RCR 8.20, 96th percentile) surveyed relaxometry-based cartilage and muscle composition for osteoarthritis, including $T_2$, $T_2^{*}$, and $T_{1\rho}$ mapping and magnetic resonance fingerprinting \cite{pmid36165880}.
+A synthesis of clinical qMRI and the need for metrology (RCR 4.28) argued that quantitation is well suited to multi-site trials but demands rigorous treatment of uncertainty and calibration \cite{pmid33710907}.
+A review of multiparametric quantitative brain MRI (RCR 4.06) organized proton density, relaxation, and magnetization transfer parameters and identified microstructural tissue modeling as an emerging application \cite{pmid36040334}.
+Post-mortem qMRI of multiple sclerosis (RCR 4.09) then showed that a panel of measures (magnetization transfer ratio, myelin water fraction, $qT_1$, quantitative susceptibility, and diffusion anisotropy) could discriminate histological lesion types, including remyelinated lesions, and correlate with myelin, axon, and astrocyte content \cite{pmid36480267}.
+These contributions share a common thread: influence followed from tying quantitative measures to a validated biological reference.
+
+\section{Recent Advances}\label{sec:recent}
+The most recent work reflects a shift from slow, per-voxel model fitting toward learned estimators and optimized acquisition.
+A physics-informed autoencoder was introduced as a self-supervised model that embeds a three-compartment diffusion-relaxation model into a neural network to profile prostate tissue from hybrid multidimensional MRI \cite{pmid39907585}.
+Validated against histology, it estimated epithelium, stroma, and lumen fractions with intraclass correlation up to 0.94, proved more robust to noise than nonlinear least squares, and ran roughly ten thousand times faster (0.18 seconds versus 40 minutes per image).
+Complementing this, a physics-informed machine-learning framework was used to select an optimal subset of diffusion-relaxation measurements, predicting unmeasured signals and enabling protocols five times shorter without degrading parameter estimates \cite{pmid38471339}.
+Together these mark physics-informed learning as the current methodological frontier: the biophysical model is retained for interpretability while the network supplies speed and noise robustness.
+
+Clinical translation is advancing in parallel.
+A review of MRI-based virtual pathology of the prostate surveyed luminal water imaging, VERDICT, restriction spectrum imaging, and hybrid multidimensional and time-dependent diffusion methods, arguing that these techniques can augment multiparametric MRI and reduce diagnostic variability, while stressing the need for larger multi-center validation and radiology-pathology correlation \cite{pmid38856839}.
+Time-dependent diffusion MRI was extended to a new organ, the endometrium, where microstructural parameters distinguished benign from malignant lesions and identified aggressive histological types, again with strong correlation to pathology \cite{pmid41015861}.
+In neurodegeneration, topographic quantitative mapping of the hippocampus linked qMRI measures sensitive to macromolecular concentration and paramagnetic susceptibility to demyelination and iron deposition in aging and presymptomatic Alzheimer's disease, an explicit demonstration of qMRI as in vivo histology \cite{pmid41144662}.
+A contemporaneous review of qMRI in leukodystrophies underscored the outstanding need for objective, quantitative outcome measures in emerging therapeutic trials \cite{pmid37150021}.
+
+Open directions recur across these studies.
+Standardization and uncertainty quantification remain unresolved \cite{pmid33710907}, indirectness limits the specificity of any single contrast \cite{pmid29097317}, and the biological underpinnings of quantitative parameter values still require refinement \cite{pmid36040334}.
+The breadth of the technique is notable: the same relaxometry principles have even been applied to characterize microstructural change from dehydration in plant tissue \cite{pmid34964166}, which illustrates how general the signal-to-microstructure mapping has become.
+
+\section{Related Work}\label{sec:related}
+Table~\ref{tab:related} summarizes the reviewed literature, ordered by year. Cells report the dominant physics model and estimation method, with the anatomical target seeded from MeSH terms. "Review" in the Method column denotes a review or overview article rather than a single-method primary study.
+
+\begin{table*}[t]
+  \caption{Reviewed work, ordered by year. Cells marked ``not specified'' were not
+  determinable from the abstract or MeSH terms.}\label{tab:related}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.2cm} c >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.0cm}@{}}
+    \toprule
+    Work & Year & Physics model & Method & Body part \\
+    \midrule
+    \href{https://pubmed.ncbi.nlm.nih.gov/16041287/}{Inglese et al.} & 2004 & MT, DTI, MRS & Review & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/21613875/}{Deoni} & 2010 & Relaxometry ($T_1$,$T_2$,$T_2^{*}$) & Review & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/23872867/}{Sled et al.} & 2013 & Multi-contrast relaxometry & Review & Brain (neonatal) \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/25355453/}{Su et al.} & 2015 & $qT_1$/$qT_2$ relaxometry & Relaxometry mapping & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/29097317/}{Cercignani et al.} & 2018 & Multi-modal & Review & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/29203455/}{Carey et al.} & 2018 & MPM (R1, MT, R2*, PD*) & Parameter mapping & Brain (cortex) \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/29193413/}{Alexander et al.} & 2019 & Multi-compartment diffusion & Review & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/31324329/}{Counsell et al.} & 2019 & Diffusion MRI & Review & Brain (fetal/neonatal) \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/33710907/}{Cashmore et al.} & 2021 & Relaxometry, diffusion & Review (metrology) & not specified \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/33902899/}{Hori et al.} & 2021 & Time-dependent diffusion & Review & not specified \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/34554579/}{Hernando et al.} & 2022 & Diffusion (ADC, IVIM) & Review & Abdomen/pelvis \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/34751615/}{Chatterjee et al.} & 2022 & Hybrid multidim. (3-comp.) & Three-compartment fit & Prostate \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/34964166/}{Leforestier et al.} & 2022 & Multi-exponential $T_2$ & Multi-exponential fit & Tomato (plant) \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/35196933/}{Xiang et al.} & 2022 & qGRE ($R2t^{*}$) & $R2t^{*}$ mapping & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/35258368/}{Wu et al.} & 2022 & Time-dependent diffusion (2-comp.) & Two-compartment fit (NLLS) & Prostate \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/36040334/}{Jara et al.} & 2022 & Relaxometry, PD, MT & Review & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/36165880/}{Eck et al.} & 2023 & Relaxometry ($T_2$,$T_2^{*}$,$T_{1\rho}$), MRF & Review & Musculoskeletal \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/36480267/}{Galbusera et al.} & 2023 & MTR, MWF, $qT_1$, QSM, DTI & Model fit + LASSO & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/37004272/}{Brier et al.} & 2023 & qGRE ($R2t^{*}$) & $R2t^{*}$ mapping & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/37150021/}{Stellingwerff et al.} & 2023 & Myelin/relaxometry/diffusion & Review & Brain (white matter) \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/38471339/}{Planchuelo-G\'omez et al.} & 2024 & Diffusion-relaxation (5D) & Physics-informed ML & Brain \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/38856839/}{Chatterjee et al.} & 2024 & VERDICT, HM-MRI, RSI & Review & Prostate \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/39907585/}{Gundogdu et al.} & 2025 & HM-MRI (3-comp. diff.-relax.) & Physics-informed self-sup. DL & Prostate \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/41015861/}{Yue et al.} & 2025 & Time-dependent diffusion (IMPULSED) & Two-compartment fit & Endometrium \\
+    \href{https://pubmed.ncbi.nlm.nih.gov/41144662/}{Wearn et al.} & 2025 & MPM (R1, MTsat, R2*, PD) & Parameter mapping & Brain (hippocampus) \\
+    \bottomrule
+  \end{tabularx}
+\end{table*}
+
+\section{Conclusion}\label{sec:conclusion}
+Quantitative MRI of tissue microstructure has matured from the recognition that relaxation and diffusion contrast encode sub-voxel biology into a discipline with histologically validated biomarkers.
+The most influential contributions succeeded by grounding a biophysical model in a biological reference standard, whether across the diffusion-MRI brain literature \cite{pmid29193413} or in organ-specific cancer studies validated against pathology \cite{pmid35258368,pmid34751615}.
+The field's current trajectory is set by physics-informed and self-supervised learning, which retain interpretable models while delivering the speed, noise robustness, and shortened protocols that clinical use requires \cite{pmid39907585,pmid38471339}.
+The remaining barriers are consistent and well identified: standardization and uncertainty quantification \cite{pmid33710907}, the limited specificity of any single contrast \cite{pmid29097317}, and the need for large multi-center validation before qMRI can serve as a routine virtual histology \cite{pmid38856839}.
+Progress on these fronts, rather than new contrasts alone, will determine how far quantitative MRI displaces the biopsy.
+
+\bibliography{references}
+
+\end{document}

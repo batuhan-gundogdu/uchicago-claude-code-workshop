@@ -1,0 +1,17 @@
+# LaTeX build intermediates
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# PDF page renders used for verification
+pg-*.png
+
+# Python cache
+__pycache__/
+*.pyc

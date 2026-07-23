@@ -1,0 +1,789 @@
+{
+  "meta": {
+    "query": "quantitative MRI tissue microstructure",
+    "retrieved_at": "2026-07-23T15:56:00.645057+00:00",
+    "count": 25,
+    "source": "PubMed/MEDLINE",
+    "impact_source": "NIH iCite"
+  },
+  "papers": [
+    {
+      "pmid": "35258368",
+      "title": "Time-Dependent Diffusion MRI for Quantitative Microstructural Mapping of Prostate Cancer.",
+      "authors": [
+        "Dan Wu",
+        "Kewen Jiang",
+        "Hai Li",
+        "Zelin Zhang",
+        "Ruicheng Ba",
+        "Yi Zhang",
+        "Yi-Cheng Hsu",
+        "Yi Sun",
+        "Yu-Dong Zhang"
+      ],
+      "first_author": "Dan Wu",
+      "year": "2022",
+      "journal": "Radiology",
+      "doi": "10.1148/radiol.211180",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35258368/",
+      "abstract": "Background Recently developed time-dependent diffusion MRI has potential in characterizing cellular tissue microstructures; however, its value in imaging prostate cancer (PCa) remains unknown. Purpose To investigate the feasibility of time-dependent diffusion MRI-based microstructural mapping for noninvasively characterizing cellular properties of PCa and for discriminating between clinically significant PCa and clinically insignificant disease. Materials and Methods Men with a clinical suspicion of PCa were enrolled prospectively between October 2019 and August 2020. Time-dependent diffusion MRI data were acquired with pulsed and oscillating gradient diffusion MRI sequences at an equivalent diffusion time of 7.5-30 msec on a 3.0-T scanner. Time-dependent diffusion MRI-based microstructural parameters, including cell diameter, intracellular volume fraction, cellularity, and diffusivities, were estimated with a two-compartment model. These were compared for different International Society of Urological Pathology grade groups (GGs), and their performance in discriminating clinically significant PCa (GG >1) from clinically insignificant disease (benign and GG 1) was determined with a linear discriminant analysis. The fitted microstructural parameters were validated by means of correlation with histopathologic measurements. Results In the 48 enrolled men, the time-dependent diffusion MRI measurements showed that higher GG was correlated with higher intracellular volume fraction and higher cellularity (intracellular volume fraction = 0.22, 0.36, 0.34, 0.37, and 0.40 in GGs 1-5, respectively; P < .001 at one-way analysis of variance), while lower cell diameter was found at higher GGs (diameter = 23.4, 18.3, 19.2, 17.9, and 18.5 μm in GGs 1-5, respectively; P = .002). Among all measurements derived from time-dependent diffusion MRI, cellularity achieved the highest diagnostic performance, with an accuracy of 92% (44 of 48 participants) and area under the receiver operating characteristic curve of 0.96 (95% CI: 0.87, 0.99) in discriminating clinically significant PCa from clinically insignificant disease. Microstructural mapping was supported by positive correlations between time-dependent diffusion MRI-based and pathologic examination-based intracellular volume fraction (r = 0.83; P < .001). Conclusion Time-dependent diffusion MRI-based microstructural mapping correlates with pathologic findings and demonstrates promise for characterizing prostate cancer. © RSNA, 2022 Online supplemental material is available for this article. See also the editorial by Chatterjee and Oto in this issue.",
+      "mesh_terms": [
+        "Diffusion Magnetic Resonance Imaging",
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Male",
+        "Neoplasm Grading",
+        "Prostatic Neoplasms",
+        "ROC Curve"
+      ],
+      "citation_count": 103,
+      "relative_citation_ratio": 9.957555757949777,
+      "nih_percentile": 97.5
+    },
+    {
+      "pmid": "37150021",
+      "title": "Quantitative MRI in leukodystrophies.",
+      "authors": [
+        "Menno D Stellingwerff",
+        "Petra J W Pouwels",
+        "Stefan D Roosendaal",
+        "Frederik Barkhof",
+        "Marjo S van der Knaap"
+      ],
+      "first_author": "Menno D Stellingwerff",
+      "year": "2023",
+      "journal": "NeuroImage. Clinical",
+      "doi": "10.1016/j.nicl.2023.103427",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/37150021/",
+      "abstract": "Leukodystrophies constitute a large and heterogeneous group of genetic diseases primarily affecting the white matter of the central nervous system. Different disorders target different white matter structural components. Leukodystrophies are most often progressive and fatal. In recent years, novel therapies are emerging and for an increasing number of leukodystrophies trials are being developed. Objective and quantitative metrics are needed to serve as outcome measures in trials. Quantitative MRI yields information on microstructural properties, such as myelin or axonal content and condition, and on the chemical composition of white matter, in a noninvasive fashion. By providing information on white matter microstructural involvement, quantitative MRI may contribute to the evaluation and monitoring of leukodystrophies. Many distinct MR techniques are available at different stages of development. While some are already clinically applicable, others are less far developed and have only or mainly been applied in healthy subjects. In this review, we explore the background, current status, potential and challenges of available quantitative MR techniques in the context of leukodystrophies.",
+      "mesh_terms": [
+        "Humans",
+        "Demyelinating Diseases",
+        "Magnetic Resonance Imaging",
+        "Myelin Sheath",
+        "White Matter",
+        "Axons"
+      ],
+      "citation_count": 19,
+      "relative_citation_ratio": 3.36817492124885,
+      "nih_percentile": 86.2
+    },
+    {
+      "pmid": "35196933",
+      "title": "Tissue damage detected by quantitative gradient echo MRI correlates with clinical progression in non-relapsing progressive MS.",
+      "authors": [
+        "Biao Xiang",
+        "Matthew R Brier",
+        "Manasa Kanthamneni",
+        "Jie Wen",
+        "Abraham Z Snyder",
+        "Dmitriy A Yablonskiy",
+        "Anne H Cross"
+      ],
+      "first_author": "Biao Xiang",
+      "year": "2022",
+      "journal": "Multiple sclerosis (Houndmills, Basingstoke, England)",
+      "doi": "10.1177/13524585211073761",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35196933/",
+      "abstract": "BACKGROUND: Imaging biomarkers of progressive multiple sclerosis (MS) are needed. Quantitative gradient recalled echo (qGRE) magnetic resonance imaging (MRI) evaluates microstructural tissue damage in MS. OBJECTIVE: To evaluate qGRE-derived R2t* as an imaging biomarker of MS progression compared with atrophy and lesion burden. METHODS: Twenty-three non-relapsing progressive MS (PMS), 22 relapsing-remitting MS (RRMS), and 18 healthy control participants underwent standard MS physical and cognitive neurological assessments and imaging with qGRE, FLAIR, and MPRAGE at 3T. PMS subjects were tested clinically and imaged every 9 months over 45 months. Imaging measures included lesion burden, atrophy, and R2t* in cortical gray matter (GM), deep GM, and normal-appearing white matter (NAWM). Longitudinal analysis of clinical performance and imaging biomarkers in PMS subjects was conducted via linear models with subject as repeated, within-subject factor. Relationship between imaging biomarkers and clinical scores was assessed by Spearman rank correlation. RESULTS: R2t* reductions correlated with neurological impairment cross-sectionally and longitudinally. PMS patients with clinically defined disease progression (N = 13) showed faster decrease of R2t* in NAWM and deep GM compared with the clinically stable PMS group (N = 10). Importantly, tissue damage measured by R2t* outperformed lesion burden and atrophy as a biomarker of progression during the study period. CONCLUSION: qGRE-derived R2t* is a potential imaging biomarker of MS progression.",
+      "mesh_terms": [
+        "Atrophy",
+        "Brain",
+        "Gray Matter",
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Multiple Sclerosis",
+        "Multiple Sclerosis, Chronic Progressive",
+        "Multiple Sclerosis, Relapsing-Remitting"
+      ],
+      "citation_count": 6,
+      "relative_citation_ratio": 0.562440135963584,
+      "nih_percentile": 32.2
+    },
+    {
+      "pmid": "34554579",
+      "title": "Quantitative diffusion MRI of the abdomen and pelvis.",
+      "authors": [
+        "Diego Hernando",
+        "Yuxin Zhang",
+        "Ali Pirasteh"
+      ],
+      "first_author": "Diego Hernando",
+      "year": "2022",
+      "journal": "Medical physics",
+      "doi": "10.1002/mp.15246",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/34554579/",
+      "abstract": "Diffusion MRI has enormous potential and utility in the evaluation of various abdominal and pelvic disease processes including cancer and noncancer imaging of the liver, prostate, and other organs. Quantitative diffusion MRI is based on acquisitions with multiple diffusion encodings followed by quantitative mapping of diffusion parameters that are sensitive to tissue microstructure. Compared to qualitative diffusion-weighted MRI, quantitative diffusion MRI can improve standardization of tissue characterization as needed for disease detection, staging, and treatment monitoring. However, similar to many other quantitative MRI methods, diffusion MRI faces multiple challenges including acquisition artifacts, signal modeling limitations, and biological variability. In abdominal and pelvic diffusion MRI, technical acquisition challenges include physiologic motion (respiratory, peristaltic, and pulsatile), image distortions, and low signal-to-noise ratio. If unaddressed, these challenges lead to poor technical performance (bias and precision) and clinical outcomes of quantitative diffusion MRI. Emerging and novel technical developments seek to address these challenges and may enable reliable quantitative diffusion MRI of the abdomen and pelvis. Through systematic validation in phantoms, volunteers, and patients, including multicenter studies to assess reproducibility, these emerging techniques may finally demonstrate the potential of quantitative diffusion MRI for abdominal and pelvic imaging applications.",
+      "mesh_terms": [
+        "Abdomen",
+        "Artifacts",
+        "Diffusion Magnetic Resonance Imaging",
+        "Humans",
+        "Male",
+        "Pelvis",
+        "Reproducibility of Results"
+      ],
+      "citation_count": 12,
+      "relative_citation_ratio": 1.48443773563869,
+      "nih_percentile": 64.0
+    },
+    {
+      "pmid": "16041287",
+      "title": "Quantitative MRI: hidden age-related changes in brain tissue.",
+      "authors": [
+        "Matilde Inglese",
+        "Yulin Ge"
+      ],
+      "first_author": "Matilde Inglese",
+      "year": "2004",
+      "journal": "Topics in magnetic resonance imaging : TMRI",
+      "doi": "10.1097/01.rmr.0000168069.12985.15",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/16041287/",
+      "abstract": "The advent of MRI has made a remarkable progress in the understanding of age-related brain changes providing a noninvasive tool to study in vivo the normally aging individuals at multiple time points. However, conventional MRI techniques are unable to detect and quantify age-related microstructural changes that have been documented at the post-mortem examination of brain tissues. More sophisticated, quantitative MR techniques such as magnetization transfer imaging, diffusion tensor imaging, and proton MR spectroscopy have been shown to be sensitive to microstructural and metabolic changes that occur in gray and white matter over the course of life span. This review highlights some of these innovative, quantitative MR techniques that are particularly relevant for the study of occult age-related brain tissue changes. Characterization of the in vivo patterns of molecular and cellular changes that occur in the normal aging brain is of crucial importance to understand the pathophysiology of normal cognitive decline and to interpret observed changes in neurodegenerative diseases.",
+      "mesh_terms": [
+        "Aging",
+        "Brain",
+        "Brain Chemistry",
+        "Diffusion Magnetic Resonance Imaging",
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Magnetic Resonance Spectroscopy"
+      ],
+      "citation_count": 39,
+      "relative_citation_ratio": 1.159766684887898,
+      "nih_percentile": 55.5
+    },
+    {
+      "pmid": "29193413",
+      "title": "Imaging brain microstructure with diffusion MRI: practicality and applications.",
+      "authors": [
+        "Daniel C Alexander",
+        "Tim B Dyrby",
+        "Markus Nilsson",
+        "Hui Zhang"
+      ],
+      "first_author": "Daniel C Alexander",
+      "year": "2019",
+      "journal": "NMR in biomedicine",
+      "doi": "10.1002/nbm.3841",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/29193413/",
+      "abstract": "This article gives an overview of microstructure imaging of the brain with diffusion MRI and reviews the state of the art. The microstructure-imaging paradigm aims to estimate and map microscopic properties of tissue using a model that links these properties to the voxel scale MR signal. Imaging techniques of this type are just starting to make the transition from the technical research domain to wide application in biomedical studies. We focus here on the practicalities of both implementing such techniques and using them in applications. Specifically, the article summarizes the relevant aspects of brain microanatomy and the range of diffusion-weighted MR measurements that provide sensitivity to them. It then reviews the evolution of mathematical and computational models that relate the diffusion MR signal to brain tissue microstructure, as well as the expanding areas of application. Next we focus on practicalities of designing a working microstructure imaging technique: model selection, experiment design, parameter estimation, validation, and the pipeline of development of this class of technique. The article concludes with some future perspectives on opportunities in this topic and expectations on how the field will evolve in the short-to-medium term.",
+      "mesh_terms": [
+        "Axons",
+        "Brain",
+        "Dendrites",
+        "Diffusion Magnetic Resonance Imaging",
+        "Humans",
+        "Models, Neurological"
+      ],
+      "citation_count": 305,
+      "relative_citation_ratio": 18.362513350679652,
+      "nih_percentile": 99.1
+    },
+    {
+      "pmid": "29203455",
+      "title": "Quantitative MRI provides markers of intra-, inter-regional, and age-related differences in young adult cortical microstructure.",
+      "authors": [
+        "Daniel Carey",
+        "Francesco Caprini",
+        "Micah Allen",
+        "Antoine Lutti",
+        "Nikolaus Weiskopf",
+        "Geraint Rees",
+        "Martina F Callaghan",
+        "Frederic Dick"
+      ],
+      "first_author": "Daniel Carey",
+      "year": "2018",
+      "journal": "NeuroImage",
+      "doi": "10.1016/j.neuroimage.2017.11.066",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/29203455/",
+      "abstract": "Measuring the structural composition of the cortex is critical to understanding typical development, yet few investigations in humans have charted markers in vivo that are sensitive to tissue microstructural attributes. Here, we used a well-validated quantitative MR protocol to measure four parameters (R1, MT, R2*, PD*) that differ in their sensitivity to facets of the tissue microstructural environment (R1, MT: myelin, macromolecular content; R2*: myelin, paramagnetic ions, i.e., iron; PD*: free water content). Mapping these parameters across cortical regions in a young adult cohort (18-39 years, N = 93) revealed expected patterns of increased macromolecular content as well as reduced tissue water content in primary and primary adjacent cortical regions. Mapping across cortical depth within regions showed decreased expression of myelin and related processes - but increased tissue water content - when progressing from the grey/white to the grey/pial boundary, in all regions. Charting developmental change in cortical microstructure cross-sectionally, we found that parameters with sensitivity to tissue myelin (R1 & MT) showed linear increases with age across frontal and parietal cortex (change 0.5-1.0% per year). Overlap of robust age effects for both parameters emerged in left inferior frontal, right parietal and bilateral pre-central regions. Our findings afford an improved understanding of ontogeny in early adulthood and offer normative quantitative MR data for inter- and intra-cortical composition, which may be used as benchmarks in further studies.",
+      "mesh_terms": [
+        "Adolescent",
+        "Adult",
+        "Age Factors",
+        "Body Water",
+        "Cerebral Cortex",
+        "Female",
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Male",
+        "Myelin Sheath",
+        "Neuroimaging",
+        "Young Adult"
+      ],
+      "citation_count": 68,
+      "relative_citation_ratio": 3.2796891614243204,
+      "nih_percentile": 85.7
+    },
+    {
+      "pmid": "39907585",
+      "title": "Physics-Informed Autoencoder for Prostate Tissue Microstructure Profiling with Hybrid Multidimensional MRI.",
+      "authors": [
+        "Batuhan Gundogdu",
+        "Aritrick Chatterjee",
+        "Milica Medved",
+        "Ulas Bagci",
+        "Gregory S Karczmar",
+        "Aytekin Oto"
+      ],
+      "first_author": "Batuhan Gundogdu",
+      "year": "2025",
+      "journal": "Radiology. Artificial intelligence",
+      "doi": "10.1148/ryai.240167",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/39907585/",
+      "abstract": "Purpose To evaluate the performance of Physics-Informed Autoencoder (PIA), a self-supervised deep learning model, in measuring tissue-based biomarkers for prostate cancer (PCa) using hybrid multidimensional MRI. Materials and Methods This retrospective study introduces PIA, an emerging self-supervised deep learning model that integrates a three-compartment diffusion-relaxation model with hybrid multidimensional MRI. PIA was trained to encode the biophysical model into a deep neural network to predict measurements of tissue-specific biomarkers for PCa without extensive training data requirements. Comprehensive in silico and in vivo experiments, using histopathology measurements as the reference standard, were conducted to validate the model's efficacy in comparison to the traditional nonlinear least squares (NLLS) algorithm. PIA's robustness to noise was tested in in silico experiments with varying signal-to-noise ratio (SNR) conditions, and in vivo performance for estimating volume fractions was evaluated in 21 patients (mean age, 60 years ± 6.6 [SD]; all male) with PCa (71 regions of interest). Evaluation metrics included the intraclass correlation coefficient (ICC) and Pearson correlation coefficient. Results PIA predicted the reference standard tissue parameters with high accuracy, outperforming conventional NLLS methods, especially under noisy conditions (rs = 0.80 vs 0.65, P < .001 for epithelium volume at SNR of 20:1). In in vivo validation, PIA's noninvasive volume fraction estimates matched quantitative histology (ICC, 0.94, 0.85, and 0.92 for epithelium, stroma, and lumen compartments, respectively; P < .001 for all). PIA's measurements strongly correlated with PCa aggressiveness (r = 0.75, P < .001). Furthermore, PIA ran 10 000 faster than NLLS (0.18 second vs 40 minutes per image). Conclusion PIA provided accurate prostate tissue biomarker measurements from MRI data with better robustness to noise and computational efficiency compared with the NLLS algorithm. The results demonstrate the potential of PIA as an accurate, noninvasive, and explainable artificial intelligence method for PCa detection. Keywords: Prostate, Stacked Auto-Encoders, Tissue Characterization, MR-Diffusion-weighted Imaging Supplemental material is available for this article. ©RSNA, 2025 See also commentary by Adams and Bressem in this issue.",
+      "mesh_terms": [
+        "Humans",
+        "Male",
+        "Middle Aged",
+        "Algorithms",
+        "Autoencoder",
+        "Image Interpretation, Computer-Assisted",
+        "Magnetic Resonance Imaging",
+        "Neural Networks, Computer",
+        "Prostate",
+        "Prostatic Neoplasms",
+        "Retrospective Studies",
+        "Signal-To-Noise Ratio"
+      ],
+      "citation_count": 2,
+      "relative_citation_ratio": null,
+      "nih_percentile": null
+    },
+    {
+      "pmid": "25355453",
+      "title": "Tissue microstructural changes in dementia with Lewy bodies revealed by quantitative MRI.",
+      "authors": [
+        "Li Su",
+        "Andrew M Blamire",
+        "Rosie Watson",
+        "Jiabao He",
+        "Benjamin Aribisala",
+        "John T O'Brien"
+      ],
+      "first_author": "Li Su",
+      "year": "2015",
+      "journal": "Journal of neurology",
+      "doi": "10.1007/s00415-014-7541-2",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/25355453/",
+      "abstract": "We aimed to characterize dementia with Lewy bodies (DLB) by the quantitative MRI parameters of longitudinal relaxation time (qT1) and transverse relaxation time (qT2). These parameters reflect potential pathological changes in tissue microstructures, which may be detectable noninvasively in brain areas without evident atrophy, so may have potential value in revealing the early neuropathological changes in DLB. We conducted a cross-sectional study of subjects with DLB (N = 35) and similarly aged control participants (N = 35). All subjects underwent a detailed clinical and neuropsychological assessment and structural and quantitative 3T MRI. Quantitative MRI maps were obtained using relaxation time mapping methods. Statistical analysis was performed on gray matter qT1 and qT2 values. We found significant alterations of quantitative parameters in DLB compared to controls. In particular, qT1 decreases in bilateral temporal lobes, right parietal lobes, basal ganglia including left putamen, left caudate nucleus and left amygdala, and left hippocampus/parahippocampus; qT2 decreases in left putamen and increases in left precuneus. These regions showed only partial overlap with areas where grey matter loss was found, making atrophy an unlikely explanation for our results. Our findings support that DLB is predominantly associated with changes in posterior regions, such as visual association areas, and subcortical structures, and that qT1 and qT2 measurement can detect subtle changes not seen on structural volumetric imaging. Hence, quantitative MRI may compliment other imaging techniques in detecting early changes in DLB and in understanding neurobiological changes associated with the disorder.",
+      "mesh_terms": [
+        "Aged",
+        "Aged, 80 and over",
+        "Aging",
+        "Cross-Sectional Studies",
+        "Female",
+        "Gray Matter",
+        "Humans",
+        "Lewy Body Disease",
+        "Magnetic Resonance Imaging",
+        "Male"
+      ],
+      "citation_count": 11,
+      "relative_citation_ratio": 0.49315380375373186,
+      "nih_percentile": 28.8
+    },
+    {
+      "pmid": "33710907",
+      "title": "Clinical quantitative MRI and the need for metrology.",
+      "authors": [
+        "Matt T Cashmore",
+        "Aaron J McCann",
+        "Stephen J Wastling",
+        "Cormac McGrath",
+        "John Thornton",
+        "Matt G Hall"
+      ],
+      "first_author": "Matt T Cashmore",
+      "year": "2021",
+      "journal": "The British journal of radiology",
+      "doi": "10.1259/bjr.20201215",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/33710907/",
+      "abstract": "MRI has been an essential diagnostic tool in healthcare for several decades. It offers unique insights into most tissues without the need for ionising radiation. Historically, MRI has been predominantly used qualitatively, images are formed to allow visual discrimination of tissues types and pathologies, rather than providing quantitative measurements. Increasingly, quantitative MRI (qMRI) is also finding clinical application, where images provide the basis for physical measurements of, e.g. tissue volume measures and represent aspects of tissue composition and microstructure. This article reviews some common current research and clinical applications of qMRI from the perspective of measurement science. qMRI not only offers additional information for radiologists, but also the opportunity for improved harmonisation and calibration between scanners and as such it is well-suited to large-scale investigations such as clinical trials and longitudinal studies. Realising these benefits, however, presents a new kind of technical challenge to MRI practioners. When measuring a parameter quantitatively, it is crucial that the reliability and reproducibility of the technique are well understood. Strictly speaking, a numerical result of a measurement is meaningless unless it is accompanied by a description of the associated measurement uncertainty. It is therefore necessary to produce not just estimates of physical properties in a quantitative image, but also their associated uncertainties. As the process of determining a physical property from the raw MR signal is complicated and multistep, estimation of uncertainty is challenging and there are many aspects of the MRI process that require validation. With the clinical implementation of qMRI techniques and its continued expansion, there is a clear and urgent need for metrology in this field.",
+      "mesh_terms": [
+        "Evaluation Studies as Topic",
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Reproducibility of Results"
+      ],
+      "citation_count": 44,
+      "relative_citation_ratio": 4.28362067675338,
+      "nih_percentile": 90.3
+    },
+    {
+      "pmid": "29097317",
+      "title": "Brain microstructure by multi-modal MRI: Is the whole greater than the sum of its parts?",
+      "authors": [
+        "Mara Cercignani",
+        "Samira Bouyagoub"
+      ],
+      "first_author": "Mara Cercignani",
+      "year": "2018",
+      "journal": "NeuroImage",
+      "doi": "10.1016/j.neuroimage.2017.10.052",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/29097317/",
+      "abstract": "The MRI signal is dependent upon a number of sub-voxel properties of tissue, which makes it potentially able to detect changes occurring at a scale much smaller than the image resolution. This \"microstructural imaging\" has become one of the main branches of quantitative MRI. Despite the exciting promise of unique insight beyond the resolution of the acquired images, its widespread application is limited by the relatively modest ability of each microstructural imaging technique to distinguish between differing microscopic substrates. This is mainly due to the fact that MRI provides a very indirect measure of the tissue properties in which we are interested. A strategy to overcome this limitation lies in the combination of more than one technique, to exploit the relative contributions of differing physiological and pathological substrates to selected MRI contrasts. This forms the basis of multi-modal MRI, a broad concept that refers to many different ways of effectively combining information from more than one MRI contrast. This paper will review a range of methods that have been proposed to maximise the output of this combination, primarily falling into one of two approaches. The first one relies on data-driven methods, exploiting multivariate analysis tools able to capture overlapping and complementary information. The second approach, which we call \"model-driven\", aims at combining parameters extracted by existing biophysical or signal models to obtain new parameters, which are believed to be more accurate or more specific than the original ones. This paper will attempt to provide an overview of the advantages and limitations of these two philosophies.",
+      "mesh_terms": [
+        "Brain",
+        "Humans",
+        "Image Interpretation, Computer-Assisted",
+        "Image Processing, Computer-Assisted",
+        "Magnetic Resonance Imaging",
+        "Models, Theoretical",
+        "Multimodal Imaging",
+        "Neuroimaging"
+      ],
+      "citation_count": 43,
+      "relative_citation_ratio": 2.213771577066404,
+      "nih_percentile": 76.4
+    },
+    {
+      "pmid": "31324329",
+      "title": "Fetal and neonatal neuroimaging.",
+      "authors": [
+        "Serena J Counsell",
+        "Tomoki Arichi",
+        "Sophie Arulkumaran",
+        "Mary A Rutherford"
+      ],
+      "first_author": "Serena J Counsell",
+      "year": "2019",
+      "journal": "Handbook of clinical neurology",
+      "doi": "10.1016/B978-0-444-64029-1.00004-7",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/31324329/",
+      "abstract": "Magnetic resonance imaging (MRI) can provide detail of the soft tissues of the fetal and neonatal brain that cannot be obtained by any other imaging modality. Conventional T1 and T2 weighted sequences provide anatomic detail of the normally developing brain and can demonstrate lesions, including those associated with preterm birth, hypoxic ischemic encephalopathy, perinatal arterial stroke, infections, and congenital malformations. Specialized imaging techniques can be used to assess cerebral vasculature (magnetic resonance angiography and venography), cerebral metabolism (magnetic resonance spectroscopy), cerebral perfusion (arterial spin labeling), and function (functional MRI). A wealth of quantitative tools, most of which were originally developed for the adult brain, can be applied to study the developing brain in utero and postnatally including measures of tissue microstructure obtained from diffusion MRI, morphometric studies to measure whole brain and regional tissue volumes, and automated approaches to study cortical folding. In this chapter, we aim to describe different imaging approaches for the fetal and neonatal brain, and to discuss their use in a range of clinical applications.",
+      "mesh_terms": [
+        "Animals",
+        "Female",
+        "Fetus",
+        "Humans",
+        "Hypoxia-Ischemia, Brain",
+        "Image Processing, Computer-Assisted",
+        "Infant, Newborn",
+        "Magnetic Resonance Imaging",
+        "Neuroimaging",
+        "Pregnancy"
+      ],
+      "citation_count": 20,
+      "relative_citation_ratio": 1.1351505918336502,
+      "nih_percentile": 54.7
+    },
+    {
+      "pmid": "36165880",
+      "title": "Quantitative MRI for Evaluation of Musculoskeletal Disease: Cartilage and Muscle Composition, Joint Inflammation, and Biomechanics in Osteoarthritis.",
+      "authors": [
+        "Brendan L Eck",
+        "Mingrui Yang",
+        "John J Elias",
+        "Carl S Winalski",
+        "Faysal Altahawi",
+        "Naveen Subhas",
+        "Xiaojuan Li"
+      ],
+      "first_author": "Brendan L Eck",
+      "year": "2023",
+      "journal": "Investigative radiology",
+      "doi": "10.1097/RLI.0000000000000909",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/36165880/",
+      "abstract": "Magnetic resonance imaging (MRI) is a valuable tool for evaluating musculoskeletal disease as it offers a range of image contrasts that are sensitive to underlying tissue biochemical composition and microstructure. Although MRI has the ability to provide high-resolution, information-rich images suitable for musculoskeletal applications, most MRI utilization remains in qualitative evaluation. Quantitative MRI (qMRI) provides additional value beyond qualitative assessment via objective metrics that can support disease characterization, disease progression monitoring, or therapy response. In this review, musculoskeletal qMRI techniques are summarized with a focus on techniques developed for osteoarthritis evaluation. Cartilage compositional MRI methods are described with a detailed discussion on relaxometric mapping (T 2 , T 2 *, T 1ρ ) without contrast agents. Methods to assess inflammation are described, including perfusion imaging, volume and signal changes, contrast-enhanced T 1 mapping, and semiquantitative scoring systems. Quantitative characterization of structure and function by bone shape modeling and joint kinematics are described. Muscle evaluation by qMRI is discussed, including size (area, volume), relaxometric mapping (T 1 , T 2 , T 1ρ ), fat fraction quantification, diffusion imaging, and metabolic assessment by 31 P-MR and creatine chemical exchange saturation transfer. Other notable technologies to support qMRI in musculoskeletal evaluation are described, including magnetic resonance fingerprinting, ultrashort echo time imaging, ultrahigh-field MRI, and hybrid MRI-positron emission tomography. Challenges for adopting and using qMRI in musculoskeletal evaluation are discussed, including the need for metal artifact suppression and qMRI standardization.",
+      "mesh_terms": [
+        "Humans",
+        "Cartilage, Articular",
+        "Magnetic Resonance Imaging",
+        "Disease Progression",
+        "Musculoskeletal Diseases",
+        "Muscles"
+      ],
+      "citation_count": 41,
+      "relative_citation_ratio": 8.203549143443835,
+      "nih_percentile": 96.5
+    },
+    {
+      "pmid": "41015861",
+      "title": "Quantitative Time-Dependent Diffusion MRI for Diagnosis and Aggressiveness Assessment of Endometrial Cancer: A Prospective Study.",
+      "authors": [
+        "Wenyi Yue",
+        "Ruxue Han",
+        "Junzhong Xu",
+        "Chaoyang Jin",
+        "Xiaoyu Jiang",
+        "Dandan Zheng",
+        "Jing Peng",
+        "Jun Lu",
+        "Qiming Liu",
+        "Ning Xu",
+        "Dan Zhao",
+        "Hua Li",
+        "Qi Yang"
+      ],
+      "first_author": "Wenyi Yue",
+      "year": "2025",
+      "journal": "Korean journal of radiology",
+      "doi": "10.3348/kjr.2025.0633",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/41015861/",
+      "abstract": "OBJECTIVE: Preoperative differentiation of benign and malignant endometrial lesions, along with the identification of aggressive histological types of endometrial cancer (EC), is crucial for guiding treatment strategies. Time-dependent diffusion magnetic resonance imaging (TDD-MRI), which allows the characterization of tissue microstructure at the cellular level, is not currently applied for endometrial lesions. This study aimed to evaluate TDD-MRI-derived microstructural parameters for noninvasively distinguishing benign and malignant endometrial lesions and predicting aggressive histological types of EC. MATERIALS AND METHODS: This prospective study enrolled 177 patients with clinically suspected EC who underwent TDD-MRI between January 2024 and March 2025. The Imaging Microstructural Parameters Using Limited Spectrally Edited Diffusion method was used to extract microstructural parameters, including the cell diameter (d), intracellular volume fraction (vin), cellularity (number of cells per unit area), cellularity index (vin/d), and extracellular diffusivity (Dex), along with three apparent diffusion coefficient measurements. The area under the receiver operating characteristic curve (AUC) was used to assess diagnostic performance. The Pearson correlation coefficient between the microstructural parameters and histopathological measurements was calculated. RESULTS: A total of 130 women (mean ± standard deviation age: 56 ± 14 years) administered uterine curettage or surgery were included in the final analysis. All microstructural parameters showed significant differences between benign endometrial lesions and EC (P < 0.05), as well as between nonaggressive and aggressive EC (P < 0.05). Cellularity exhibited the highest AUC of 0.86 for distinguishing benign endometrial lesions from EC, whereas the cellularity index showed the highest AUC of 0.88 for distinguishing aggressive histological types. D0Hz was positively correlated with Dex (P < 0.05) and negatively correlated with diameter (P < 0.05), cellularity index (P < 0.01) and vin (P < 0.001) in patients with benign endometrial lesions. D0Hz was positively correlated with Dex (P < 0.001) and negatively correlated with vin (P < 0.001) in patients with EC. Microstructural parameters strongly correlated with corresponding pathological features (r = 0.77-0.83; P < 0.001). CONCLUSION: TDD-MRI-derived microstructural parameters demonstrated high performance in differentiating benign from malignant endometrial diseases and identifying aggressive types of EC.",
+      "mesh_terms": [
+        "Humans",
+        "Female",
+        "Endometrial Neoplasms",
+        "Middle Aged",
+        "Prospective Studies",
+        "Diffusion Magnetic Resonance Imaging",
+        "Aged",
+        "Adult",
+        "Diagnosis, Differential",
+        "Endometrium"
+      ],
+      "citation_count": 2,
+      "relative_citation_ratio": null,
+      "nih_percentile": null
+    },
+    {
+      "pmid": "41144662",
+      "title": "Quantitative MRI of the hippocampus reveals microstructural trajectories of aging and Alzheimer's disease pathology.",
+      "authors": [
+        "Alfie Wearn",
+        "Christine L Tardif",
+        "Ilana R Leppert",
+        "Giulia Baracchini",
+        "Colleen Hughes",
+        "Jennifer Tremblay-Mercier",
+        "John Breitner",
+        "Judes Poirier",
+        "Sylvia Villeneuve",
+        "Boris C Bernhardt",
+        "Gary R Turner",
+        "R Nathan Spreng"
+      ],
+      "first_author": "Alfie Wearn",
+      "year": "2025",
+      "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+      "doi": "10.1073/pnas.2502674122",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/41144662/",
+      "abstract": "Hippocampal degeneration is a feature of both normal aging and Alzheimer's disease (AD). Prior to macroscopic degeneration, microstructural changes occur such as demyelination, iron deposition, or subtle atrophy, which can be characterized in vivo using MRI. We topographically mapped measures of microstructure and macrostructure across the unfolded surface of the hippocampus in 224 healthy older adults at risk for AD (aged 57 to 87) and 37 younger adults (aged 18 to 37). We describe three spatial regions of unique structural covariance between four parameters sensitive to microstructural tissue properties (R1, MTsat, R2*, PD) and macrostructure (surface thickness), with high convergence with previous spatial segmentations. We demonstrate both cross-sectional and longitudinal associations of microstructure with healthy aging across the lifespan, AD pathological hallmarks, genetic risk, and cognition. These associations had subtle variations across different spatial areas of the hippocampus. We report associations between age and qMRI measures sensitive to macromolecular concentration (R1, MTsat) and paramagnetic susceptibility (R2*), consistent with mechanisms of demyelination and increased iron deposition as key hallmarks of the aging hippocampus and in presymptomatic stages of AD. qMRI measures did not explain more variance in delayed recall than global PET measures, suggesting variation in cognitive performance in aging and incipient AD is influenced by factors beyond hippocampal microstructure. We demonstrate the utility of quantitative MRI to provide greater insight into hippocampal health compared to typical macrostructural measures through \"in vivo histology,\" opening a window to understanding neuropathological mechanisms in the earliest stages of age- and disease-related neurodegeneration.",
+      "mesh_terms": [
+        "Humans",
+        "Alzheimer Disease",
+        "Hippocampus",
+        "Magnetic Resonance Imaging",
+        "Aged",
+        "Male",
+        "Middle Aged",
+        "Female",
+        "Aging",
+        "Aged, 80 and over",
+        "Adult",
+        "Cross-Sectional Studies",
+        "Young Adult",
+        "Adolescent"
+      ],
+      "citation_count": 3,
+      "relative_citation_ratio": null,
+      "nih_percentile": null
+    },
+    {
+      "pmid": "33902899",
+      "title": "Technical Basics of Diffusion-Weighted Imaging.",
+      "authors": [
+        "Masaaki Hori",
+        "Kouhei Kamiya",
+        "Katsutoshi Murata"
+      ],
+      "first_author": "Masaaki Hori",
+      "year": "2021",
+      "journal": "Magnetic resonance imaging clinics of North America",
+      "doi": "10.1016/j.mric.2021.01.001",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/33902899/",
+      "abstract": "Diffusion-weighted images provide a unique contrast that shows the ability to assess tissue structure and condition on a micrometer scale. Notably, these equations are necessary to understand diffusion MR imaging as a theory but not for real imaging, particularly in clinical practice. The diffusion phenomenon can be observed only through MR measurements. One of the emerging fields of diffusion MRI is to probe the tissue microstructure by altering the diffusion time t, the time interval over which spin displacements are sampled. However, the diffusion time is, in a sense, more important than the b-value for diffusion-weighted images and their quantitative metrics.",
+      "mesh_terms": [
+        "Diffusion Magnetic Resonance Imaging",
+        "Humans",
+        "Magnetic Resonance Imaging"
+      ],
+      "citation_count": 11,
+      "relative_citation_ratio": 0.9308347771409036,
+      "nih_percentile": 47.9
+    },
+    {
+      "pmid": "36040334",
+      "title": "Primary Multiparametric Quantitative Brain MRI: State-of-the-Art Relaxometric and Proton Density Mapping Techniques.",
+      "authors": [
+        "Hernán Jara",
+        "Osamu Sakai",
+        "Ezequiel Farrher",
+        "Ana-Maria Oros-Peusquens",
+        "N Jon Shah",
+        "David C Alsop",
+        "Kathryn E Keenan"
+      ],
+      "first_author": "Hernán Jara",
+      "year": "2022",
+      "journal": "Radiology",
+      "doi": "10.1148/radiol.211519",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/36040334/",
+      "abstract": "This review on brain multiparametric quantitative MRI (MP-qMRI) focuses on the primary subset of quantitative MRI (qMRI) parameters that represent the mobile (\"free\") and bound (\"motion-restricted\") proton pools. Such primary parameters are the proton densities, relaxation times, and magnetization transfer parameters. Diffusion qMRI is also included because of its wide implementation in complete clinical MP-qMRI application. MP-qMRI advances were reviewed over the past 2 decades, with substantial progress observed toward accelerating image acquisition and increasing mapping accuracy. Areas that need further investigation and refinement are identified as follows: (a) the biologic underpinnings of qMRI parameter values and their changes with age and/or disease and (b) the theoretical limitations implicitly built into most qMRI mapping algorithms that do not distinguish between the different spatial scales of voxels versus spin packets, the central physical object of the Bloch theory. With rapidly improving image processing techniques and continuous advances in computer hardware, MP-qMRI has the potential for implementation in a wide range of clinical applications. Currently, three emerging MP-qMRI applications are synthetic MRI, macrostructural qMRI, and microstructural tissue modeling.",
+      "mesh_terms": [
+        "Biological Products",
+        "Brain",
+        "Brain Mapping",
+        "Humans",
+        "Image Processing, Computer-Assisted",
+        "Magnetic Resonance Imaging",
+        "Protons"
+      ],
+      "citation_count": 33,
+      "relative_citation_ratio": 4.062162489181689,
+      "nih_percentile": 89.5
+    },
+    {
+      "pmid": "38856839",
+      "title": "MRI-based virtual pathology of the prostate.",
+      "authors": [
+        "Aritrick Chatterjee",
+        "Durgesh Kumar Dwivedi"
+      ],
+      "first_author": "Aritrick Chatterjee",
+      "year": "2024",
+      "journal": "Magma (New York, N.Y.)",
+      "doi": "10.1007/s10334-024-01163-w",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/38856839/",
+      "abstract": "Prostate cancer poses significant diagnostic challenges, with conventional methods like prostate-specific antigen (PSA) screening and transrectal ultrasound (TRUS)-guided biopsies often leading to overdiagnosis or miss clinically significant cancers. Multiparametric MRI (mpMRI) has emerged as a more reliable tool. However, it is limited by high inter-observer variability and radiologists missing up to 30% of clinically significant cancers. This article summarizes a few of these recent advancements in quantitative MRI techniques that look at the \"Virtual Pathology\" of the prostate with an aim to enhance prostate cancer detection and characterization. These techniques include T2 relaxation-based techniques such as luminal water imaging, diffusion based such as vascular, extracellular, and restricted diffusion for cytometry in tumors (VERDICT) and restriction spectrum imaging or combined relaxation-diffusion techniques such as hybrid multi-dimensional MRI (HM-MRI), time-dependent diffusion imaging, and diffusion-relaxation correlation spectrum imaging. These methods provide detailed insights into underlying prostate microstructure and tissue composition and have shown improved diagnostic accuracy over conventional MRI. These innovative MRI methods hold potential for augmenting mpMRI, reducing variability in diagnosis, and paving the way for MRI as a 'virtual histology' tool in prostate cancer diagnosis. However, they require further validation in larger multi-center clinical settings and rigorous in-depth radiological-pathology correlation are needed for broader implementation.",
+      "mesh_terms": [
+        "Humans",
+        "Male",
+        "Prostatic Neoplasms",
+        "Prostate",
+        "Multiparametric Magnetic Resonance Imaging",
+        "Magnetic Resonance Imaging",
+        "Diffusion Magnetic Resonance Imaging",
+        "Image-Guided Biopsy",
+        "Reproducibility of Results",
+        "Image Interpretation, Computer-Assisted"
+      ],
+      "citation_count": 3,
+      "relative_citation_ratio": 0.871026815152734,
+      "nih_percentile": 45.6
+    },
+    {
+      "pmid": "21613875",
+      "title": "Quantitative relaxometry of the brain.",
+      "authors": [
+        "Sean C L Deoni"
+      ],
+      "first_author": "Sean C L Deoni",
+      "year": "2010",
+      "journal": "Topics in magnetic resonance imaging : TMRI",
+      "doi": "10.1097/RMR.0b013e31821e56d8",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/21613875/",
+      "abstract": "The exquisite soft tissue contrast provided by magnetic resonance imaging arises principally from differences in the intrinsic relaxation properties, T1 and T2. Although the intricate relationships that link tissue microstructure and the longitudinal and transverse relaxation times remain to be firmly established, quantitative measurement of these parameters, also referred to as quantitative relaxometry, can be informative of disease-related tissue change, developmental plasticity, and other biological processes. Further, relaxometry studies potentially offer a more detailed characterization of tissue, compared with conventional qualitative or weighted imaging approaches.The purposes of this review were to briefly review the biophysical basis of relaxation, focusing specifically on the T1, T2, and T2* relaxation times, and to detail some of the more widely used and clinically feasible techniques for their in vivo measurement. We will focus on neuroimaging applications, although the methods described are equally well suited to cardiac, abdominal, and musculoskeletal imaging. Potential sources of error, and methods for their correction, are also touched on. Finally, the combination of relaxation time data with other complementary quantitative imaging data, including diffusion tensor imaging, is discussed, with the aim of more thoroughly characterizing brain tissue.",
+      "mesh_terms": [
+        "Alzheimer Disease",
+        "Brain",
+        "Diffusion Tensor Imaging",
+        "Epilepsy",
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Multiple Sclerosis",
+        "Radiography",
+        "Reproducibility of Results"
+      ],
+      "citation_count": 194,
+      "relative_citation_ratio": 6.414503985198306,
+      "nih_percentile": 94.8
+    },
+    {
+      "pmid": "23872867",
+      "title": "Quantitative MRI for studying neonatal brain development.",
+      "authors": [
+        "John G Sled",
+        "Revital Nossin-Manor"
+      ],
+      "first_author": "John G Sled",
+      "year": "2013",
+      "journal": "Neuroradiology",
+      "doi": "10.1007/s00234-013-1235-9",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/23872867/",
+      "abstract": "Quantitative MRI techniques based on morphology and tissue microstructure dependent contrast provide a unique window on brain development in the neonatal period. The dramatic changes in morphology and MRI contrast that occur during this period have the potential to be used to identify normal and abnormal developmental trajectories that predict neurodevelopmental outcome in at risk populations. Here, we review these technologies focussing on two broad categories: gross morphological analysis and tissue microstructure assessment. With respect to morphology, we examine the role of image registration and atlas-based techniques, highlighting the challenges posed by the scale of the anatomical changes and the high incidence of radiologically abnormal scans in the premature infant population. With respect to microstructure, we examine the potential and remaining challenges for using quantitative MRI to dissociate processes of cell proliferation, neuronal maturation, and myelination by combining different signal contrasts. Recent progress from our group in this area is highlighted.",
+      "mesh_terms": [
+        "Brain",
+        "Female",
+        "Humans",
+        "Image Interpretation, Computer-Assisted",
+        "Infant, Newborn",
+        "Infant, Premature",
+        "Magnetic Resonance Imaging",
+        "Male",
+        "Nerve Fibers, Myelinated",
+        "Prenatal Diagnosis"
+      ],
+      "citation_count": 18,
+      "relative_citation_ratio": 0.756484967051531,
+      "nih_percentile": 41.0
+    },
+    {
+      "pmid": "36480267",
+      "title": "Postmortem quantitative MRI disentangles histological lesion types in multiple sclerosis.",
+      "authors": [
+        "Riccardo Galbusera",
+        "Erik Bahn",
+        "Matthias Weigel",
+        "Sabine Schaedelin",
+        "Jonas Franz",
+        "Po-Jui Lu",
+        "Muhamed Barakovic",
+        "Lester Melie-Garcia",
+        "Peter Dechent",
+        "Antoine Lutti",
+        "Pascal Sati",
+        "Daniel S Reich",
+        "Govind Nair",
+        "Wolfgang Brück",
+        "Ludwig Kappos",
+        "Christine Stadelmann",
+        "Cristina Granziera"
+      ],
+      "first_author": "Riccardo Galbusera",
+      "year": "2023",
+      "journal": "Brain pathology (Zurich, Switzerland)",
+      "doi": "10.1111/bpa.13136",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/36480267/",
+      "abstract": "Quantitative MRI (qMRI) probes the microstructural properties of the central nervous system (CNS) by providing biophysical measures of tissue characteristics. In this work, we aimed to (i) identify qMRI measures that distinguish histological lesion types in postmortem multiple sclerosis (MS) brains, especially the remyelinated ones; and to (ii) investigate the relationship between those measures and quantitative histological markers of myelin, axons, and astrocytes in the same experimental setting. Three fixed MS whole brains were imaged with qMRI at 3T to obtain magnetization transfer ratio (MTR), myelin water fraction (MWF), quantitative T1 (qT1), quantitative susceptibility mapping (QSM), fractional anisotropy (FA) and radial diffusivity (RD) maps. The identification of lesion types (active, inactive, chronic active, or remyelinated) and quantification of tissue components were performed using histological staining methods as well as immunohistochemistry and immunofluorescence. Pairwise logistic and LASSO regression models were used to identify the best qMRI discriminators of lesion types. The association between qMRI and quantitative histological measures was performed using Spearman's correlations and linear mixed-effect models. We identified a total of 65 lesions. MTR and MWF best predicted the chance of a lesion to be remyelinated, whereas RD and QSM were useful in the discrimination of active lesions. The measurement of microstructural properties through qMRI did not show any difference between chronic active and inactive lesions. MWF and RD were associated with myelin content in both lesions and normal-appearing white matter (NAWM), FA was the measure most associated with axon content in both locations, while MWF was associated with astrocyte immunoreactivity only in lesions. Moreover, we provided evidence of extensive astrogliosis in remyelinated lesions. Our study provides new information on the discriminative power of qMRI in differentiating MS lesions -especially remyelinated ones- as well as on the relative association between multiple qMRI measures and myelin, axon and astrocytes.",
+      "mesh_terms": [
+        "Humans",
+        "Multiple Sclerosis",
+        "Magnetic Resonance Imaging",
+        "Brain",
+        "White Matter",
+        "Myelin Sheath"
+      ],
+      "citation_count": 26,
+      "relative_citation_ratio": 4.094876150321545,
+      "nih_percentile": 89.6
+    },
+    {
+      "pmid": "37004272",
+      "title": "Quantitative MRI identifies lesional and non-lesional abnormalities in MOGAD.",
+      "authors": [
+        "Matthew R Brier",
+        "Biao Xiang",
+        "John R Ciotti",
+        "Salim Chahin",
+        "Gregory F Wu",
+        "Robert T Naismith",
+        "Dmitriy Yablonskiy",
+        "Anne H Cross"
+      ],
+      "first_author": "Matthew R Brier",
+      "year": "2023",
+      "journal": "Multiple sclerosis and related disorders",
+      "doi": "10.1016/j.msard.2023.104659",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/37004272/",
+      "abstract": "BACKGROUND: Myelin oligodendrocyte glycoprotein antibody-associated disease (MOGAD) is a distinct central nervous system (CNS) disorder that shares features with multiple sclerosis (MS) and may be misdiagnosed as MS. MOGAD and MS share a frequently relapsing clinical course and lesions with inflammatory demyelinating pathology. One key feature of MS pathology is tissue damage in normal-appearing white matter (NAWM) outside of discrete lesions, whereas the extent to which similar non-lesional damage occurs in MOGAD is not known and could be assessed using qGRE. The goal of this study was to examine the brains of people with MOGAD using quantitative gradient-recalled echo (qGRE) magnetic resonance imaging and to compare tissue damage with MS patients matched for disability. METHODS: MOGAD and MS patients were recruited to match in terms of age and disability. Similarly aged healthy control (HC) data were drawn from existing studies. qGRE brain imaging of HC (N = 15), MOGAD (N = 17), and MS (N = 15) patients was used to examine the severity and extent of tissue damage within and outside of discrete lesions. The qGRE metric R2t* is sensitive to changes in tissue microstructure and was measured in white matter lesions (WMLs), NAWM, cortical (CGM) and deep gray matter (DGM). Statistical inference was performed with linear models. RESULTS: R2t* was reduced in CGM (p = 0.00047), DGM (p = 0.0055) and NAWM (p = 0.0019) in MOGAD and MS compared to similar regions in age-matched HCs. However, the degree of R2t* reduction in all these regions was less in the MOGAD patients compared with MS. WMLs in MOGAD demonstrated reduced R2t* compared to NAWM but this reduction was modest compared to changes associated with WMLs in MS (p = 0.026). CONCLUSION: These results demonstrate abnormalities in lesional and non-lesional CNS tissues in MOGAD that are not detectable on standard MRI. The abnormalities seen in NAWM, CGM, and DGM were less severe in MOGAD compared to MS. MOGAD-related WMLs showed reduced R2t*, but were less abnormal than WMLs in MS. These data reveal damage to non-lesional tissues in two different demyelinating diseases, suggesting that damage outside of WMLs may be a common feature of demyelinating diseases. The lesser degree of R2t* abnormality in MOGAD tissues compared to MS suggests less underlying tissue damage and may underlie the greater propensity for recovery in MOGAD.",
+      "mesh_terms": [
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Brain",
+        "Multiple Sclerosis",
+        "White Matter",
+        "Central Nervous System Diseases"
+      ],
+      "citation_count": 5,
+      "relative_citation_ratio": 0.7103441250951245,
+      "nih_percentile": 39.0
+    },
+    {
+      "pmid": "38471339",
+      "title": "Optimisation of quantitative brain diffusion-relaxation MRI acquisition protocols with physics-informed machine learning.",
+      "authors": [
+        "Álvaro Planchuelo-Gómez",
+        "Maxime Descoteaux",
+        "Hugo Larochelle",
+        "Jana Hutter",
+        "Derek K Jones",
+        "Chantal M W Tax"
+      ],
+      "first_author": "Álvaro Planchuelo-Gómez",
+      "year": "2024",
+      "journal": "Medical image analysis",
+      "doi": "10.1016/j.media.2024.103134",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/38471339/",
+      "abstract": "Diffusion-relaxation MRI aims to extract quantitative measures that characterise microstructural tissue properties such as orientation, size, and shape, but long acquisition times are typically required. This work proposes a physics-informed learning framework to extract an optimal subset of diffusion-relaxation MRI measurements for enabling shorter acquisition times, predict non-measured signals, and estimate quantitative parameters. In vivo and synthetic brain 5D-Diffusion-T1-T2∗-weighted MRI data obtained from five healthy subjects were used for training and validation, and from a sixth participant for testing. One fully data-driven and two physics-informed machine learning methods were implemented and compared to two manual selection procedures and Cramér-Rao lower bound optimisation. The physics-informed approaches could identify measurement-subsets that yielded more consistently accurate parameter estimates in simulations than other approaches, with similar signal prediction error. Five-fold shorter protocols yielded error distributions of estimated quantitative parameters with very small effect sizes compared to estimates from the full protocol. Selected subsets commonly included a denser sampling of the shortest and longest inversion time, lowest echo time, and high b-value. The proposed framework combining machine learning and MRI physics offers a promising approach to develop shorter imaging protocols without compromising the quality of parameter estimates and signal predictions.",
+      "mesh_terms": [
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Diffusion Magnetic Resonance Imaging",
+        "Brain",
+        "Neuroimaging",
+        "Machine Learning"
+      ],
+      "citation_count": 6,
+      "relative_citation_ratio": 1.8717161159236508,
+      "nih_percentile": 71.5
+    },
+    {
+      "pmid": "34964166",
+      "title": "Quantitative MRI analysis of structural changes in tomato tissues resulting from dehydration.",
+      "authors": [
+        "Rodolphe Leforestier",
+        "Anna Fleury",
+        "François Mariette",
+        "Guylaine Collewet",
+        "Sylvain Challois",
+        "Maja Musse"
+      ],
+      "first_author": "Rodolphe Leforestier",
+      "year": "2022",
+      "journal": "Magnetic resonance in chemistry : MRC",
+      "doi": "10.1002/mrc.5241",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/34964166/",
+      "abstract": "A quantitative magnetic resonance imaging (MRI) analysis at 1.5T of the effects of different dehydration regimes on transverse relaxation parameters measured in tomato tissue is presented. Multi-exponential T2 maps have been estimated for the first time, providing access to spatialized microstructural information at voxel scale. The objective was to provide a better understanding of the changes in the multi-exponential transverse relaxation parameters induced by dehydration in tomato tissues and to unravel the effects of microstructure and composition on relaxation parameters. The results led to the hypothesis that the multi-exponential relaxation signal reflects cell compartmentation and tissue heterogeneity, even at the voxel scale. Multi-exponential relaxation times provided information about water loss from specific cell compartments and seem to indicate that the dehydration process mainly affects large cells. By contrast, total signal intensity showed no sensitivity to variations in water content in the range investigated in the present study (between 95% [fresh tissue] and 90% [after dehydration]). The variation in relaxation times resulting from water loss was due to both changes in solute concentration and compartment size. The comparative analysis of the two contrasted tissues in terms of microporosity demonstrated that magnetic susceptibility effects, caused by the presence of air in the placenta tissue, significantly impact the effective relaxation and might be the dominant effect in the variations observed in relaxation times in this tissue.",
+      "mesh_terms": [
+        "Dehydration",
+        "Solanum lycopersicum",
+        "Magnetic Resonance Imaging",
+        "Magnetic Resonance Spectroscopy",
+        "Water"
+      ],
+      "citation_count": 4,
+      "relative_citation_ratio": 0.5785389494270595,
+      "nih_percentile": 33.0
+    },
+    {
+      "pmid": "34751615",
+      "title": "Validation of Prostate Tissue Composition by Using Hybrid Multidimensional MRI: Correlation with Histologic Findings.",
+      "authors": [
+        "Aritrick Chatterjee",
+        "Crystal Mercado",
+        "Roger M Bourne",
+        "Ambereen Yousuf",
+        "Brittany Hess",
+        "Tatjana Antic",
+        "Scott Eggener",
+        "Aytekin Oto",
+        "Gregory S Karczmar"
+      ],
+      "first_author": "Aritrick Chatterjee",
+      "year": "2022",
+      "journal": "Radiology",
+      "doi": "10.1148/radiol.2021204459",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/34751615/",
+      "abstract": "Background Tissue estimates obtained by using microstructure imaging techniques, such as hybrid multidimensional (HM) MRI, may improve prostate cancer diagnosis but require histologic validation. Purpose To validate prostate tissue composition measured by using HM MRI, with quantitative histologic evaluation from whole-mount prostatectomy as the reference standard. Materials and Methods In this HIPAA-compliant study, from December 2016 to July 2018, prospective participants with biopsy-confirmed prostate cancer underwent 3-T MRI before radical prostatectomy. Axial HM MRI was performed with all combinations of echo times (57, 70, 150, and 200 msec) and b values (0, 150, 750, and 1500 sec/mm2). Data were fitted by using a three-compartment signal model to generate volumes for each tissue component (stroma, epithelium, lumen). Quantitative histologic evaluation was performed to calculate volume fractions for each tissue component for regions of interest corresponding to MRI. Tissue composition measured by using HM MRI and quantitative histologic evaluation were compared (paired t test) and correlated (Pearson correlation coefficient), and agreement (concordance correlation) was assessed. Receiver operating characteristic curve analysis for cancer diagnosis was performed. Results Twenty-five participants (mean age, 60 years ± 7 [standard deviation]; 30 cancers and 45 benign regions of interest) were included. Prostate tissue composition measured with HM MRI and quantitative histologic evaluation did not differ (stroma, 45% ± 11 vs 44% ± 11 [P = .23]; epithelium, 31% ± 15 vs 34% ± 15 [P = .08]; and lumen, 24% ± 13 vs 22% ± 11 [P = .80]). Between HM MRI and histologic evaluation, there was excellent correlation (Pearson r: overall, 0.91; stroma, 0.82; epithelium, 0.93; lumen, 0.90 [all P < .05]) and agreement (concordance correlation coefficient: overall, 0.91; stroma, 0.81; epithelium, 0.90; and lumen, 0.87). High areas under the receiver operating characteristic curve obtained with HM MRI (0.96 for epithelium and 0.94 for lumen, P < .001) and histologic evaluation (0.94 for epithelium and 0.88 for lumen, P < .001) were found for differentiation between benign tissue and prostate cancer. Conclusion Tissue composition measured by using hybrid multidimensional MRI had excellent correlation with quantitative histologic evaluation as the reference standard. © RSNA, 2021 Online supplemental material is available for this article. See also the editorial by Muglia in this issue.",
+      "mesh_terms": [
+        "Diagnosis, Differential",
+        "Humans",
+        "Magnetic Resonance Imaging",
+        "Male",
+        "Middle Aged",
+        "Prospective Studies",
+        "Prostate",
+        "Prostatectomy",
+        "Prostatic Neoplasms"
+      ],
+      "citation_count": 39,
+      "relative_citation_ratio": 4.089518130471581,
+      "nih_percentile": 89.6
+    }
+  ]
+}
