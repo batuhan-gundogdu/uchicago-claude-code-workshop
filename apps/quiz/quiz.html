@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Illinois Rules of the Road - Practice Quiz</title>
+<style>
+  /*
+   * Illinois Rules of the Road - a friendly, pastel practice quiz.
+   * All CSS and JS are inline. No external libraries, no network calls.
+   * Questions and answer key come from the official Illinois "Rules of the
+   * Road" Review Course workbook (DSD DS 9.28).
+   * Traffic signs are hand-drawn inline SVG (kept in real sign colors so
+   * they stay recognizable); the surrounding UI uses soft pastels.
+   */
+  :root {
+    --canvas: #f7f4fb;
+    --canvas-tint: #efe9f7;
+    --ink: #3a3550;
+    --ink-soft: #6f6987;
+    --ink-faint: #9b95ae;
+    --card: #ffffff;
+    --line: #ece7f4;
+
+    --grape: #7c6bd6;
+    --grape-deep: #5a4bb0;
+    --grape-soft: #ece8fb;
+
+    --mint: #7bd0b0;
+    --mint-deep: #3d9c78;
+    --mint-soft: #e2f6ee;
+    --peach: #f4b183;
+    --peach-soft: #fdeee1;
+    --sky: #7fb8ec;
+    --sky-soft: #e4f0fc;
+    --blush: #ef9bbf;
+    --blush-soft: #fce7f1;
+    --butter: #f2d17a;
+    --butter-soft: #fdf4dc;
+
+    --wrong: #e06a8b;
+    --wrong-soft: #fbe4ec;
+
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(90, 75, 176, 0.12);
+    --shadow-soft: 0 4px 14px rgba(90, 75, 176, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1200px 600px at 15% -10%, var(--sky-soft), transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, var(--blush-soft), transparent 55%),
+      var(--canvas);
+    min-height: 100vh;
+    padding: 28px 16px 60px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  .app-head { text-align: center; margin-bottom: 22px; }
+  .app-head .road { font-size: 34px; line-height: 1; }
+  .app-head h1 {
+    font-size: 27px; margin: 8px 0 4px; letter-spacing: -0.3px;
+  }
+  .app-head p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+  }
+
+  .hidden { display: none !important; }
+
+  /* ---------- Start screen ---------- */
+  .lead { color: var(--ink-soft); margin: 0 0 22px; }
+  .field-label {
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--ink-faint); margin: 0 0 10px;
+  }
+  .modes { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+  @media (max-width: 520px) { .modes { grid-template-columns: 1fr; } }
+
+  .mode {
+    border: 2px solid var(--line);
+    background: var(--canvas);
+    border-radius: 14px;
+    padding: 14px 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color .15s, background .15s, transform .05s;
+  }
+  .mode:hover { border-color: var(--grape); }
+  .mode:active { transform: translateY(1px); }
+  .mode.sel { border-color: var(--grape); background: var(--grape-soft); }
+  .mode .mode-title { font-weight: 700; font-size: 15px; }
+  .mode .mode-sub { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+
+  .toggle-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; background: var(--butter-soft);
+    border-radius: 12px; margin-bottom: 22px; cursor: pointer; user-select: none;
+  }
+  .toggle-row input { width: 18px; height: 18px; accent-color: var(--grape); cursor: pointer; }
+  .toggle-row .t-title { font-weight: 600; }
+  .toggle-row .t-sub { color: var(--ink-soft); font-size: 13px; }
+
+  .best {
+    margin: 0 0 20px; padding: 12px 14px; border-radius: 12px;
+    background: var(--mint-soft); color: var(--mint-deep); font-weight: 600; font-size: 14px;
+  }
+
+  .btn {
+    border: none; border-radius: 14px; cursor: pointer;
+    font-size: 16px; font-weight: 700; font-family: inherit;
+    padding: 14px 22px; transition: transform .05s, box-shadow .15s, background .15s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--grape); color: #fff; box-shadow: var(--shadow-soft); width: 100%; }
+  .btn-primary:hover { background: var(--grape-deep); }
+  .btn-ghost {
+    background: var(--canvas); color: var(--grape-deep);
+    border: 2px solid var(--grape-soft);
+  }
+  .btn-ghost:hover { border-color: var(--grape); }
+
+  /* ---------- Quiz screen ---------- */
+  .top { margin-bottom: 18px; }
+  .top-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 13px; color: var(--ink-soft); margin-bottom: 8px; font-weight: 600;
+  }
+  .top-row .score b { color: var(--mint-deep); }
+  .bar { height: 12px; background: var(--grape-soft); border-radius: 999px; overflow: hidden; }
+  .bar-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--sky), var(--grape));
+    border-radius: 999px; transition: width .35s ease;
+  }
+
+  .qtag {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: .5px;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .qtag.written { background: var(--sky-soft); color: #2f6aa8; }
+  .qtag.sign { background: var(--peach-soft); color: #b96a2c; }
+
+  .qtext { font-size: 19px; font-weight: 600; margin: 0 0 18px; }
+
+  .sign-stage { display: flex; justify-content: center; margin: 4px 0 20px; }
+  .sign-stage svg { width: 150px; height: 150px; filter: drop-shadow(0 6px 14px rgba(0,0,0,.12)); }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .opt {
+    display: flex; align-items: center; gap: 14px;
+    border: 2px solid var(--line); background: #fff;
+    border-radius: 14px; padding: 15px 16px;
+    cursor: pointer; text-align: left; font-size: 16px; font-family: inherit; color: var(--ink);
+    transition: border-color .12s, background .12s, transform .05s;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--grape); background: var(--grape-soft); }
+  .opt:active:not(:disabled) { transform: translateY(1px); }
+  .opt .key {
+    flex: 0 0 30px; height: 30px; border-radius: 9px;
+    display: grid; place-items: center; font-weight: 800; font-size: 14px;
+    background: var(--grape-soft); color: var(--grape-deep);
+  }
+  .opt .mark { margin-left: auto; font-size: 20px; font-weight: 800; opacity: 0; }
+  .opt:disabled { cursor: default; }
+
+  .opt.correct { border-color: var(--mint-deep); background: var(--mint-soft); }
+  .opt.correct .key { background: var(--mint); color: #fff; }
+  .opt.correct .mark { opacity: 1; color: var(--mint-deep); }
+  .opt.wrong { border-color: var(--wrong); background: var(--wrong-soft); }
+  .opt.wrong .key { background: var(--wrong); color: #fff; }
+  .opt.wrong .mark { opacity: 1; color: var(--wrong); }
+  .opt.dim { opacity: .55; }
+
+  .feedback { margin-top: 16px; font-weight: 700; font-size: 15px; min-height: 22px; }
+  .feedback.good { color: var(--mint-deep); }
+  .feedback.bad { color: var(--wrong); }
+
+  .nav { display: flex; justify-content: flex-end; margin-top: 20px; }
+  .btn-next { background: var(--grape); color: #fff; box-shadow: var(--shadow-soft); }
+  .btn-next:hover { background: var(--grape-deep); }
+  .btn-next:disabled { background: var(--line); color: var(--ink-faint); cursor: not-allowed; box-shadow: none; }
+
+  /* ---------- Results screen ---------- */
+  .result-head { text-align: center; margin-bottom: 8px; }
+  .donut { display: block; margin: 0 auto 6px; }
+  .result-score { font-size: 40px; font-weight: 800; letter-spacing: -1px; }
+  .result-sub { color: var(--ink-soft); margin: 0 0 4px; }
+  .verdict { font-weight: 800; font-size: 18px; margin: 6px 0 18px; text-align: center; }
+  .verdict.pass { color: var(--mint-deep); }
+  .verdict.retry { color: var(--peach); }
+
+  .review-title { font-weight: 700; margin: 22px 0 10px; font-size: 15px; }
+  .review-list { display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow: auto; padding-right: 4px; }
+  .review-item {
+    border: 1px solid var(--line); border-left: 4px solid var(--wrong);
+    border-radius: 12px; padding: 12px 14px; background: var(--wrong-soft);
+    font-size: 14.5px;
+  }
+  .review-item .rq { color: var(--ink); }
+  .review-item .ra { margin-top: 6px; font-size: 13.5px; }
+  .review-item .ra .yours { color: var(--wrong); font-weight: 700; }
+  .review-item .ra .right { color: var(--mint-deep); font-weight: 700; }
+  .review-item .rsign { display: flex; align-items: center; gap: 12px; }
+  .review-item .rsign svg { width: 54px; height: 54px; flex: 0 0 54px; }
+  .allright { text-align: center; color: var(--mint-deep); font-weight: 700; background: var(--mint-soft); padding: 16px; border-radius: 12px; }
+
+  .result-actions { display: flex; gap: 12px; margin-top: 24px; }
+  .result-actions .btn { flex: 1; }
+
+  .foot { text-align: center; color: var(--ink-faint); font-size: 12px; margin-top: 22px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app-head">
+    <div class="road" aria-hidden="true">🛣️</div>
+    <h1>Illinois Rules of the Road</h1>
+    <p>Practice quiz &middot; questions from the official Review Course workbook</p>
+  </header>
+
+  <!-- ============ START ============ -->
+  <section id="start" class="card">
+    <p class="lead">Answer one question at a time. The correct answer lights up the moment you choose, so you learn as you go. Take it as many times as you like.</p>
+
+    <div id="bestBox" class="best hidden"></div>
+
+    <p class="field-label">Which section?</p>
+    <div class="modes" id="modes">
+      <button class="mode sel" data-mode="both">
+        <div class="mode-title">Both</div>
+        <div class="mode-sub">Signs + written &middot; 86 questions</div>
+      </button>
+      <button class="mode" data-mode="written">
+        <div class="mode-title">Written only</div>
+        <div class="mode-sub">True/false &amp; multiple choice &middot; 62</div>
+      </button>
+      <button class="mode" data-mode="signs">
+        <div class="mode-title">Signs only</div>
+        <div class="mode-sub">Identify the sign &middot; 24</div>
+      </button>
+    </div>
+
+    <label class="toggle-row" for="shuffle">
+      <input type="checkbox" id="shuffle" checked />
+      <span>
+        <span class="t-title">Shuffle questions</span>
+        <span class="t-sub"> &mdash; a fresh order every attempt</span>
+      </span>
+    </label>
+
+    <button class="btn btn-primary" id="startBtn">Start the quiz</button>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz" class="card hidden">
+    <div class="top">
+      <div class="top-row">
+        <span id="progressLabel">Question 1 of 86</span>
+        <span class="score">Score: <b id="scoreLabel">0</b></span>
+      </div>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+
+    <span id="qtag" class="qtag written">Written</span>
+    <div id="signStage" class="sign-stage hidden"></div>
+    <p id="qtext" class="qtext"></p>
+
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback"></div>
+
+    <div class="nav">
+      <button class="btn btn-next" id="nextBtn" disabled>Next &rarr;</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" class="card hidden">
+    <div class="result-head">
+      <svg class="donut" id="donut" width="132" height="132" viewBox="0 0 132 132" aria-hidden="true">
+        <circle cx="66" cy="66" r="56" fill="none" stroke="var(--grape-soft)" stroke-width="16"/>
+        <circle id="donutArc" cx="66" cy="66" r="56" fill="none" stroke="var(--grape)" stroke-width="16"
+                stroke-linecap="round" transform="rotate(-90 66 66)"
+                stroke-dasharray="351.86" stroke-dashoffset="351.86"/>
+        <text id="donutPct" x="66" y="74" text-anchor="middle" font-size="30" font-weight="800" fill="var(--ink)">0%</text>
+      </svg>
+      <div class="result-score" id="resultScore">0 / 0</div>
+      <p class="result-sub" id="resultSub">correct answers</p>
+    </div>
+    <div class="verdict" id="verdict"></div>
+
+    <div id="reviewWrap">
+      <div class="review-title" id="reviewTitle">Review the ones you missed</div>
+      <div class="review-list" id="reviewList"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn btn-ghost" id="homeBtn">Change section</button>
+      <button class="btn btn-primary" id="againBtn">Take it again</button>
+    </div>
+  </section>
+
+  <p class="foot">Study aid based on the Illinois Secretary of State <em>Rules of the Road</em> Review Course. Not an official test.</p>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+ * DATA
+ * ============================================================ */
+
+/* ---- Written exam (pages 16-19), answers from key on page 29 ---- */
+/* type "tf": answer is "T" or "F".  type "mc": answer is option key. */
+const WRITTEN = [
+  { id: 1, type: "tf", answer: "T", text: "Cellphone use while driving is permitted as long as you are using a hands-free device." },
+  { id: 2, type: "mc", answer: "a", text: "Illinois law requires children under 8 years old to be secured by a restraining system or seat belt when traveling in a motor vehicle.",
+    options: [["a","Anywhere in the vehicle."],["b","In the front seat only."],["c","In the back seat only."],["d","Never, this is not a law."]] },
+  { id: 3, type: "tf", answer: "T", text: "A parent or legal guardian may request that the driver's license of a minor be canceled at any time before age 18." },
+  { id: 4, type: "tf", answer: "T", text: "When passing another vehicle, you should wait until the entire car you are passing is visible in the rearview mirror before turning back into the right-hand lane." },
+  { id: 5, type: "tf", answer: "T", text: "After making a complete stop and yielding to traffic or pedestrians within the intersection, it is permissible for you on a one-way street to turn left at a red light onto another one-way street that moves traffic to the left." },
+  { id: 6, type: "mc", answer: "b", text: "How should you proceed if you are within an intersection waiting to make a left turn and the traffic signal light turns red?",
+    options: [["a","Wait in the intersection until the light turns green."],["b","Yield to oncoming traffic and complete the turn."],["c","Make sure it is clear, then back up from the intersection."]] },
+  { id: 7, type: "tf", answer: "T", text: "When on a two-lane roadway, you must stop your vehicle if approaching a stopped school bus with its red warning lights flashing and stop signal arm extended." },
+  { id: 8, type: "tf", answer: "T", text: "When an authorized vehicle using its sirens and flashing lights approaches your vehicle, you should pull to the right-hand edge of the roadway and wait for the emergency vehicle to pass." },
+  { id: 9, type: "tf", answer: "T", text: "Your driving privileges will be suspended if you are convicted of illegally passing a stopped school bus." },
+  { id: 10, type: "tf", answer: "F", text: "You may pass another vehicle by driving on the shoulder of the road." },
+  { id: 11, type: "tf", answer: "T", text: "It is permissible to make a right turn against a red signal light after stopping and yielding to other vehicles and pedestrians." },
+  { id: 12, type: "tf", answer: "T", text: "You must give the right- or left-turn signal when changing lanes." },
+  { id: 13, type: "tf", answer: "F", text: "In urban areas, if you are moving out of an alley, building, private road, or driveway, you do not need to come to a complete stop before entering the roadway is clear of traffic." },
+  { id: 14, type: "mc", answer: "c", text: "For what distance should a continuous turn signal be given when making a left or right turn in a business or residential district?",
+    options: [["a","Not less than 50 feet before turning."],["b","Not less than 75 feet before turning."],["c","Not less than 100 feet before turning."]] },
+  { id: 15, type: "tf", answer: "T", text: "When waiting at an intersection and the traffic signal light turns green, you should look to the left and then right before proceeding into the intersection." },
+  { id: 16, type: "mc", answer: "b", text: "What should you do when approaching a construction area?",
+    options: [["a","Increase your speed to get out of the way quickly."],["b","Slow down, stop all wireless telephone communications and yield the right of way."],["c","Honk your horn several times to alert individuals working in the area of your presence."]] },
+  { id: 17, type: "tf", answer: "F", text: "You are not required to yield to pedestrians in a crosswalk." },
+  { id: 18, type: "tf", answer: "F", text: "It is permissible for anyone to wear a headset while driving." },
+  { id: 19, type: "mc", answer: "c", text: "Speed should be reduced below the posted speed limit for which of the following reasons:",
+    options: [["a","You are driving in unfavorable weather conditions."],["b","You are approaching and crossing an intersection."],["c","Both of the above."]] },
+  { id: 20, type: "tf", answer: "T", text: "Slow vehicles should use the right-hand lane except when passing or turning left." },
+  { id: 21, type: "mc", answer: "a", text: "When must you slow down in a school zone?",
+    options: [["a","When children are present and signs are posted."],["b","On weekends."],["c","Only during recess."]] },
+  { id: 22, type: "tf", answer: "T", text: "When parked, you may open car doors on the side on which traffic is moving (also known as a Dutch Reach) only when it can be done safely and without interfering with traffic." },
+  { id: 23, type: "tf", answer: "F", text: "Passing on a two-lane, two-way roadway within 100 feet of an intersection, or railroad crossing is permissible." },
+  { id: 24, type: "tf", answer: "T", text: "Only vehicles displaying special plates or parking placards for persons with disabilities may park in spaces reserved by an official PARKING FOR PERSONS WITH DISABILITIES sign." },
+  { id: 25, type: "tf", answer: "T", text: "Unless authorized, you may not break into the line of a funeral procession." },
+  { id: 26, type: "tf", answer: "T", text: "When you are turning right and a bicyclist is approaching on the right, you must allow the bicyclist to go through the intersection first before making the turn." },
+  { id: 27, type: "tf", answer: "F", text: "You do not need to allow as much distance when following a motorcycle as following a car." },
+  { id: 28, type: "tf", answer: "T", text: "Motorcyclists are entitled to use the full width of a traffic lane; therefore, you should pass a motorcycle the same way as another vehicle." },
+  { id: 29, type: "tf", answer: "T", text: "When following a vehicle at night, it is important to dim your high beams." },
+  { id: 30, type: "tf", answer: "T", text: "When approaching a disabled pedestrian using a guide dog, white cane, or another assistive device, you should yield the right of way." },
+  { id: 31, type: "tf", answer: "T", text: "If arrested with a blood-alcohol concentration of .08% or more, your driving privileges will be suspended for at least six months." },
+  { id: 32, type: "tf", answer: "T", text: "Alcohol is the single greatest factor in fatal motor vehicle crashes." },
+  { id: 33, type: "mc", answer: "b", text: "What is the only effective way to remove alcohol from the body?",
+    options: [["a","Strong coffee."],["b","Time."],["c","Cold shower."]] },
+  { id: 34, type: "tf", answer: "T", text: "If you are arrested for DUI and refuse to submit to testing, your driving privileges will be suspended for 12 months." },
+  { id: 35, type: "tf", answer: "T", text: "If your license has been revoked as a result of DUI, you must meet several requirements, including an evaluation for alcohol and drug problems and paying a reinstatement fee, to regain your license." },
+  { id: 36, type: "tf", answer: "T", text: "It is illegal for persons under 21 years old to drive with any trace of alcohol or drugs in their system." },
+  { id: 37, type: "tf", answer: "T", text: "Regardless of fault, a crash report must be filed by the driver of a vehicle if the crash involves death, bodily injury, or property damage of more than $1,500 (or more than $500 if a vehicle is uninsured)." },
+  { id: 38, type: "tf", answer: "T", text: "Before you can regain driving privileges after losing them for failure to pay for damages caused by a crash, you must file proof of financial responsibility with the Secretary of State's office." },
+  { id: 39, type: "tf", answer: "T", text: "If you are involved in a traffic crash, you should stop your vehicle in a safe, well-lighted public place that does not obstruct traffic, if able to do so." },
+  { id: 40, type: "tf", answer: "T", text: "Driving privileges may be revoked for giving false information to the Secretary of State's office." },
+  { id: 41, type: "mc", answer: "a", text: "What should you do when approaching a traffic control signal that is not in operation?",
+    options: [["a","Come to a full stop and yield the right of way before entering the intersection."],["b","If the intersection is clear, you do not need to stop."],["c","Drive quickly through the intersection to get out of the way of other vehicles."]] },
+  { id: 42, type: "tf", answer: "F", text: "If a traffic light shows both a red light and a green arrow at the same time, you may not turn in the direction of the arrow until the red light has changed." },
+  { id: 43, type: "tf", answer: "F", text: "You may pass on a two-lane roadway marked with a single solid yellow line on your side of the center line." },
+  { id: 44, type: "tf", answer: "T", text: "A railroad crossing sign should be treated the same as a yield sign." },
+  { id: 45, type: "mc", answer: "a", text: "All vehicles are required to stop within how many feet of the nearest rail of a railroad crossing when a train is approaching?",
+    options: [["a","Between 15 and 50 feet."],["b","Between 5 and 10 feet."],["c","10 feet."]] },
+  { id: 46, type: "tf", answer: "T", text: "When approaching a railroad crossing without warning signals (such as electric flashing lights or gates), you should look, listen, and slow down." },
+  { id: 47, type: "tf", answer: "T", text: "After a train clears a crossing with flashing signals, you may proceed after checking for a second train on another track and the lights have stopped flashing." },
+  { id: 48, type: "tf", answer: "F", text: "If moving with a stream of vehicles across a railroad track, it is safe to stop on the track for a short period of time." },
+  { id: 49, type: "tf", answer: "T", text: "The road surface of a bridge may be dangerous in winter due to ice buildup while the rest of the roadway remains clear." },
+  { id: 50, type: "tf", answer: "F", text: "When driving in fog, you should turn on the high-beam headlights to increase the field of vision." },
+  { id: 51, type: "tf", answer: "T", text: "Most rear-end collisions are caused by the vehicle in back following too closely." },
+  { id: 52, type: "tf", answer: "T", text: "The three-second rule helps you determine a safe following distance." },
+  { id: 53, type: "tf", answer: "F", text: "If your vehicle starts to skid on water (hydroplane), you should quickly apply the brakes." },
+  { id: 54, type: "tf", answer: "T", text: "If the front right wheel of your vehicle runs off the pavement, you should ease off the accelerator, allow the vehicle to slow down, and gently steer back onto the pavement." },
+  { id: 55, type: "tf", answer: "T", text: "If you become stranded in blizzard conditions, you should remain in your vehicle." },
+  { id: 56, type: "tf", answer: "F", text: "When experiencing a tire blowout, you should immediately apply the brakes and quickly pull off the side of the road." },
+  { id: 57, type: "tf", answer: "F", text: "If your vehicle starts to skid, you should apply the brakes and steer in the opposite direction of the skid." },
+  { id: 58, type: "tf", answer: "T", text: "Illinois law requires that headlights be on when weather conditions require the use of windshield wipers." },
+  { id: 59, type: "tf", answer: "F", text: "If pulled over by law enforcement, you should immediately exit the vehicle and quickly approach the officer's squad car." },
+  { id: 60, type: "mc", answer: "c", text: "Within how many feet are you required to dim the highbeams before meeting another vehicle?",
+    options: [["a","250 feet."],["b","400 feet."],["c","500 feet."]] },
+  { id: 61, type: "tf", answer: "F", text: "Taillights are not required to be illuminated after dark." },
+  { id: 62, type: "tf", answer: "T", text: "Your vehicle must have a horn that can be heard from a distance of 200 feet." },
+];
+
+/* ---- Traffic signs (page 12 names, page 13 images, page 29 mapping) ---- */
+const SIGN_NAMES = [
+  "Winding Road Ahead",              // 1
+  "Crossroad",                       // 2
+  "Divided Highway",                 // 3
+  "Do Not Enter",                    // 4
+  "Downgrade",                       // 5
+  "Merge",                           // 6
+  "No Passing Zone",                 // 7
+  "No Right Turn",                   // 8
+  "No U-Turn",                       // 9
+  "Pedestrian Crossing",             // 10
+  "Persons with Disabilities Parking", // 11
+  "Railroad Warning",                // 12
+  "Reduction in Lanes",              // 13
+  "Road Construction/Maintenance Area", // 14
+  "School Zone and Crossing",        // 15
+  "Side Road",                       // 16
+  "Slippery When Wet",               // 17
+  "Slow-Moving Vehicle",             // 18
+  "Stop",                            // 19
+  "Stop Sign Ahead",                 // 20
+  "Traffic Signal Ahead",            // 21
+  "Two-Way Traffic",                 // 22
+  "Warning of a Change in Direction or Narrowing of Roadway", // 23
+  "Yield Right of Way",              // 24
+];
+
+/* image letter -> sign number (from answer key, page 29) */
+const SIGN_MAP = {
+  a:19, b:1, c:8, d:24, e:15, f:23, g:12, h:7, i:11, j:3, k:2, l:17,
+  m:5, n:6, o:10, p:14, q:4, r:9, s:21, t:18, u:16, v:22, w:13, x:20,
+};
+
+/* Inline-SVG artwork for each image letter. Real sign colors on purpose. */
+const YEL = "#F6C500", BLK = "#141414", RED = "#CE1B1B", ORG = "#EE7A12", GRN = "#1E7A3C", BLU = "#12579E", YG = "#B7D219";
+function svg(inner, extra) { return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" '+(extra||"")+'>'+inner+'</svg>'; }
+function diamond(inner, fill) { return svg('<polygon points="50,3 97,50 50,97 3,50" fill="'+(fill||YEL)+'" stroke="'+BLK+'" stroke-width="3.5" stroke-linejoin="round"/>'+inner); }
+
+const SIGNS = {
+  // a - Stop
+  a: svg('<polygon points="31,4 69,4 96,31 96,69 69,96 31,96 4,69 4,31" fill="'+RED+'" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><text x="50" y="59" font-size="23" font-weight="800" fill="#fff" text-anchor="middle" font-family="Arial">STOP</text>'),
+  // b - Winding Road Ahead
+  b: diamond('<path d="M52 82 C 26 68, 74 56, 50 40 C 40 33, 55 30, 55 24" fill="none" stroke="'+BLK+'" stroke-width="7" stroke-linecap="round"/><polygon points="55,15 46,29 64,29" fill="'+BLK+'"/>'),
+  // c - No Right Turn
+  c: svg('<rect x="6" y="6" width="88" height="88" rx="7" fill="#fff" stroke="'+BLK+'" stroke-width="3"/><path d="M40 76 L40 54 Q40 46 48 46 L64 46" fill="none" stroke="'+BLK+'" stroke-width="7" stroke-linecap="round"/><polygon points="76,46 60,38 60,54" fill="'+BLK+'"/><circle cx="50" cy="50" r="35" fill="none" stroke="'+RED+'" stroke-width="7"/><line x1="25" y1="25" x2="75" y2="75" stroke="'+RED+'" stroke-width="7"/>'),
+  // d - Yield
+  d: svg('<polygon points="7,13 93,13 50,91" fill="#fff" stroke="'+RED+'" stroke-width="10" stroke-linejoin="round"/>'),
+  // e - School Zone and Crossing (pentagon)
+  e: svg('<polygon points="50,4 96,40 79,96 21,96 4,40" fill="'+YG+'" stroke="'+BLK+'" stroke-width="3" stroke-linejoin="round"/><circle cx="41" cy="46" r="6" fill="'+BLK+'"/><path d="M41 52 L41 68 M41 57 L33 63 M41 57 L49 61 M41 68 L35 82 M41 68 L47 82" stroke="'+BLK+'" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="60" cy="46" r="6" fill="'+BLK+'"/><path d="M60 52 L60 68 M60 57 L52 61 M60 57 L68 63 M60 68 L54 82 M60 68 L66 82" stroke="'+BLK+'" stroke-width="4" fill="none" stroke-linecap="round"/>'),
+  // f - Warning of change in direction / large arrow (chevron)
+  f: svg('<rect x="6" y="6" width="88" height="88" rx="7" fill="'+YEL+'" stroke="'+BLK+'" stroke-width="3"/><polygon points="62,18 30,50 62,82 62,65 47,50 62,35" fill="'+BLK+'"/>'),
+  // g - Railroad Warning
+  g: svg('<circle cx="50" cy="50" r="46" fill="'+YEL+'" stroke="'+BLK+'" stroke-width="3"/><text x="50" y="61" font-size="30" font-weight="800" fill="'+BLK+'" text-anchor="middle" font-family="Arial">R&#8226;R</text><line x1="20" y1="20" x2="80" y2="80" stroke="'+BLK+'" stroke-width="4"/><line x1="80" y1="20" x2="20" y2="80" stroke="'+BLK+'" stroke-width="4"/>'),
+  // h - No Passing Zone (pennant)
+  h: svg('<polygon points="6,9 95,50 6,91" fill="'+YEL+'" stroke="'+BLK+'" stroke-width="3" stroke-linejoin="round"/><text x="30" y="43" font-size="9.5" font-weight="700" fill="'+BLK+'" text-anchor="middle" font-family="Arial">NO</text><text x="30" y="55" font-size="9.5" font-weight="700" fill="'+BLK+'" text-anchor="middle" font-family="Arial">PASSING</text><text x="30" y="67" font-size="9.5" font-weight="700" fill="'+BLK+'" text-anchor="middle" font-family="Arial">ZONE</text>'),
+  // i - Persons with Disabilities Parking
+  i: svg('<rect x="14" y="6" width="72" height="88" rx="5" fill="#fff" stroke="'+BLK+'" stroke-width="2"/><rect x="14" y="6" width="72" height="20" rx="5" fill="'+GRN+'"/><text x="50" y="20" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" font-family="Arial">RESERVED</text><rect x="30" y="33" width="40" height="55" rx="3" fill="'+BLU+'"/><circle cx="47" cy="45" r="4.5" fill="#fff"/><circle cx="47" cy="66" r="11" fill="none" stroke="#fff" stroke-width="3"/><path d="M47 51 L47 64 L60 64" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>'),
+  // j - Divided Highway
+  j: diamond('<rect x="46" y="20" width="8" height="30" rx="3" fill="'+BLK+'"/><path d="M34 80 L34 42" stroke="'+BLK+'" stroke-width="6" fill="none"/><polygon points="34,28 27,44 41,44" fill="'+BLK+'"/><path d="M66 80 L66 42" stroke="'+BLK+'" stroke-width="6" fill="none"/><polygon points="66,28 59,44 73,44" fill="'+BLK+'"/>'),
+  // k - Crossroad
+  k: diamond('<rect x="44" y="24" width="12" height="52" fill="'+BLK+'"/><rect x="24" y="44" width="52" height="12" fill="'+BLK+'"/>'),
+  // l - Slippery When Wet
+  l: diamond('<rect x="30" y="42" width="40" height="13" rx="4" fill="'+BLK+'"/><rect x="39" y="34" width="20" height="11" rx="3" fill="'+BLK+'"/><circle cx="38" cy="57" r="4" fill="'+BLK+'"/><circle cx="62" cy="57" r="4" fill="'+BLK+'"/><path d="M28 74 q 8 -9 16 0 t 16 0" fill="none" stroke="'+BLK+'" stroke-width="4"/>'),
+  // m - Downgrade
+  m: diamond('<line x1="20" y1="30" x2="80" y2="74" stroke="'+BLK+'" stroke-width="4"/><g transform="rotate(36 50 52)"><rect x="34" y="44" width="30" height="13" fill="'+BLK+'"/><rect x="30" y="49" width="8" height="8" fill="'+BLK+'"/><circle cx="40" cy="60" r="4.5" fill="'+BLK+'"/><circle cx="58" cy="60" r="4.5" fill="'+BLK+'"/></g>'),
+  // n - Merge
+  n: diamond('<path d="M40 80 L40 34" stroke="'+BLK+'" stroke-width="6" fill="none"/><polygon points="40,22 32,36 48,36" fill="'+BLK+'"/><path d="M66 80 C 66 54, 42 54, 42 46" stroke="'+BLK+'" stroke-width="6" fill="none"/>'),
+  // o - Pedestrian Crossing (yellow-green)
+  o: diamond('<circle cx="50" cy="30" r="7" fill="'+BLK+'"/><path d="M50 37 L50 60 M50 44 L40 51 M50 44 L60 51 M50 60 L42 78 M50 60 L59 78" stroke="'+BLK+'" stroke-width="5" fill="none" stroke-linecap="round"/>', YG),
+  // p - Road Construction / Maintenance Area (orange diamond)
+  p: diamond('', ORG),
+  // q - Do Not Enter
+  q: svg('<circle cx="50" cy="50" r="45" fill="'+RED+'" stroke="#fff" stroke-width="4"/><rect x="22" y="42" width="56" height="16" rx="3" fill="#fff"/>'),
+  // r - No U-Turn
+  r: svg('<rect x="6" y="6" width="88" height="88" rx="7" fill="#fff" stroke="'+BLK+'" stroke-width="3"/><path d="M37 74 L37 50 Q37 35 51 35 Q65 35 65 50 L65 63" fill="none" stroke="'+BLK+'" stroke-width="7"/><polygon points="65,74 57,60 73,60" fill="'+BLK+'"/><circle cx="50" cy="50" r="35" fill="none" stroke="'+RED+'" stroke-width="7"/><line x1="25" y1="25" x2="75" y2="75" stroke="'+RED+'" stroke-width="7"/>'),
+  // s - Traffic Signal Ahead
+  s: diamond('<rect x="40" y="22" width="20" height="52" rx="6" fill="'+BLK+'"/><circle cx="50" cy="33" r="6" fill="'+RED+'"/><circle cx="50" cy="48" r="6" fill="'+YEL+'"/><circle cx="50" cy="63" r="6" fill="#2fb457"/>'),
+  // t - Slow-Moving Vehicle
+  t: svg('<polygon points="50,8 90,84 10,84" fill="'+ORG+'" stroke="'+RED+'" stroke-width="9" stroke-linejoin="round"/>'),
+  // u - Side Road
+  u: diamond('<line x1="42" y1="20" x2="42" y2="82" stroke="'+BLK+'" stroke-width="7"/><line x1="42" y1="52" x2="76" y2="34" stroke="'+BLK+'" stroke-width="7"/>'),
+  // v - Two-Way Traffic
+  v: diamond('<path d="M40 74 L40 34" stroke="'+BLK+'" stroke-width="6"/><polygon points="40,22 33,36 47,36" fill="'+BLK+'"/><path d="M62 26 L62 66" stroke="'+BLK+'" stroke-width="6"/><polygon points="62,78 55,64 69,64" fill="'+BLK+'"/>'),
+  // w - Reduction in Lanes
+  w: diamond('<path d="M38 82 L38 24" stroke="'+BLK+'" stroke-width="6" fill="none"/><path d="M66 82 L66 50 C 66 34 52 32 44 28" stroke="'+BLK+'" stroke-width="6" fill="none"/>'),
+  // x - Stop Sign Ahead
+  x: diamond('<polygon points="42,15 58,15 69,26 69,42 58,53 42,53 31,42 31,26" fill="'+RED+'" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><text x="50" y="38" font-size="10" font-weight="800" fill="#fff" text-anchor="middle" font-family="Arial">STOP</text><path d="M50 84 L50 64" stroke="'+BLK+'" stroke-width="6"/><polygon points="50,54 42,66 58,66" fill="'+BLK+'"/>'),
+};
+
+/* ============================================================
+ * QUIZ ENGINE
+ * ============================================================ */
+
+const BEST_KEY = "irotr-best-v1";
+const el = (id) => document.getElementById(id);
+
+let state = {
+  mode: "both",
+  shuffle: true,
+  items: [],     // built questions for this run
+  index: 0,
+  score: 0,
+  answered: false,
+  missed: [],
+};
+
+function shuffleArr(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* Build the list of questions based on mode. */
+function buildItems() {
+  const items = [];
+
+  if (state.mode === "written" || state.mode === "both") {
+    for (const q of WRITTEN) {
+      let opts;
+      if (q.type === "tf") {
+        opts = [{ key: "T", label: "True" }, { key: "F", label: "False" }];
+      } else {
+        opts = q.options.map(([key, label]) => ({ key, label }));
+      }
+      items.push({
+        kind: "written",
+        ref: "Q" + q.id,
+        prompt: q.text,
+        answer: q.answer,
+        options: opts,
+      });
+    }
+  }
+
+  if (state.mode === "signs" || state.mode === "both") {
+    const letters = Object.keys(SIGN_MAP);
+    for (const letter of letters) {
+      const correctIdx = SIGN_MAP[letter] - 1;
+      const correctName = SIGN_NAMES[correctIdx];
+      // three distractor names, distinct from the correct one
+      const pool = shuffleArr(SIGN_NAMES.filter((n) => n !== correctName)).slice(0, 3);
+      const optionNames = shuffleArr([correctName, ...pool]);
+      items.push({
+        kind: "sign",
+        ref: "Sign (" + letter + ")",
+        svg: SIGNS[letter],
+        prompt: "Which sign is this?",
+        answer: correctName,
+        options: optionNames.map((n) => ({ key: n, label: n })),
+      });
+    }
+  }
+
+  if (state.shuffle) shuffleArr(items);
+  return items;
+}
+
+function startQuiz() {
+  state.items = buildItems();
+  state.index = 0;
+  state.score = 0;
+  state.answered = false;
+  state.missed = [];
+  show("quiz");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const item = state.items[state.index];
+  const total = state.items.length;
+  state.answered = false;
+
+  // progress
+  el("progressLabel").textContent = "Question " + (state.index + 1) + " of " + total;
+  el("scoreLabel").textContent = state.score;
+  el("barFill").style.width = ((state.index) / total * 100) + "%";
+
+  // tag
+  const tag = el("qtag");
+  if (item.kind === "sign") {
+    tag.className = "qtag sign";
+    tag.textContent = "Traffic sign";
+    el("signStage").innerHTML = item.svg;
+    el("signStage").classList.remove("hidden");
+  } else {
+    tag.className = "qtag written";
+    tag.textContent = "Written";
+    el("signStage").classList.add("hidden");
+    el("signStage").innerHTML = "";
+  }
+
+  el("qtext").textContent = item.prompt;
+
+  // options
+  const box = el("options");
+  box.innerHTML = "";
+  item.options.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.type = "button";
+    const keyLabel = item.kind === "sign" ? String.fromCharCode(65 + i) : opt.key.toUpperCase();
+    b.innerHTML = '<span class="key">' + keyLabel + '</span>' +
+                  '<span class="lbl">' + escapeHtml(opt.label) + '</span>' +
+                  '<span class="mark"></span>';
+    b.addEventListener("click", () => choose(b, opt.key, item));
+    box.appendChild(b);
+  });
+
+  // feedback + next
+  const fb = el("feedback");
+  fb.textContent = "";
+  fb.className = "feedback";
+  const next = el("nextBtn");
+  next.disabled = true;
+  next.textContent = state.index === total - 1 ? "See results" : "Next →";
+}
+
+function choose(btn, key, item) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const correct = key === item.answer;
+  if (correct) state.score++;
+
+  const buttons = Array.from(el("options").children);
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    const optKey = item.options[i].key;
+    const mark = b.querySelector(".mark");
+    if (optKey === item.answer) {
+      b.classList.add("correct");
+      mark.textContent = "✓";
+    } else if (b === btn) {
+      b.classList.add("wrong");
+      mark.textContent = "✗";
+    } else {
+      b.classList.add("dim");
+    }
+  });
+
+  const fb = el("feedback");
+  if (correct) {
+    fb.textContent = "✓ Correct!";
+    fb.className = "feedback good";
+  } else {
+    const rightLabel = item.options.find((o) => o.key === item.answer).label;
+    fb.textContent = "✗ Not quite — the answer is: " + rightLabel;
+    fb.className = "feedback bad";
+    state.missed.push({ item: item, chosenLabel: item.options.find((o) => o.key === key).label });
+  }
+
+  el("scoreLabel").textContent = state.score;
+  el("nextBtn").disabled = false;
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  if (state.index < state.items.length - 1) {
+    state.index++;
+    renderQuestion();
+  } else {
+    finish();
+  }
+}
+
+function finish() {
+  const total = state.items.length;
+  const pct = total ? Math.round((state.score / total) * 100) : 0;
+
+  el("resultScore").textContent = state.score + " / " + total;
+  el("resultSub").textContent = "correct answers";
+
+  // donut
+  const C = 2 * Math.PI * 56;
+  el("donutArc").setAttribute("stroke-dasharray", C.toFixed(2));
+  el("donutArc").setAttribute("stroke-dashoffset", (C * (1 - pct / 100)).toFixed(2));
+  el("donutPct").textContent = pct + "%";
+
+  const verdict = el("verdict");
+  if (pct >= 80) {
+    verdict.textContent = "🎉 Passing score! (80% or better)";
+    verdict.className = "verdict pass";
+  } else {
+    verdict.textContent = "Keep practicing — aim for 80% or better.";
+    verdict.className = "verdict retry";
+  }
+
+  // review
+  const wrap = el("reviewWrap");
+  const list = el("reviewList");
+  list.innerHTML = "";
+  if (state.missed.length === 0) {
+    el("reviewTitle").classList.add("hidden");
+    const done = document.createElement("div");
+    done.className = "allright";
+    done.textContent = "Perfect — you didn't miss a single one!";
+    list.appendChild(done);
+  } else {
+    el("reviewTitle").classList.remove("hidden");
+    el("reviewTitle").textContent = "Review the " + state.missed.length + " you missed";
+    state.missed.forEach(({ item, chosenLabel }) => {
+      const rightLabel = item.options.find((o) => o.key === item.answer).label;
+      const div = document.createElement("div");
+      div.className = "review-item";
+      const inner =
+        '<div class="rq">' + escapeHtml(item.prompt) + '</div>' +
+        '<div class="ra">You chose <span class="yours">' + escapeHtml(chosenLabel) + '</span> ' +
+        '&middot; correct: <span class="right">' + escapeHtml(rightLabel) + '</span></div>';
+      if (item.kind === "sign") {
+        div.innerHTML = '<div class="rsign">' + item.svg + '<div>' + inner + '</div></div>';
+      } else {
+        div.innerHTML = inner;
+      }
+      list.appendChild(div);
+    });
+  }
+
+  // best score in localStorage
+  saveBest(pct, state.score, total);
+
+  show("results");
+}
+
+/* ---------- persistence ---------- */
+function saveBest(pct, score, total) {
+  try {
+    const prev = JSON.parse(localStorage.getItem(BEST_KEY) || "null");
+    if (!prev || pct > prev.pct) {
+      localStorage.setItem(BEST_KEY, JSON.stringify({ pct, score, total, mode: state.mode }));
+    }
+  } catch (e) { /* storage unavailable - ignore */ }
+}
+function showBest() {
+  let best = null;
+  try { best = JSON.parse(localStorage.getItem(BEST_KEY) || "null"); } catch (e) {}
+  const box = el("bestBox");
+  if (best && typeof best.pct === "number") {
+    box.textContent = "🏆 Your best so far: " + best.pct + "% (" + best.score + "/" + best.total + ")";
+    box.classList.remove("hidden");
+  } else {
+    box.classList.add("hidden");
+  }
+}
+
+/* ---------- view switching ---------- */
+function show(which) {
+  ["start", "quiz", "results"].forEach((id) => {
+    el(id).classList.toggle("hidden", id !== which);
+  });
+  if (which === "start") showBest();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+/* ---------- wiring ---------- */
+el("modes").addEventListener("click", (e) => {
+  const m = e.target.closest(".mode");
+  if (!m) return;
+  Array.from(el("modes").children).forEach((c) => c.classList.remove("sel"));
+  m.classList.add("sel");
+  state.mode = m.dataset.mode;
+});
+el("shuffle").addEventListener("change", (e) => { state.shuffle = e.target.checked; });
+el("startBtn").addEventListener("click", startQuiz);
+el("nextBtn").addEventListener("click", nextQuestion);
+el("againBtn").addEventListener("click", startQuiz);
+el("homeBtn").addEventListener("click", () => show("start"));
+
+showBest();
+</script>
+</body>
+</html>
