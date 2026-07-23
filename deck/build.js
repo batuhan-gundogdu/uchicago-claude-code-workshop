@@ -1,17 +1,18 @@
 // UChicago × Anthropic - "Talk to Your Computer" intro workshop deck.
-// House style via ./theme (deck-style skill, uchicago brand).
+// Minimalist "simple" style via ./theme (Avenir Next, one teal accent).
 // Build:  node build.js   ->  writes workshop.pptx
 const T = require("./theme");
 
 const p = T.newDeck({
   title: "Talk to Your Computer",
   author: "Batuhan Gundogdu",
-  brand: "uchicago",
+  brand: "generic",
 });
 
 // 1. TITLE
 T.titleSlide(p, {
   title: "Talk to Your Computer",
+  watermark: "talk",
   author: "Claude Code for everyday work  ·  UChicago × Anthropic  ·  Batuhan Gundogdu",
   label: "Intro Session",
 });
@@ -19,6 +20,7 @@ T.titleSlide(p, {
 // 2. THE POLL (Poll Everywhere QR goes here)
 T.content(p, {
   title: "First - who's in the room?",
+  kicker: "Warm-up poll",
   points: [
     { text: "Scan the QR and pick one.  [ Poll Everywhere QR - top right ]", color: "MAROON" },
     { text: "" },
@@ -34,6 +36,7 @@ T.section(p, { kicker: "Part one", title: "The one big idea" });
 // 4. Big idea
 T.content(p, {
   title: "It's not a coding tool. It's a conversation.",
+  kicker: "The big idea",
   points: [
     { text: "You describe what you want, in plain English.", color: "ACCENTBLUE" },
     { text: "It builds the thing - a page, a tracker, a tool.", color: "INK" },
@@ -46,6 +49,7 @@ T.content(p, {
 // 5. Myth vs reality
 T.twoColumn(p, {
   title: "What people assume vs. what's true",
+  kicker: "Myths vs reality",
   left: [
     { text: "The assumption", color: "MAROON" },
     "“It's for programmers.”",
@@ -63,6 +67,7 @@ T.twoColumn(p, {
 // 6. Light tease
 T.content(p, {
   title: "One small thing before we start…",
+  kicker: "Before we start",
   points: [
     { text: "These slides were made by talking to Claude Code.", color: "ACCENTBLUE" },
     { text: "So were the four apps you're about to see.", color: "ACCENTBLUE" },
@@ -77,6 +82,7 @@ T.section(p, { kicker: "Part two", title: "Let's build four everyday tools" });
 // 8. Demo roadmap
 T.content(p, {
   title: "Four tools, built live, in front of you",
+  kicker: "The plan",
   points: [
     { text: "1 · A budget controller - track money, see a chart.", color: "INK" },
     { text: "2 · A research paper tracker - what to read, what's done.", color: "INK" },
@@ -96,6 +102,7 @@ T.section(p, { kicker: "Demo 4", title: "Teaching Assistant" });
 // 13. The recurring beat
 T.content(p, {
   title: "Don't like it? Just say so.",
+  kicker: "The recurring beat",
   points: [
     { text: "“Make it dark.”", color: "ACCENTBLUE" },
     { text: "“Move the total to the top.”", color: "ACCENTBLUE" },
@@ -111,12 +118,14 @@ T.section(p, { kicker: "Part three", title: "The reveal" });
 // 15. The brag (stat)
 T.stat(p, {
   value: "1",
+  kicker: "The whole thing",
   label: "Claude Code session built this whole workshop - these slides and all four apps. No template. No help. Just conversation.",
 });
 
 // 16. How you start Monday
 T.content(p, {
   title: "How you start - Monday morning",
+  kicker: "Getting started",
   points: [
     { text: "Open Claude Code. Type what you wish existed.", color: "ACCENTBLUE" },
     { text: "Start tiny: a checklist, a tracker, a page.", color: "INK" },
@@ -129,6 +138,7 @@ T.content(p, {
 // 17. Closer
 T.content(p, {
   title: "Your turn",
+  kicker: "Your turn",
   points: [
     { text: "Open Claude Code. Describe the thing you wish existed.", color: "ACCENTBLUE" },
     { text: "You just watched me do it - no code, no template.", color: "INK" },

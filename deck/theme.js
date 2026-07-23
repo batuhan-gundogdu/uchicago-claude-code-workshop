@@ -1,47 +1,59 @@
 /**
- * deck-style — UChicago MS-ADS house style for pptxgenjs decks.
- * Copied from lecture-1.pptx.
+ * "simple" — minimalist deck style for pptxgenjs.
+ * White background, generous whitespace, Avenir Next, one muted-teal accent.
  *
- * Type: Calibri throughout. Cover title 60pt bold; page titles 50pt bold;
- * body 28pt. White background. Semantic color palette (black/blue/green/maroon).
- * UChicago footer lockup on every slide; phoenix bleeds off the right edge of
- * the title slide. Calibri is Office-safe, so QA renders are true-to-width.
+ * Signature elements (from the reference template):
+ *  - small uppercase gray micro-label (kicker) with a short teal rule under it
+ *  - big bold black page titles, pinned top-left
+ *  - a giant faint watermark word behind the cover title
+ *  - teal used sparingly for emphasis, section numbers, and the stat figure
+ *
+ * Semantic point colors from the old house style are remapped:
+ *  INK -> black · ACCENTBLUE/GREEN -> teal (emphasis) · MAROON -> black bold
+ *  (punchlines) · BLUE -> gray. So build.js keeps working unchanged.
  */
 const pptxgen = require("pptxgenjs");
-const path = require("path");
-const ASSET = (f) => path.join(__dirname, "assets", f);
 
 // ---- TOKENS -----------------------------------------------------------------
 const COLOR = {
-  BG: "FFFFFF",
-  INK: "000000",     // headings + default body
-  BLUE: "1F4E79",    // subtitle/author (deep blue, per cover)
-  ACCENTBLUE: "0070C0", // questions / emphasis body
-  GREEN: "00B050",   // callouts
-  MAROON: "800000",  // labels ("Lecture-1"), UChicago maroon
-  MUTE: "808080",
+  BG:   "FFFFFF",
+  INK:  "111111",   // titles + default body
+  MUTE: "9A9A9A",   // micro-labels, subtitles
+  TEAL: "2E7A72",   // the single accent
+  WM:   "F1F2F1",   // watermark ghost text
 };
 
-const FONT = "Calibri"; // headings (bold) and body both Calibri
+const FONT = "Avenir Next";
 
 const SIZE = {
-  TITLE: 60,   // cover headline
-  H: 50,       // page/content-slide title
-  SUB: 20,     // cover subtitle/author
-  LABEL: 40,   // cover "Lecture-N" maroon label
-  BODY: 28,
-  SMALL: 24,
-  STAT: 140,
+  TITLE: 54,    // cover headline
+  WM:    210,   // cover watermark word
+  SUB:   14,    // cover subtitle (uppercase, gray)
+  LABEL: 14,    // cover teal label
+  H:     40,    // page/content title
+  KICKER:12,    // micro-label
+  SECNUM:15,    // section kicker
+  SECTITLE:44,  // section title
+  BODY:  20,
+  SMALL: 15,
+  STAT:  130,
 };
 
-const M = 0.6;
 const W = 13.33, HGT = 7.5;
+const M = 0.9;                 // airy left/right margin
+const RULE_W = 0.62;           // length of the teal accent rule
 
-// exact placements copied from the reference (EMU -> inches)
-const FOOTER  = { x: 0.59, y: 6.98, w: 3.11, h: 0.52 };
-const PHOENIX = { x: 9.09, y: 0.82, w: 6.31, h: 5.52 }; // bleeds off right edge
-const CTITLE  = { x: 1.00, y: 1.31, w: 8.32, h: 2.61 };
-const CSUB    = { x: 1.04, y: 4.03, w: 6.07, h: 0.68 };
+// point-color remap: old semantic name -> { color, bold }
+const POINT = {
+  INK:        { color: COLOR.INK },
+  ACCENTBLUE: { color: COLOR.TEAL },
+  GREEN:      { color: COLOR.TEAL },
+  MAROON:     { color: COLOR.INK, bold: true },
+  BLUE:       { color: COLOR.MUTE },
+  MUTE:       { color: COLOR.MUTE },
+  TEAL:       { color: COLOR.TEAL },
+};
+const styleFor = (name) => POINT[name] || POINT.INK;
 
 // ---- SETUP ------------------------------------------------------------------
 function newDeck(opts = {}) {
@@ -50,132 +62,147 @@ function newDeck(opts = {}) {
   p.layout = "WIDE";
   p.author = opts.author || "";
   p.title = opts.title || "";
-  p._brand = (opts.brand || "generic").toLowerCase(); // "generic" | "uchicago"
   p.defineSlideMaster({ title: "BASE", background: { color: COLOR.BG } });
   return p;
 }
 
-// Footer lockup, stamped directly on each slide so PowerPoint always shows it
-// (master/layout graphics from pptxgenjs don't reliably render in PowerPoint).
-function addFooter(s) {
-  s.addImage({ path: ASSET("uchicago-footer.png"), x: FOOTER.x, y: FOOTER.y, w: FOOTER.w, h: FOOTER.h });
+// short teal accent rule (a thin rectangle)
+function rule(s, x, y, w = RULE_W) {
+  s.addShape("rect", { x, y, w, h: 0.045, fill: { color: COLOR.TEAL }, line: { type: "none" } });
 }
 
-// Page title: Calibri Bold 50, black, top-left.
-function heading(s, text) {
+// micro-label + rule; returns the y where the title should start
+function kickerBlock(s, kicker, x = M, y = 0.72) {
+  if (!kicker) return 1.2;
+  s.addText(String(kicker).toUpperCase(), {
+    x, y, w: W - 2 * M, h: 0.3,
+    fontFace: FONT, fontSize: SIZE.KICKER, bold: true, color: COLOR.MUTE,
+    charSpacing: 2.5, align: "left", valign: "top", margin: 0,
+  });
+  rule(s, x, y + 0.34);
+  return y + 0.55;
+}
+
+// Page title: Avenir Next Bold, black, top-left (below optional kicker).
+function heading(s, text, y = 1.2) {
   s.addText(text || "", {
-    x: M, y: 0.4, w: W - 2 * M, h: 1.3,
+    x: M, y, w: W - 2 * M, h: 1.3,
     fontFace: FONT, fontSize: SIZE.H, bold: true, color: COLOR.INK,
-    align: "left", valign: "top", margin: 0,
+    align: "left", valign: "top", margin: 0, lineSpacingMultiple: 0.98,
   });
 }
 
 // ---- SLIDE BUILDERS ---------------------------------------------------------
 
-// Title slide: Calibri 60 bold title, deep-blue author, maroon lecture label,
-// phoenix bleeding off the right edge (matches the reference layout exactly).
-function titleSlide(p, { title, author, label } = {}) {
+// Title slide: giant faint watermark word + bold title + gray subtitle + teal label.
+function titleSlide(p, { title, author, label, watermark } = {}) {
   const s = p.addSlide({ masterName: "BASE" });
-  if (p._brand === "uchicago") addFooter(s);
-  if (p._brand === "uchicago") {
-    s.addImage({ path: ASSET("phoenix.png"), x: PHOENIX.x, y: PHOENIX.y, w: PHOENIX.w, h: PHOENIX.h, transparency: 60 });
+  if (watermark) {
+    s.addText(String(watermark).toLowerCase(), {
+      x: -0.4, y: 1.4, w: W + 0.8, h: 4.6,
+      fontFace: FONT, fontSize: SIZE.WM, bold: true, color: COLOR.WM,
+      align: "left", valign: "middle", margin: 0,
+    });
   }
   s.addText(title || "", {
-    x: CTITLE.x, y: CTITLE.y, w: CTITLE.w, h: CTITLE.h,
+    x: M, y: 2.55, w: W - 2 * M, h: 2.0,
     fontFace: FONT, fontSize: SIZE.TITLE, bold: true, color: COLOR.INK,
     align: "left", valign: "middle", margin: 0, lineSpacingMultiple: 1.0,
   });
+  rule(s, M, 4.62, 1.0);
   if (author) {
-    s.addText(author, {
-      x: CSUB.x, y: CSUB.y, w: CSUB.w, h: CSUB.h,
-      fontFace: FONT, fontSize: SIZE.SUB, color: COLOR.BLUE,
-      align: "left", valign: "top", margin: 0,
+    s.addText(String(author).toUpperCase(), {
+      x: M, y: 4.8, w: W - 2 * M, h: 0.6,
+      fontFace: FONT, fontSize: SIZE.SUB, color: COLOR.MUTE,
+      charSpacing: 1.5, align: "left", valign: "top", margin: 0,
     });
   }
   if (label) {
-    s.addText(label, {
-      x: 3.0, y: 5.4, w: 5.0, h: 0.9,
-      fontFace: FONT, fontSize: SIZE.LABEL, bold: true, color: COLOR.MAROON,
-      align: "left", valign: "top", margin: 0,
+    s.addText(String(label).toUpperCase(), {
+      x: M, y: 5.5, w: W - 2 * M, h: 0.5,
+      fontFace: FONT, fontSize: SIZE.LABEL, bold: true, color: COLOR.TEAL,
+      charSpacing: 2, align: "left", valign: "top", margin: 0,
     });
   }
   return s;
 }
 
-// Section divider: maroon kicker + big black Calibri bold title.
+// Section divider: teal kicker + big black title, centered vertically.
 function section(p, { kicker, title } = {}) {
   const s = p.addSlide({ masterName: "BASE" });
-  if (p._brand === "uchicago") addFooter(s);
   if (kicker) {
     s.addText(String(kicker).toUpperCase(), {
-      x: M, y: 2.7, w: W - 2 * M, h: 0.5,
-      fontFace: FONT, fontSize: SIZE.SMALL, color: COLOR.MAROON,
-      charSpacing: 2, align: "left", valign: "bottom", margin: 0,
+      x: M, y: 2.75, w: W - 2 * M, h: 0.4,
+      fontFace: FONT, fontSize: SIZE.SECNUM, bold: true, color: COLOR.TEAL,
+      charSpacing: 3, align: "left", valign: "bottom", margin: 0,
     });
+    rule(s, M, 3.2);
   }
   s.addText(title || "", {
-    x: M, y: 3.2, w: W - 2 * M, h: 1.6,
-    fontFace: FONT, fontSize: SIZE.H, bold: true, color: COLOR.INK,
-    align: "left", valign: "top", margin: 0,
+    x: M, y: 3.4, w: W - 2 * M, h: 1.6,
+    fontFace: FONT, fontSize: SIZE.SECTITLE, bold: true, color: COLOR.INK,
+    align: "left", valign: "top", margin: 0, lineSpacingMultiple: 0.98,
   });
   return s;
 }
 
-// Content: heading + body. points may be strings or {text, color}.
-// color one of: INK | ACCENTBLUE | GREEN | MAROON | BLUE
-function content(p, { title, points = [] } = {}) {
+// Content: optional kicker + heading + body. points: strings or {text,color}.
+function content(p, { title, kicker, points = [] } = {}) {
   const s = p.addSlide({ masterName: "BASE" });
-  if (p._brand === "uchicago") addFooter(s);
-  heading(s, title);
+  const ty = kickerBlock(s, kicker);
+  heading(s, title, ty);
   if (points.length) {
     s.addText(
       points.map((pt) => {
         const o = typeof pt === "string" ? { text: pt } : pt;
-        return { text: o.text, options: { color: COLOR[o.color || "INK"] || COLOR.INK, bullet: false, paraSpaceAfter: 18, breakLine: true } };
+        const st = styleFor(o.color);
+        return { text: o.text, options: { color: st.color, bold: !!st.bold, bullet: false, paraSpaceAfter: 16, breakLine: true } };
       }),
-      { x: M, y: 2.1, w: W - 2 * M, h: HGT - 2.1 - 0.7,
-        fontFace: FONT, fontSize: SIZE.BODY, align: "left", valign: "top", margin: 0, lineSpacingMultiple: 1.1 }
+      { x: M, y: ty + 1.4, w: W - 2 * M, h: HGT - (ty + 1.4) - 0.5,
+        fontFace: FONT, fontSize: SIZE.BODY, align: "left", valign: "top", margin: 0, lineSpacingMultiple: 1.15 }
     );
   }
   return s;
 }
 
 // Two-column content.
-function twoColumn(p, { title, left, right } = {}) {
+function twoColumn(p, { title, kicker, left, right } = {}) {
   const s = p.addSlide({ masterName: "BASE" });
-  if (p._brand === "uchicago") addFooter(s);
-  heading(s, title);
-  const colW = (W - 2 * M - 0.6) / 2;
+  const ty = kickerBlock(s, kicker);
+  heading(s, title, ty);
+  const colW = (W - 2 * M - 0.8) / 2;
+  const by = ty + 1.4;
   const block = (items, x) =>
     s.addText(
       (items || []).map((pt) => {
         const o = typeof pt === "string" ? { text: pt } : pt;
-        return { text: o.text, options: { color: COLOR[o.color || "INK"] || COLOR.INK, paraSpaceAfter: 16, breakLine: true } };
+        const st = styleFor(o.color);
+        return { text: o.text, options: { color: st.color, bold: !!st.bold, paraSpaceAfter: 14, breakLine: true } };
       }),
-      { x, y: 2.1, w: colW, h: HGT - 2.1 - 0.7, fontFace: FONT, fontSize: SIZE.BODY, align: "left", valign: "top", margin: 0, lineSpacingMultiple: 1.1 }
+      { x, y: by, w: colW, h: HGT - by - 0.5, fontFace: FONT, fontSize: SIZE.BODY, align: "left", valign: "top", margin: 0, lineSpacingMultiple: 1.15 }
     );
   block(left, M);
-  block(right, M + colW + 0.6);
+  block(right, M + colW + 0.8);
   return s;
 }
 
-// Stat: giant maroon Calibri number + label.
-function stat(p, { value, label } = {}) {
+// Stat: giant teal figure + label.
+function stat(p, { value, label, kicker } = {}) {
   const s = p.addSlide({ masterName: "BASE" });
-  if (p._brand === "uchicago") addFooter(s);
+  const ty = kickerBlock(s, kicker);
   s.addText(String(value), {
-    x: M, y: 1.7, w: W - 2 * M, h: 3.0,
-    fontFace: FONT, fontSize: SIZE.STAT, bold: true, color: COLOR.MAROON,
+    x: M - 0.05, y: 1.5, w: W - 2 * M, h: 3.2,
+    fontFace: FONT, fontSize: SIZE.STAT, bold: true, color: COLOR.TEAL,
     align: "left", valign: "middle", margin: 0,
   });
   if (label) {
     s.addText(label, {
-      x: M, y: 4.8, w: W - 2 * M, h: 1.0,
+      x: M, y: 4.9, w: W - 2 * M - 2.0, h: 1.4,
       fontFace: FONT, fontSize: SIZE.SMALL, color: COLOR.INK,
-      align: "left", valign: "top", margin: 0,
+      align: "left", valign: "top", margin: 0, lineSpacingMultiple: 1.2,
     });
   }
   return s;
 }
 
-module.exports = { COLOR, FONT, SIZE, W, H: HGT, M, newDeck, addFooter, heading, titleSlide, section, content, twoColumn, stat };
+module.exports = { COLOR, FONT, SIZE, W, H: HGT, M, newDeck, heading, titleSlide, section, content, twoColumn, stat };
