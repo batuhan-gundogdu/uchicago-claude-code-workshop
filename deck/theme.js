@@ -1,27 +1,33 @@
 /**
  * "simple" — minimalist deck style for pptxgenjs.
- * White background, generous whitespace, Avenir Next, one muted-teal accent.
+ * White background, generous whitespace, Avenir Next, one UChicago-maroon accent.
  *
  * Signature elements (from the reference template):
- *  - small uppercase gray micro-label (kicker) with a short teal rule under it
+ *  - small uppercase gray micro-label (kicker) with a short maroon rule under it
  *  - big bold black page titles, pinned top-left
  *  - a giant faint watermark word behind the cover title
- *  - teal used sparingly for emphasis, section numbers, and the stat figure
+ *  - the UChicago phoenix bleeding off the right edge of the title slide
+ *  - maroon used sparingly for emphasis, section numbers, and the stat figure
  *
  * Semantic point colors from the old house style are remapped:
- *  INK -> black · ACCENTBLUE/GREEN -> teal (emphasis) · MAROON -> black bold
+ *  INK -> black · ACCENTBLUE/GREEN -> maroon (emphasis) · MAROON -> black bold
  *  (punchlines) · BLUE -> gray. So build.js keeps working unchanged.
  */
 const pptxgen = require("pptxgenjs");
+const path = require("path");
+const ASSET = (f) => path.join(__dirname, "assets", f);
 
 // ---- TOKENS -----------------------------------------------------------------
 const COLOR = {
-  BG:   "FFFFFF",
-  INK:  "111111",   // titles + default body
-  MUTE: "9A9A9A",   // micro-labels, subtitles
-  TEAL: "2E7A72",   // the single accent
-  WM:   "F1F2F1",   // watermark ghost text
+  BG:     "FFFFFF",
+  INK:    "111111",   // titles + default body
+  MUTE:   "9A9A9A",   // micro-labels, subtitles
+  ACCENT: "800000",   // the single accent — UChicago maroon
+  WM:     "F1F2F1",   // watermark ghost text
 };
+
+// title-slide phoenix, bleeding off the right edge (EMU -> inches, faded)
+const PHOENIX = { x: 9.09, y: 0.82, w: 6.31, h: 5.52 };
 
 const FONT = "Avenir Next";
 
@@ -46,12 +52,12 @@ const RULE_W = 0.62;           // length of the teal accent rule
 // point-color remap: old semantic name -> { color, bold }
 const POINT = {
   INK:        { color: COLOR.INK },
-  ACCENTBLUE: { color: COLOR.TEAL },
-  GREEN:      { color: COLOR.TEAL },
+  ACCENTBLUE: { color: COLOR.ACCENT },
+  GREEN:      { color: COLOR.ACCENT },
   MAROON:     { color: COLOR.INK, bold: true },
   BLUE:       { color: COLOR.MUTE },
   MUTE:       { color: COLOR.MUTE },
-  TEAL:       { color: COLOR.TEAL },
+  TEAL:       { color: COLOR.ACCENT },
 };
 const styleFor = (name) => POINT[name] || POINT.INK;
 
@@ -68,7 +74,7 @@ function newDeck(opts = {}) {
 
 // short teal accent rule (a thin rectangle)
 function rule(s, x, y, w = RULE_W) {
-  s.addShape("rect", { x, y, w, h: 0.045, fill: { color: COLOR.TEAL }, line: { type: "none" } });
+  s.addShape("rect", { x, y, w, h: 0.045, fill: { color: COLOR.ACCENT }, line: { type: "none" } });
 }
 
 // micro-label + rule; returns the y where the title should start
@@ -104,6 +110,8 @@ function titleSlide(p, { title, author, label, watermark } = {}) {
       align: "left", valign: "middle", margin: 0,
     });
   }
+  // UChicago phoenix, faded, bleeding off the right edge
+  s.addImage({ path: ASSET("phoenix.png"), x: PHOENIX.x, y: PHOENIX.y, w: PHOENIX.w, h: PHOENIX.h, transparency: 55 });
   s.addText(title || "", {
     x: M, y: 2.55, w: W - 2 * M, h: 2.0,
     fontFace: FONT, fontSize: SIZE.TITLE, bold: true, color: COLOR.INK,
@@ -120,7 +128,7 @@ function titleSlide(p, { title, author, label, watermark } = {}) {
   if (label) {
     s.addText(String(label).toUpperCase(), {
       x: M, y: 5.5, w: W - 2 * M, h: 0.5,
-      fontFace: FONT, fontSize: SIZE.LABEL, bold: true, color: COLOR.TEAL,
+      fontFace: FONT, fontSize: SIZE.LABEL, bold: true, color: COLOR.ACCENT,
       charSpacing: 2, align: "left", valign: "top", margin: 0,
     });
   }
@@ -133,7 +141,7 @@ function section(p, { kicker, title } = {}) {
   if (kicker) {
     s.addText(String(kicker).toUpperCase(), {
       x: M, y: 2.75, w: W - 2 * M, h: 0.4,
-      fontFace: FONT, fontSize: SIZE.SECNUM, bold: true, color: COLOR.TEAL,
+      fontFace: FONT, fontSize: SIZE.SECNUM, bold: true, color: COLOR.ACCENT,
       charSpacing: 3, align: "left", valign: "bottom", margin: 0,
     });
     rule(s, M, 3.2);
@@ -192,7 +200,7 @@ function stat(p, { value, label, kicker } = {}) {
   const ty = kickerBlock(s, kicker);
   s.addText(String(value), {
     x: M - 0.05, y: 1.5, w: W - 2 * M, h: 3.2,
-    fontFace: FONT, fontSize: SIZE.STAT, bold: true, color: COLOR.TEAL,
+    fontFace: FONT, fontSize: SIZE.STAT, bold: true, color: COLOR.ACCENT,
     align: "left", valign: "middle", margin: 0,
   });
   if (label) {
