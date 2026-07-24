@@ -1,7 +1,6 @@
 node_modules/
 .DS_Store
 *.log
-deck/.qa/
 **/.qa/
 
 # Never commit real financial data
